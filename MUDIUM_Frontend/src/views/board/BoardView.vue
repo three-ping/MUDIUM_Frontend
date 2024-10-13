@@ -18,7 +18,7 @@
                         </router-link>
                     </td>
                     <td class="td-nickname">{{ pageItem.nickname }}</td>
-                    <td class="td-createdAt">{{ pageItem.createdAt }}</td>
+                    <td class="td-createdAt">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
                 </tr>
             </table>
         </div> 
@@ -58,6 +58,25 @@ const updatePageNumber = (newPageNumber) => {
     fetchPageData();  // 페이지 번호가 바뀔 때마다 새로운 데이터를 가져옴
     
 };
+
+function convertToKoreanTime(timestamp) {
+// JavaScript의 Date 객체는 UTC 기준으로 동작함
+const date = new Date(timestamp);
+
+// 한국 시간은 UTC+9이므로 시간대를 KST로 변경
+const options = {
+    timeZone: 'Asia/Seoul', // 한국 시간대 설정
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+};
+
+// toLocaleString으로 한국 시간대 기준으로 포맷
+return date.toLocaleString('ko-KR', options);
+}
 
 // 컴포넌트가 처음 로드될 때 데이터 가져오기
 onMounted(() => {

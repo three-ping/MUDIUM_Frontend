@@ -1,7 +1,7 @@
 export default [
     {
         path: '/board',
-        component: () => import('@/views/board/BoardView.vue'),
+        component: () => import('@/views/board/BoardRoot.vue'),
         redirect: {path:"/board/view"},
         children: [
             {
