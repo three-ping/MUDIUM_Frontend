@@ -1,5 +1,7 @@
 <template>
-  <button>버튼</button>
+  <button class="primary">버튼</button>
+  <button class="secondary"></button>
+  <button class="contrast"></button>
   <AppHeader />
   <main>
     <RouterView />
