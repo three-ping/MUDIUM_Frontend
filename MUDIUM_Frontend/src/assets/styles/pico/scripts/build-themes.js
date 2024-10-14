@@ -3,25 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const themeColors = [
-  "amber",
-  "blue",
-  "cyan",
-  "fuchsia",
-  "green",
-  "grey",
-  "indigo",
-  "jade",
-  "lime",
-  "orange",
-  "pink",
-  "pumpkin",
-  "purple",
-  "red",
-  "sand",
-  "slate",
-  "violet",
-  "yellow",
-  "zinc",
+  "mudium",
 ];
 
 const tempScssFoldername = path.join(__dirname, "../.pico");

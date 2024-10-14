@@ -3,6 +3,27 @@
 @use "../../settings" as *;
 
 $color-mappings: (
+  "mudium": ("dark": ("text-selection-color": rgba($purple-350, 0.1875),
+      "primary": $purple-350,
+      "primary-background": $purple-600,
+      "primary-underline": rgba($purple-350, 0.5),
+      "primary-hover": $purple-250,
+      "primary-hover-background": $purple-550,
+      "primary-focus": rgba($purple-350, 0.375),
+      "primary-inverse": $white,
+      "switch-thumb-box-shadow": 0 0 0 rgba(0, 0, 0, 0),
+    ),
+    "light": ("text-selection-color": rgba($purple-400, 0.25),
+      "primary": $purple-550,
+      "primary-background": $purple-600,
+      "primary-underline": rgba($purple-550, 0.5),
+      "primary-hover": $purple-650,
+      "primary-hover-background": $purple-650,
+      "primary-focus": rgba($purple-400, 0.5),
+      "primary-inverse": $white,
+      "switch-thumb-box-shadow": 0 0 0 rgba(0, 0, 0, 0),
+    ),
+  ),
 );
 
 @function get($key, $mode: "light") {
