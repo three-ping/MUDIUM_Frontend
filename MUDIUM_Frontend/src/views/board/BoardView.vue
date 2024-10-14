@@ -1,86 +1,116 @@
 <template>
-    <div class="board-container">
-        <div class="board">
-            <table class="board-table">
-                <thead class="board-table-header">
-                    <tr class="board-tr">
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성일</th>
-                    </tr>
-                </thead>   
-                <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
-                    <td class="td-id">{{ pageItem.id }}</td>
-                    <td class="td-title">
-                        <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.id } }">
-                            {{ pageItem.title }}
-                        </router-link>
-                    </td>
-                    <td class="td-nickname">{{ pageItem.nickname }}</td>
-                    <td class="td-createdAt">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
-                </tr>
-            </table>
-        </div> 
-        <Paging 
-            :requestURL="requestURL" 
-            :pageNumber="pageNumber" 
-            :totalPageNumber="totalPageNumber" 
-            @updatePageNumber="updatePageNumber" />
+  <div class="board-container">
+    <div class="board-actions">
+      <div class="search-bar">
+        <select v-model="searchType">
+          <option value="author">작성자</option>
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+        </select>
+        <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요">
+        <button @click="search" class="search-button">검색</button>
+      </div>
+      <button @click="createBoard" class="create-button">글 쓰기</button>
     </div>
+    <div class="board">
+      <table class="board-table">
+        <thead class="board-table-header">
+          <tr class="board-tr">
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>작성일</th>
+          </tr>
+        </thead>   
+        <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
+          <td class="td-id">{{ pageItem.id }}</td>
+          <td class="td-title">
+            <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.id } }">
+              {{ pageItem.title }}
+            </router-link>
+          </td>
+          <td class="td-nickname">{{ pageItem.nickname }}</td>
+          <td class="td-createdAt">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
+        </tr>
+      </table>
+    </div> 
+    <Paging 
+      :requestURL="requestURL" 
+      :pageNumber="pageNumber" 
+      :totalPageNumber="totalPageNumber" 
+      @updatePageNumber="updatePageNumber" />
+  </div>
 </template>
 
 <script setup>
 import Paging from '@/components/board/pagination.vue';
 import Detail from '@/views/board/BoardDetailView.vue';
 import { ref, reactive, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const requestURL = `api/board`;
 const pageNumber = ref(1);
 const totalPageNumber = ref(0);
 const pageItems = reactive([]);
+const searchType = ref('title');
+const searchQuery = ref('');
 
 const fetchPageData = async () => {
-    const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
-        method: "GET"
-    });
-    const responseDTO = await response.json();
-    // 응답 데이터를 기반으로 pageItems와 totalPageNumber 업데이트
-    pageItems.length = 0;
-    pageItems.push(...responseDTO.data.content);
-    totalPageNumber.value = responseDTO.data.totalPages;
+  const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
+    method: "GET"
+  });
+  const responseDTO = await response.json();
+  pageItems.length = 0;
+  pageItems.push(...responseDTO.data.content);
+  totalPageNumber.value = responseDTO.data.totalPages;
 
 };
 
-// 자식 컴포넌트가 페이지를 변경했을 때 호출되는 함수
+const queryPageData = async () => {
+  const response = await fetch(`http://localhost:8080/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}`, {
+    method: "GET"
+  });
+  const responseDTO = await response.json();
+  pageItems.length = 0;
+  pageItems.push(...responseDTO.data.content);
+  totalPageNumber.value = responseDTO.data.totalPages;
+
+};
+
 const updatePageNumber = (newPageNumber) => {
-    pageNumber.value = newPageNumber;
-    fetchPageData();  // 페이지 번호가 바뀔 때마다 새로운 데이터를 가져옴
-    
+  pageNumber.value = newPageNumber;
+  fetchPageData();
+};
+
+const search = async () => {
+  pageNumber.value = 1;
+  await queryPageData();
+  if(pageItems.length == 0) {
+    router.push("view/no-args");
+  }
+};
+
+const createBoard = () => {
+  router.push('create');
 };
 
 function convertToKoreanTime(timestamp) {
-// JavaScript의 Date 객체는 UTC 기준으로 동작함
-const date = new Date(timestamp);
-
-// 한국 시간은 UTC+9이므로 시간대를 KST로 변경
-const options = {
-    timeZone: 'Asia/Seoul', // 한국 시간대 설정
+  const date = new Date(timestamp);
+  const options = {
+    timeZone: 'Asia/Seoul',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-};
-
-// toLocaleString으로 한국 시간대 기준으로 포맷
-return date.toLocaleString('ko-KR', options);
+  };
+  return date.toLocaleString('ko-KR', options);
 }
 
-// 컴포넌트가 처음 로드될 때 데이터 가져오기
 onMounted(() => {
-    fetchPageData();
+  fetchPageData();
 });
 </script>
 
@@ -90,14 +120,52 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
   font-family: Arial, sans-serif;
+}
+
+.board-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+}
+
+.search-bar select,
+.search-bar input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.search-button,
+.create-button {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+.search-button {
+  background-color: #9A70CC;
+}
+
+.create-button {
+  background-color: #D53EC6;
 }
 
 .board {
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .board-table {
@@ -152,7 +220,6 @@ onMounted(() => {
   text-align: center;
 }
 
-/* 링크 스타일 */
 .td-title a {
   color: #333;
   text-decoration: none;

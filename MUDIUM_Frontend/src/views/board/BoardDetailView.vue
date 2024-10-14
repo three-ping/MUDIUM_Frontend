@@ -2,10 +2,16 @@
     <div class="board-detail">
     <div class="board-detail-header">
         <h1 class="board-detail-title">{{ title }}</h1>
+        <div class="board-detail-buttons">
+        <button class="board-button" @click="editPost">수정</button>
+        <button class="board-button" @click="backToBoard">글 목록</button>
+        </div>
     </div>
-    <div class="board-detail-author-created">
+    <div class="board-detail-subheader">
+        <div class="board-detail-author-created">
         <span class="board-detail-author">작성자: {{ author }}</span>
         <span class="board-detail-created">작성시간: {{ convertToKoreanTime(createdAt) }}</span>
+        </div>
     </div>
     <template v-if="updatedAt !== null">
         <div class="board-detail-updated-template">
@@ -19,8 +25,7 @@
         <h2>댓글을 입력하세요</h2>
         <textarea v-model="newComment" placeholder="댓글을 입력하세요."></textarea>
         <div class="button-container">
-            <button class="board-back" @click="backToBoard">글 목록</button>
-            <button class="comment-submit" @click="submitComment">등록</button>
+        <button class="comment-submit" @click="submitComment">등록</button>
         </div>
     </div>
     <div class="board-detail-comments">
@@ -48,6 +53,11 @@ const updatedAt = ref(0);
 const newComment = ref('');
 const comments = ref([]);
 
+const editPost = () => {
+// 수정 페이지로 이동하는 로직
+router.push(`/board/edit/${id.value}`);
+};
+
 const fetchDetailBoard = async() => {
     const response = await fetch(`http://localhost:8080/api/board/${id.value}`, {
         method: "GET"
@@ -58,12 +68,11 @@ const fetchDetailBoard = async() => {
     content.value = responseDTO.data.content;
     createdAt.value = responseDTO.data.createdAt;
     updatedAt.value = responseDTO.data.updatedAt;
-    console.log(updatedAt.value);
 }
 
 const fetchComments = async () => {
     try {
- 
+
     comments.value = [
         { id: 1, author: '김정모', text: '역시 뮤지컬은 시카고!! ...' },
         { id: 2, author: '이서연', text: '저도 너무 재미있게 봤어요!' }
@@ -77,7 +86,7 @@ const submitComment = async () => {
     if (newComment.value.trim() === '') return;
     
     try {
- 
+
     comments.value.push({
         id: comments.value.length + 1,
         author: '현재 사용자',
@@ -121,102 +130,112 @@ onMounted(() => {
 
 <style scoped>
 .board-detail {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
+font-family: Arial, sans-serif;
+max-width: 800px;
+margin: 0 auto;
+padding: 20px;
 }
 
 .board-detail-header {
-    border-bottom: 2px solid #D53EC6;
-    padding-bottom: 10px;
-    margin-bottom: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
+border-bottom: 2px solid #D53EC6;
+padding-bottom: 10px;
+margin-bottom: 10px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.board-detail-buttons {
+display: flex;
+gap: 10px;
 }
 
 .board-detail-title {
-    font-size: 24px;
-    margin: 0;
+font-size: 24px;
+margin: 0;
+}
+
+.board-detail-subheader {
+margin-bottom: 20px;
 }
 
 .board-detail-author-created {
-    font-size: 14px;
-    color: #666;
-    display: flex;
-    justify-content: space-between;
+font-size: 14px;
+color: #666;
+display:flex;
+justify-content: space-between;
 }
+
 .board-detail-updated {
-    font-size: 14px;
-    color: #666;
+font-size: 14px;
+color: #666;
 }
+
 .board-detail-updated-template {
-    display: flex;
-    align-items: end;
-    flex-direction: column;
+display: flex;
+align-items: end;
+flex-direction: column;
 }
+
 .board-detail-content {
-    min-height: 50vh;
-    margin-bottom: 30px;
-    border: 1px solid #eee;
-    padding: 20px;
-    overflow-y: auto;
+min-height: 50vh;
+margin-bottom: 30px;
+border: 1px solid #eee;
+padding: 20px;
+overflow-y: auto;
 }
 
 .board-detail-comment h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
+font-size: 18px;
+margin-bottom: 10px;
 }
 
 textarea {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+width: 100%;
+height: 100px;
+padding: 10px;
+margin-bottom: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+
+.comment-submit, .board-button {
+border: none;
+padding: 10px 20px;
+border-radius: 4px;
+cursor: pointer;
+color: white;
 }
 
 .comment-submit {
-    background-color: #D53EC6;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
+background-color: #D53EC6;
 }
 
-.board-back {
-    background-color: #9A70CC;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
+.board-button {
+background-color: #9A70CC;
 }
 
 .board-detail-comments {
-    margin-top: 30px;
+margin-top: 30px;
 }
 
 .comment {
-    background-color: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 10px;
+background-color: #f9f9f9;
+border: 1px solid #eee;
+border-radius: 4px;
+padding: 10px;
+margin-bottom: 10px;
 }
 
 .comment strong {
-    display: block;
-    margin-bottom: 5px;
+display: block;
+margin-bottom: 5px;
 }
 
 .button-container {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-bottom: 20px;
+display: flex;
+justify-content: flex-end;
+gap: 10px;
+margin-bottom: 20px;
 }
 </style>
