@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@picocss/pico": "^2.0.6",
+    "sass-embedded": "^1.79.5",
     "vue": "^3.4.29",
     "vue-router": "^4.4.5"
   },

@@ -1,8 +1,9 @@
 <template>
-  <AppHeader/>
-<main>
-  <RouterView/>
-</main>  
+  <button>버튼</button>
+  <AppHeader />
+  <main>
+    <RouterView />
+  </main>
 </template>
 
 <script setup>
@@ -13,6 +14,6 @@ import AppHeader from '@/components/AppHeader.vue';
 
 <style>
 * {
-font-family: 'Noto Sans KR';
+  font-family: 'Noto Sans KR';
 }
 </style>
