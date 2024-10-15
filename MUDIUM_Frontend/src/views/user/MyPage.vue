@@ -1,7 +1,7 @@
 <template>
-	<div>
+	<aside>
 
-	</div>
+	</aside>
 </template>
 
 <script setup>

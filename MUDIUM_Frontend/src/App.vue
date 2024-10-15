@@ -1,8 +1,9 @@
 <template>
   <Navigation />
-
-  <main class=container>
-    <RouterView />
+  <!-- <AppHeader /> -->
+  <main class="container-fluid">
+    <!-- <RouterView /> -->
+    <MyPage />
   </main>
 </template>
 
@@ -11,7 +12,7 @@ import { RouterView, RouterLink } from 'vue-router';
 
 import AppHeader from '@/components/AppHeader.vue';
 import Navigation from './components/Navigation.vue';
-
+import MyPage from './views/user/MyPage.vue';
 </script>
 
 <style>

@@ -1,0 +1,395 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+ul,
+li,
+dl,
+dt,
+dd,
+p,
+span {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+li {
+  list-style: none;
+}
+h1 {
+  font-size: 3rem;
+}
+*,
+:after,
+:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 10px;
+  font-family: "Noto Sans";
+  color: #202020;
+}
+
+.root-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+}
+
+.main {
+  display: flex;
+  justify-content: center;
+  width: calc(100% - 42rem);
+  margin-top: 9rem;
+  margin-left: 42rem;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 110rem;
+  background-color: #ffffff;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #a1b872;
+  border: none;
+  border-radius: 1rem;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.btn:hover {
+  box-shadow: 0rem 0.1rem 0.2rem #a6a6a6;
+}
+
+/* 기본스타일 제거, 버튼 모양 재설정 */
+input[type="radio"] {
+  flex-shrink: 0;
+  -webkit-appearance: none; /* 웹킷 브라우저에서 기본 스타일 제거*/
+  -moz-appearance: none; /* 모질라 브라우저에서 기본 스타일 제거*/
+  appearance: none; /*기본 브라우저에서 기본 스타일 제거*/
+  width: 3.6rem;
+  height: 3.6rem;
+  border: 1px solid #8c8c8c; /*체크되지 않았을 때의 테두리 색상*/
+  border-radius: 50%;
+  outline: none; /*focus 시에 나타나는 기본 스타일 제거*/
+  cursor: pointer;
+  margin-top: 0.9rem;
+}
+
+/* 체크 시 버튼 모양 스타일*/
+input[type="radio"]:checked {
+  background-color: #a1b872; /*체크 시 내부 원 색상*/
+  border: none;
+}
+
+.hide-text {
+  text-indent: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.hidden {
+  display: none;
+}
+
+/* 노트북 */
+@media screen and (max-width: 1683px) {
+  :root {
+    font-size: 8px;
+  }
+}
+
+@media screen and (max-width: 1439px) {
+  :root {
+    font-size: 7px;
+  }
+}
+
+/* 태블릿 */
+@media screen and (max-width: 1023px) {
+  :root {
+    font-size: 6px;
+  }
+}
+
+/* 모바일 */
+@media screen and (max-width: 767px) {
+  :root {
+    font-size: 4.5px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  :root {
+    font-size: 3.2px;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  :root {
+    font-size: 2.5px;
+  }
+}
+
+@media screen and (max-width: 374px) {
+  :root {
+    font-size: 2px;
+  }
+}
+
+@media screen and (max-width: 319px) {
+  :root {
+    font-size: 1.8px;
+  }
+}
+
+@media only screen and (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --mudium-background-color: rgb(19, 22.5, 30.5);
+    --mudium-color: #c2c7d0;
+    --mudium-text-selection-color: rgba(212, 125, 228, 0.1875);
+    --mudium-muted-color: #7b8495;
+    --mudium-muted-border-color: #202632;
+    --mudium-primary: #d47de4;
+    --mudium-primary-background: #9236a4;
+    --mudium-primary-border: var(--mudium-primary-background);
+    --mudium-primary-underline: rgba(212, 125, 228, 0.5);
+    --mudium-primary-hover: #e2a3eb;
+    --mudium-primary-hover-background: #aa40bf;
+    --mudium-primary-hover-border: var(--mudium-primary-hover-background);
+    --mudium-primary-hover-underline: var(--mudium-primary-hover);
+    --mudium-primary-focus: rgba(212, 125, 228, 0.375);
+    --mudium-primary-inverse: #fff;
+    --mudium-secondary: #969eaf;
+    --mudium-secondary-background: #525f7a;
+    --mudium-secondary-border: var(--mudium-secondary-background);
+    --mudium-secondary-underline: rgba(150, 158, 175, 0.5);
+    --mudium-secondary-hover: #b3b9c5;
+    --mudium-secondary-hover-background: #5d6b89;
+    --mudium-secondary-hover-border: var(--mudium-secondary-hover-background);
+    --mudium-secondary-hover-underline: var(--mudium-secondary-hover);
+    --mudium-secondary-focus: rgba(144, 158, 190, 0.25);
+    --mudium-secondary-inverse: #fff;
+    --mudium-contrast: #dfe3eb;
+    --mudium-contrast-background: #eff1f4;
+    --mudium-contrast-border: var(--mudium-contrast-background);
+    --mudium-contrast-underline: rgba(223, 227, 235, 0.5);
+    --mudium-contrast-hover: #fff;
+    --mudium-contrast-hover-background: #fff;
+    --mudium-contrast-hover-border: var(--mudium-contrast-hover-background);
+    --mudium-contrast-hover-underline: var(--mudium-contrast-hover);
+    --mudium-contrast-focus: rgba(207, 213, 226, 0.25);
+    --mudium-contrast-inverse: #000;
+    --mudium-box-shadow: 0.0145rem 0.029rem 0.174rem rgba(7, 8.5, 12, 0.01698), 0.0335rem 0.067rem 0.402rem rgba(7, 8.5, 12, 0.024), 0.0625rem 0.125rem 0.75rem rgba(7, 8.5, 12, 0.03), 0.1125rem 0.225rem 1.35rem rgba(7, 8.5, 12, 0.036), 0.2085rem 0.417rem 2.502rem rgba(7, 8.5, 12, 0.04302),
+      0.5rem 1rem 6rem rgba(7, 8.5, 12, 0.06), 0 0 0 0.0625rem rgba(7, 8.5, 12, 0.015);
+    --mudium-h1-color: #f0f1f3;
+    --mudium-h2-color: #e0e3e7;
+    --mudium-h3-color: #c2c7d0;
+    --mudium-h4-color: #b3b9c5;
+    --mudium-h5-color: #a4acba;
+    --mudium-h6-color: #8891a4;
+    --mudium-mark-background-color: #014063;
+    --mudium-mark-color: #fff;
+    --mudium-ins-color: #62af9a;
+    --mudium-del-color: rgb(205.5, 126, 123);
+    --mudium-blockquote-border-color: var(--mudium-muted-border-color);
+    --mudium-blockquote-footer-color: var(--mudium-muted-color);
+    --mudium-button-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    --mudium-button-hover-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    --mudium-table-border-color: var(--mudium-muted-border-color);
+    --mudium-table-row-stripped-background-color: rgba(111, 120, 135, 0.0375);
+    --mudium-code-background-color: rgb(26, 30.5, 40.25);
+    --mudium-code-color: #8891a4;
+    --mudium-code-kbd-background-color: var(--mudium-color);
+    --mudium-code-kbd-color: var(--mudium-background-color);
+    --mudium-form-element-background-color: rgb(28, 33, 43.5);
+    --mudium-form-element-selected-background-color: #2a3140;
+    --mudium-form-element-border-color: #2a3140;
+    --mudium-form-element-color: #e0e3e7;
+    --mudium-form-element-placeholder-color: #8891a4;
+    --mudium-form-element-active-background-color: rgb(26, 30.5, 40.25);
+    --mudium-form-element-active-border-color: var(--mudium-primary-border);
+    --mudium-form-element-focus-color: var(--mudium-primary-border);
+    --mudium-form-element-disabled-opacity: 0.5;
+    --mudium-form-element-invalid-border-color: rgb(149.5, 74, 80);
+    --mudium-form-element-invalid-active-border-color: rgb(183.25, 63.5, 59);
+    --mudium-form-element-invalid-focus-color: var(--mudium-form-element-invalid-active-border-color);
+    --mudium-form-element-valid-border-color: #2a7b6f;
+    --mudium-form-element-valid-active-border-color: rgb(22, 137, 105.5);
+    --mudium-form-element-valid-focus-color: var(--mudium-form-element-valid-active-border-color);
+    --mudium-switch-background-color: #333c4e;
+    --mudium-switch-checked-background-color: var(--mudium-primary-background);
+    --mudium-switch-color: #fff;
+    --mudium-switch-thumb-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    --mudium-range-border-color: #202632;
+    --mudium-range-active-border-color: #2a3140;
+    --mudium-range-thumb-border-color: var(--mudium-background-color);
+    --mudium-range-thumb-color: var(--mudium-secondary-background);
+    --mudium-range-thumb-active-color: var(--mudium-primary-background);
+    --mudium-accordion-border-color: var(--mudium-muted-border-color);
+    --mudium-accordion-active-summary-color: var(--mudium-primary-hover);
+    --mudium-accordion-close-summary-color: var(--mudium-color);
+    --mudium-accordion-open-summary-color: var(--mudium-muted-color);
+    --mudium-card-background-color: #181c25;
+    --mudium-card-border-color: var(--mudium-card-background-color);
+    --mudium-card-box-shadow: var(--mudium-box-shadow);
+    --mudium-card-sectioning-background-color: rgb(26, 30.5, 40.25);
+    --mudium-dropdown-background-color: #181c25;
+    --mudium-dropdown-border-color: #202632;
+    --mudium-dropdown-box-shadow: var(--mudium-box-shadow);
+    --mudium-dropdown-color: var(--mudium-color);
+    --mudium-dropdown-hover-background-color: #202632;
+    --mudium-loading-spinner-opacity: 0.5;
+    --mudium-modal-overlay-background-color: rgba(7.5, 8.5, 10, 0.75);
+    --mudium-progress-background-color: #202632;
+    --mudium-progress-color: var(--mudium-primary-background);
+    --mudium-tooltip-background-color: var(--mudium-contrast-background);
+    --mudium-tooltip-color: var(--mudium-contrast-inverse);
+    --mudium-icon-valid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(42, 123, 111)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+    --mudium-icon-invalid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(150, 74, 80)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
+    color-scheme: dark;
+  }
+  :root:not([data-theme]) input:is([type="submit"], [type="button"], [type="reset"], [type="checkbox"], [type="radio"], [type="file"]) {
+    --mudium-form-element-focus-color: var(--mudium-primary-focus);
+  }
+  :root:not([data-theme]) details summary[role="button"].contrast:not(.outline)::after {
+    filter: brightness(0);
+  }
+  :root:not([data-theme]) [aria-busy="true"]:not(input, select, textarea).contrast:is(button, [type="submit"], [type="button"], [type="reset"], [role="button"]):not(.outline)::before {
+    filter: brightness(0);
+  }
+}
+[data-theme="dark"] {
+  --mudium-background-color: rgb(19, 22.5, 30.5);
+  --mudium-color: #c2c7d0;
+  --mudium-text-selection-color: rgba(212, 125, 228, 0.1875);
+  --mudium-muted-color: #7b8495;
+  --mudium-muted-border-color: #202632;
+  --mudium-primary: #d47de4;
+  --mudium-primary-background: #9236a4;
+  --mudium-primary-border: var(--mudium-primary-background);
+  --mudium-primary-underline: rgba(212, 125, 228, 0.5);
+  --mudium-primary-hover: #e2a3eb;
+  --mudium-primary-hover-background: #aa40bf;
+  --mudium-primary-hover-border: var(--mudium-primary-hover-background);
+  --mudium-primary-hover-underline: var(--mudium-primary-hover);
+  --mudium-primary-focus: rgba(212, 125, 228, 0.375);
+  --mudium-primary-inverse: #fff;
+  --mudium-secondary: #969eaf;
+  --mudium-secondary-background: #525f7a;
+  --mudium-secondary-border: var(--mudium-secondary-background);
+  --mudium-secondary-underline: rgba(150, 158, 175, 0.5);
+  --mudium-secondary-hover: #b3b9c5;
+  --mudium-secondary-hover-background: #5d6b89;
+  --mudium-secondary-hover-border: var(--mudium-secondary-hover-background);
+  --mudium-secondary-hover-underline: var(--mudium-secondary-hover);
+  --mudium-secondary-focus: rgba(144, 158, 190, 0.25);
+  --mudium-secondary-inverse: #fff;
+  --mudium-contrast: #dfe3eb;
+  --mudium-contrast-background: #eff1f4;
+  --mudium-contrast-border: var(--mudium-contrast-background);
+  --mudium-contrast-underline: rgba(223, 227, 235, 0.5);
+  --mudium-contrast-hover: #fff;
+  --mudium-contrast-hover-background: #fff;
+  --mudium-contrast-hover-border: var(--mudium-contrast-hover-background);
+  --mudium-contrast-hover-underline: var(--mudium-contrast-hover);
+  --mudium-contrast-focus: rgba(207, 213, 226, 0.25);
+  --mudium-contrast-inverse: #000;
+  --mudium-box-shadow: 0.0145rem 0.029rem 0.174rem rgba(7, 8.5, 12, 0.01698), 0.0335rem 0.067rem 0.402rem rgba(7, 8.5, 12, 0.024), 0.0625rem 0.125rem 0.75rem rgba(7, 8.5, 12, 0.03), 0.1125rem 0.225rem 1.35rem rgba(7, 8.5, 12, 0.036), 0.2085rem 0.417rem 2.502rem rgba(7, 8.5, 12, 0.04302),
+    0.5rem 1rem 6rem rgba(7, 8.5, 12, 0.06), 0 0 0 0.0625rem rgba(7, 8.5, 12, 0.015);
+  --mudium-h1-color: #f0f1f3;
+  --mudium-h2-color: #e0e3e7;
+  --mudium-h3-color: #c2c7d0;
+  --mudium-h4-color: #b3b9c5;
+  --mudium-h5-color: #a4acba;
+  --mudium-h6-color: #8891a4;
+  --mudium-mark-background-color: #014063;
+  --mudium-mark-color: #fff;
+  --mudium-ins-color: #62af9a;
+  --mudium-del-color: rgb(205.5, 126, 123);
+  --mudium-blockquote-border-color: var(--mudium-muted-border-color);
+  --mudium-blockquote-footer-color: var(--mudium-muted-color);
+  --mudium-button-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  --mudium-button-hover-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  --mudium-table-border-color: var(--mudium-muted-border-color);
+  --mudium-table-row-stripped-background-color: rgba(111, 120, 135, 0.0375);
+  --mudium-code-background-color: rgb(26, 30.5, 40.25);
+  --mudium-code-color: #8891a4;
+  --mudium-code-kbd-background-color: var(--mudium-color);
+  --mudium-code-kbd-color: var(--mudium-background-color);
+  --mudium-form-element-background-color: rgb(28, 33, 43.5);
+  --mudium-form-element-selected-background-color: #2a3140;
+  --mudium-form-element-border-color: #2a3140;
+  --mudium-form-element-color: #e0e3e7;
+  --mudium-form-element-placeholder-color: #8891a4;
+  --mudium-form-element-active-background-color: rgb(26, 30.5, 40.25);
+  --mudium-form-element-active-border-color: var(--mudium-primary-border);
+  --mudium-form-element-focus-color: var(--mudium-primary-border);
+  --mudium-form-element-disabled-opacity: 0.5;
+  --mudium-form-element-invalid-border-color: rgb(149.5, 74, 80);
+  --mudium-form-element-invalid-active-border-color: rgb(183.25, 63.5, 59);
+  --mudium-form-element-invalid-focus-color: var(--mudium-form-element-invalid-active-border-color);
+  --mudium-form-element-valid-border-color: #2a7b6f;
+  --mudium-form-element-valid-active-border-color: rgb(22, 137, 105.5);
+  --mudium-form-element-valid-focus-color: var(--mudium-form-element-valid-active-border-color);
+  --mudium-switch-background-color: #333c4e;
+  --mudium-switch-checked-background-color: var(--mudium-primary-background);
+  --mudium-switch-color: #fff;
+  --mudium-switch-thumb-box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  --mudium-range-border-color: #202632;
+  --mudium-range-active-border-color: #2a3140;
+  --mudium-range-thumb-border-color: var(--mudium-background-color);
+  --mudium-range-thumb-color: var(--mudium-secondary-background);
+  --mudium-range-thumb-active-color: var(--mudium-primary-background);
+  --mudium-accordion-border-color: var(--mudium-muted-border-color);
+  --mudium-accordion-active-summary-color: var(--mudium-primary-hover);
+  --mudium-accordion-close-summary-color: var(--mudium-color);
+  --mudium-accordion-open-summary-color: var(--mudium-muted-color);
+  --mudium-card-background-color: #181c25;
+  --mudium-card-border-color: var(--mudium-card-background-color);
+  --mudium-card-box-shadow: var(--mudium-box-shadow);
+  --mudium-card-sectioning-background-color: rgb(26, 30.5, 40.25);
+  --mudium-dropdown-background-color: #181c25;
+  --mudium-dropdown-border-color: #202632;
+  --mudium-dropdown-box-shadow: var(--mudium-box-shadow);
+  --mudium-dropdown-color: var(--mudium-color);
+  --mudium-dropdown-hover-background-color: #202632;
+  --mudium-loading-spinner-opacity: 0.5;
+  --mudium-modal-overlay-background-color: rgba(7.5, 8.5, 10, 0.75);
+  --mudium-progress-background-color: #202632;
+  --mudium-progress-color: var(--mudium-primary-background);
+  --mudium-tooltip-background-color: var(--mudium-contrast-background);
+  --mudium-tooltip-color: var(--mudium-contrast-inverse);
+  --mudium-icon-valid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(42, 123, 111)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  --mudium-icon-invalid: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgb(150, 74, 80)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
+  color-scheme: dark;
+}
+[data-theme="dark"] input:is([type="submit"], [type="button"], [type="reset"], [type="checkbox"], [type="radio"], [type="file"]) {
+  --mudium-form-element-focus-color: var(--mudium-primary-focus);
+}
+[data-theme="dark"] details summary[role="button"].contrast:not(.outline)::after {
+  filter: brightness(0);
+}
+[data-theme="dark"] [aria-busy="true"]:not(input, select, textarea).contrast:is(button, [type="submit"], [type="button"], [type="reset"], [role="button"]):not(.outline)::before {
+  filter: brightness(0);
+}
