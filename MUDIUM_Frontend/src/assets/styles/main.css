@@ -604,6 +604,7 @@ body {
 
 main {
   display: block;
+  min-height: 40rem;
 }
 
 body > header,
