@@ -1,12 +1,21 @@
 <template>
 	<aside>
+		<nav>
+			<ul>
+				<li><a href="#" class="contrast"><strong>프로필</strong></a></li>
+				<li><a href="#" class="contrast"><strong>프로필</strong></a></li>
 
+			</ul>
+		</nav>
+		<ul>
+			<li></li>
+		</ul>
 	</aside>
-	<Modal />
+
+
 </template>
 
 <script setup>
-import Modal from '@/components/layout/Modal.vue';
 </script>
 
 <style scoped></style>

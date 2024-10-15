@@ -2480,7 +2480,13 @@ nav[aria-label="breadcrumb"] a[aria-current]:not([aria-current="false"]) {
   text-decoration: none;
   pointer-events: none;
 }
-
+aside {
+  padding-top: 3rem;
+  width: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: var(--pico-block-spacing-vertical);
+}
 aside nav,
 aside ol,
 aside ul,
@@ -2492,6 +2498,7 @@ aside li {
 }
 aside li a {
   display: block;
+  text-align: right;
 }
 aside li [role="button"] {
   margin: inherit;
