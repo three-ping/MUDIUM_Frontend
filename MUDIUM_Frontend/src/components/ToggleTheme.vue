@@ -5,45 +5,20 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, watch } from 'vue';
-const state = reactive({ currentTheme: null, })
-
-
-const setTheme = (theme) => {
-	state.currentTheme = theme;
-}
-const updateMetaTheme = () => {
-	const metaTheme = document.querySelector('meta[name="color-scheme"]');
-	console.log(`metaTheme: ${metaTheme.tagName}`)
-	console.log(`currentTheme: ${state.currentTheme}`)
-	metaTheme.setAttribute('content', state.currentTheme);
-}
-
-const pickTheme = () => {
-	const newTheme = state.currentTheme === 'dark' ? 'light' : 'dark';
-
-	if (state.currentTheme !== newTheme) {
-		localStorage.setItem('theme', newTheme);
-		console.log(`newTheme: ${newTheme}`)
-		setTheme(newTheme);
-	}
-}
-
+import { onMounted, ref } from 'vue';
+const _scheme = ref(null);
+const localStorageKey = "picoPreferredColorScheme";
 onMounted(() => {
-	const savedTheme = localStorage.getItem('theme');
-	if (savedTheme) {
-		console.log(`savedTheme: ${savedTheme}`)
-		setTheme(savedTheme);
-	} else {
-		setTheme('light');
-	}
-});
+	_scheme.value = getSchemeFromLocalStorage();
+	console.log(`scheme: ${_scheme.value}`)
+})
 
-// watch(() => state.currentTheme, () => {
-// 	document.documentElement.setAttribute('dataTheme', state.currentTheme);
-// 	updateMetaTheme();
-// })
-
+const getSchemeFromLocalStorage = () => {
+	return window.localStorage?.getItem(localStorageKey) ?? 'light';
+}
+const getPreferredColorScheme = () => {
+	return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
 </script>
 
 <style scoped></style>
