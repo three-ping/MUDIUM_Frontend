@@ -1,6 +1,5 @@
 <template>
   <Navigation />
-  <!-- <AppHeader /> -->
   <main class="container-fluid">
     <!-- <RouterView /> -->
     <MyPage />
@@ -11,7 +10,6 @@
 <script setup>
 import { RouterView, RouterLink } from 'vue-router';
 
-import AppHeader from '@/components/layout/AppHeader.vue';
 import Navigation from './components/layout/Navigation.vue';
 import MyPage from './views/user/MyPage.vue';
 import Footer from './components/layout/Footer.vue';

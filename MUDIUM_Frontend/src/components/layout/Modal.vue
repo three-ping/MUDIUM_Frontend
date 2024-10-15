@@ -1,10 +1,11 @@
 <template>
 	<dialog ref="modal" @click.self="closeModal(modal)" open>
-		<article>
+		<article id="modal-popup">
 			<header id="modal-header">
-				<p class="jim-nightshade-regular"><strong>Mudium</strong></p>
+				<img src="@/assets/images/MudiumText.svg" alt="">
 			</header>
-			<input type="text" placeholder="아이디">
+			<div></div>
+			<footer></footer>
 		</article>
 	</dialog>
 </template>
@@ -96,6 +97,10 @@ onBeforeUnmount(() => {
 #modal-header {
 	display: flex;
 	justify-content: center;
+}
+
+#modal-header img {
+	width: 8rem;
 }
 
 .jim-nightshade-regular {

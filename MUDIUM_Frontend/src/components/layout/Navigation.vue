@@ -1,7 +1,7 @@
 <template>
 	<header class="container-fluid">
 		<nav>
-			<img src="@/assets/Mudium_small.svg" width="100px" alt="">
+			<img src="@/assets/images/Mudium.svg" width="100px" alt="">
 			<ul>
 				<li>
 					<a href="#" class="contrast"><strong>뮤지컬</strong></a>
