@@ -4,7 +4,8 @@
 			<summary>Theme</summary>
 			<ul>
 				<li>
-					<a href="#" data-theme-switcher="auto" @click.prevent="setScheme('auto')">Auto</a>
+					<a href="#" data-theme-switcher="auto" @click.prevent="setScheme('auto')">Auto (System
+						Preference)</a>
 				</li>
 				<li>
 					<a href="#" data-theme-switcher="light" @click.prevent="setScheme('light')">Light</a>
@@ -36,6 +37,13 @@ export default {
 	mounted() {
 		this._scheme = this.schemeFromLocalStorage || 'auto';
 		this.applyScheme();
+
+		// Listen for system preference changes
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.handleSystemPreferenceChange);
+	},
+	beforeDestroy() {
+		// Cleanup event listener when component is destroyed
+		window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.handleSystemPreferenceChange);
 	},
 	methods: {
 		setScheme(scheme) {
@@ -49,13 +57,19 @@ export default {
 			this.closeDropdown();
 		},
 		applyScheme() {
-			document.querySelector('html')?.setAttribute(this.rootAttribute, this._scheme);
+			const scheme = this._scheme === 'auto' ? this.preferredColorScheme : this._scheme;
+			document.querySelector('html')?.setAttribute(this.rootAttribute, scheme);
 		},
 		schemeToLocalStorage() {
 			window.localStorage.setItem(this.localStorageKey, this._scheme);
 		},
 		closeDropdown() {
 			this.$refs.menu.removeAttribute('open');
+		},
+		handleSystemPreferenceChange(event) {
+			if (this._scheme === 'auto') {
+				this.applyScheme();  // Apply new system preference if theme is set to auto
+			}
 		},
 	},
 	computed: {
