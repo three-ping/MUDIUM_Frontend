@@ -1,13 +1,11 @@
 <template>
 	<footer>
-		<button title="Toggle theme" aria-label="toggle theme">
-
-		</button>
+		<ToggleTheme />
 	</footer>
 </template>
 
 <script setup>
-
+import ToggleTheme from 'vue-toggle-theme';
 </script>
 
 <style scoped></style>
