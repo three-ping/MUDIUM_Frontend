@@ -2,7 +2,7 @@
 	<header class="container-fluid">
 		<nav>
 			<ul>
-				<li><img src="@/assets/Mudium_small.svg" alt=""></li>
+				<li><img src="@/assets/Mudium_small.svg" alt="" width="120px"></li>
 			</ul>
 			<ul>
 				<li><strong>뮤지컬</strong></li>
@@ -23,7 +23,7 @@
 						</ul>
 					</details>
 				</li>
-				<li>
+				<!-- <li>
 					<details class="dropdown" id="theme-selector">
 						<summary role="button" class="secondary">Theme</summary>
 						<ul>
@@ -32,7 +32,7 @@
 							<li><a href="#" data-theme-switcher="dark">Dark</a></li>
 						</ul>
 					</details>
-				</li>
+				</li> -->
 			</ul>
 			<hr>
 		</nav>

@@ -1,7 +1,6 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router/index.js"; // 라우터 가져오기
-// import "@/assets/styles/main.scss";
 import "@/assets/styles/mudium.css";
 const app = createApp(App);
 
