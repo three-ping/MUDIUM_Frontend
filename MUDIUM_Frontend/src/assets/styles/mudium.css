@@ -1948,7 +1948,7 @@ details.dropdown {
 details.dropdown summary::after,
 details.dropdown > button::after,
 details.dropdown > a::after {
-  display: block;
+  display: none;
   width: 1rem;
   height: calc(1rem * var(--pico-line-height, 1.5));
   margin-inline-start: 0.25rem;
