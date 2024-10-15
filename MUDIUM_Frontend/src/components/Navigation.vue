@@ -1,5 +1,5 @@
 <template>
-	<header class="container">
+	<header class="container-fluid">
 		<nav>
 			<ul>
 				<li><img src="@/assets/Mudium_small.svg" alt=""></li>
