@@ -13,6 +13,21 @@ export default [
                 name: 'BoardDetailView',
                 component: () => import('@/views/board/BoardDetailView.vue')    
             },
+            {
+                path: 'create',  
+                name: 'BoardCreate',
+                component: () => import('@/views/board/BoardCreate.vue')    
+            },
+            {
+                path: 'view/no-args',  
+                name: 'BoardNoArgs',
+                component: () => import('@/views/board/BoardNoArgs.vue')    
+            },
+            {
+                path: 'edit/:id',  
+                name: 'BoardUpdate',
+                component: () => import('@/views/board/BoardUpdate.vue')    
+            }
         ],
     },
 ];
