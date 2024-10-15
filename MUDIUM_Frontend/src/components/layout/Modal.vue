@@ -1,8 +1,8 @@
 <template>
 	<dialog ref="modal" @click.self="closeModal(modal)" open>
 		<article>
-			<header>
-				<p><strong>Mudium</strong></p>
+			<header id="modal-header">
+				<p class="jim-nightshade-regular"><strong>Mudium</strong></p>
 			</header>
 			<input type="text" placeholder="아이디">
 		</article>
@@ -92,4 +92,15 @@ onBeforeUnmount(() => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+#modal-header {
+	display: flex;
+	justify-content: center;
+}
+
+.jim-nightshade-regular {
+	font-family: "Jim Nightshade", cursive;
+	font-weight: 400;
+	font-style: normal;
+}
+</style>
