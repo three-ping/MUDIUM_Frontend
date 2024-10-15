@@ -18,66 +18,73 @@
 	</div>
 </template>
 
-<script>
-export default {
-	data() {
-		return {
-			_scheme: 'auto',
-			menuTarget: "details.dropdown",
-			buttonAttribute: "data-theme-switcher",
-			rootAttribute: "data-theme",
-			localStorageKey: "picoPreferredColorScheme",
-		};
-	},
-	computed: {
-		preferredColorScheme() {
-			return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-		},
-	},
-	mounted() {
-		this._scheme = this.schemeFromLocalStorage || 'auto';
-		this.applyScheme();
+<script setup>
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue';
 
-		// Listen for system preference changes
-		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.handleSystemPreferenceChange);
-	},
-	beforeDestroy() {
-		// Cleanup event listener when component is destroyed
-		window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', this.handleSystemPreferenceChange);
-	},
-	methods: {
-		setScheme(scheme) {
-			if (scheme === 'auto') {
-				this._scheme = this.preferredColorScheme;
-			} else if (scheme === 'dark' || scheme === 'light') {
-				this._scheme = scheme;
-			}
-			this.applyScheme();
-			this.schemeToLocalStorage();
-			this.closeDropdown();
-		},
-		applyScheme() {
-			const scheme = this._scheme === 'auto' ? this.preferredColorScheme : this._scheme;
-			document.querySelector('html')?.setAttribute(this.rootAttribute, scheme);
-		},
-		schemeToLocalStorage() {
-			window.localStorage.setItem(this.localStorageKey, this._scheme);
-		},
-		closeDropdown() {
-			this.$refs.menu.removeAttribute('open');
-		},
-		handleSystemPreferenceChange(event) {
-			if (this._scheme === 'auto') {
-				this.applyScheme();  // Apply new system preference if theme is set to auto
-			}
-		},
-	},
-	computed: {
-		schemeFromLocalStorage() {
-			return window.localStorage.getItem(this.localStorageKey) || this._scheme;
-		},
-	},
+const _scheme = ref('auto');
+const menu = ref(null);
+const rootAttribute = 'data-theme';
+const localStorageKey = 'picoPreferredColorScheme';
+
+// Preferred color scheme based on system preference
+const preferredColorScheme = computed(() => {
+	return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+});
+
+// Get color scheme from local storage
+const schemeFromLocalStorage = window.localStorage.getItem(localStorageKey) || _scheme.value;
+
+// Set scheme
+const setScheme = (scheme) => {
+	if (scheme === 'auto') {
+		_scheme.value = preferredColorScheme.value;
+	} else if (scheme === 'dark' || scheme === 'light') {
+		_scheme.value = scheme;
+	}
+	applyScheme();
+	schemeToLocalStorage();
+	closeDropdown();
 };
+
+// Apply scheme
+const applyScheme = () => {
+	const scheme = _scheme.value === 'auto' ? preferredColorScheme.value : _scheme.value;
+	document.querySelector('html')?.setAttribute(rootAttribute, scheme);
+};
+
+// Store scheme to local storage
+const schemeToLocalStorage = () => {
+	window.localStorage.setItem(localStorageKey, _scheme.value);
+};
+
+// Close dropdown
+const closeDropdown = () => {
+	if (menu.value) {
+		menu.value.removeAttribute('open');
+	}
+};
+
+// Handle system preference change
+const handleSystemPreferenceChange = () => {
+	if (_scheme.value === 'auto') {
+		applyScheme(); // Apply new system preference if theme is set to auto
+	}
+};
+
+// Lifecycle hooks
+onMounted(() => {
+	_scheme.value = schemeFromLocalStorage;
+
+	applyScheme();
+
+	// Listen for system preference changes
+	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemPreferenceChange);
+});
+
+onBeforeUnmount(() => {
+	// Cleanup event listener when component is destroyed
+	window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleSystemPreferenceChange);
+});
 </script>
 
 <style scoped>
