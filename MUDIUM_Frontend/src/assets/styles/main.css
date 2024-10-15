@@ -2483,10 +2483,20 @@ nav[aria-label="breadcrumb"] a[aria-current]:not([aria-current="false"]) {
 aside {
   padding-top: 3rem;
   width: 5rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: var(--pico-block-spacing-vertical);
 }
+aside nav ol:first-of-type,
+aside nav ul:first-of-type {
+  margin-top: calc(var(--pico-nav-element-spacing-horizontal) * -1);
+}
+aside nav ol:last-of-type,
+aside nav ul:last-of-type {
+  margin-bottom: calc(var(--pico-nav-element-spacing-horizontal) * -1);
+}
+
 aside nav,
 aside ol,
 aside ul,
@@ -2499,6 +2509,7 @@ aside li {
 aside li a {
   display: block;
   text-align: right;
+  text-decoration: none;
 }
 aside li [role="button"] {
   margin: inherit;
