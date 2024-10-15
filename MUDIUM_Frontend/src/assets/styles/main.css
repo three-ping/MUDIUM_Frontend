@@ -155,7 +155,7 @@ input:not([type="submit"], [type="button"], [type="reset"], [type="checkbox"], [
 }
 
 [type="search"] {
-  --pico-border-radius: 5rem;
+  --pico-border-radius: 0.5rem;
 }
 
 [type="checkbox"],
@@ -1196,7 +1196,7 @@ figure figcaption {
  */
 hr {
   height: 0;
-  margin: var(--pico-typography-spacing-vertical) 0;
+  margin: var(--pico-typography-spacing-vertical) / 2 0;
   border: 0;
   border-top: 1px solid var(--pico-muted-border-color);
   color: inherit;

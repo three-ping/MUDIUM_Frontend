@@ -16,6 +16,7 @@
 				<li><a href="#" class="contrast">회원가입</a></li>
 			</ul>
 		</nav>
+		<hr>
 	</header>
 </template>
 
