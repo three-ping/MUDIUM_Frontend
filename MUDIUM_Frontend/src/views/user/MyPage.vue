@@ -2,7 +2,9 @@
 	<SideBar />
 
 	<div class="mypage-content">
+		<div>
 
+		</div>
 	</div>
 </template>
 

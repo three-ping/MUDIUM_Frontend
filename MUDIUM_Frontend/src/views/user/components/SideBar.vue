@@ -4,12 +4,15 @@
 			<ul>
 				<li><a href="#" class="contrast"><strong>프로필</strong></a></li>
 				<li><a href="#" class="contrast"><strong>북마크</strong></a></li>
+				<li><a href="#" class="contrast"><strong>본 작품</strong></a></li>
+				<li><a href="#" class="contrast"><strong>게시글</strong></a></li>
+				<li><a href="#" class="contrast"><strong>댓글</strong></a></li>
+				<li><a href="#" class="contrast"><strong>티켓</strong></a></li>
+				<li><a href="#" class="contrast"><strong>캘린더</strong></a></li>
 
 			</ul>
 
-			<ul>
-				<li><a href="#"><strong>로그아웃</strong></a></li>
-			</ul>
+
 		</nav>
 
 	</aside>
