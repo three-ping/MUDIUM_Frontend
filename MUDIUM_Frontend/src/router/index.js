@@ -2,17 +2,17 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 // 도메인별 라우트 가져오기
 import boardRoutes from "./board";
-import signupRoutes from "./signup";
-import App from '@/App.vue';
+import MusicalRoutes from "./musical";
+// import HomeView from '/HomeView.vue';
 
 
 
 const routes = [
   {
-    path: '/'
+    path: '/',
   },
   ...boardRoutes,
-  ...signupRoutes
+  ...MusicalRoutes
 ];
 
 const router = createRouter({

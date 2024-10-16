@@ -13,6 +13,7 @@ import AppHeader from '@/components/AppHeader.vue';
 
 <style>
 * {
-font-family: 'Noto Sans KR';
+  font-family: 'Noto Sans KR';
+  text-decoration: none;
 }
 </style>
