@@ -3,6 +3,7 @@
     <div class="board-detail-header">
         <h1 class="board-detail-title">{{ title }}</h1>
         <div class="board-detail-buttons">
+        <button class="board-button" @click="showDeleteModal = true">삭제</button>
         <button class="board-button" @click="editPost">수정</button>
         <button class="board-button" @click="backToBoard">글 목록</button>
         </div>
@@ -38,12 +39,17 @@
         </div>
     </div>
     </div>
+
+    <Modal v-model:isVisible="showDeleteModal" @confirm="deletePost">
+      정말 삭제하시겠습니까?
+    </Modal>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Like from "@/components/common/Like.vue";
+import Modal from "@/components/common/Modal.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -59,9 +65,19 @@ const comments = ref([]);
 const likeCount = ref(0);
 const isLiked = ref(false);
 const userId = ref(1);
+const showDeleteModal = ref(false);
 
 const editPost = () => {
     router.push(`/board/edit/${id.value}`);
+};
+
+const deletePost = async () => {
+    await fetch(`http://localhost:8080/api/board/${id.value}/${userId.value}`, {
+        method: 'DELETE'
+    }
+    );
+    console.log(`http://localhost:8080/api/board/${id.value}/${userId.value}`);
+    router.push('/board');  
 };
 
 const fetchDetailBoard = async() => {

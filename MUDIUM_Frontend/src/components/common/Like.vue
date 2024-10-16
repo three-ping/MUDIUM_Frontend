@@ -67,7 +67,6 @@ const deleteLike = async (boardId,userId) => {
 
 onMounted( ()=>{
     likeCount.value = props.likeCount;
-    console.log(props.likeCount);
     isLiked.value = props.isLiked;
     firstLike.value = isLiked.value;
 })

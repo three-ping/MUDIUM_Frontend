@@ -115,7 +115,9 @@ function convertToKoreanTime(timestamp) {
 
 
 onMounted(() => {
-  fetchPageData();
+  setTimeout(() => {
+    fetchPageData();
+  }, 100); 
 });
 </script>
 

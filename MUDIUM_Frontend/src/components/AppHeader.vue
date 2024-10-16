@@ -20,7 +20,7 @@
             <RouterLink 
                 to="/board" 
                 class="banner-link"
-                :class="{ active: currentRoute === '/board' }">
+                :class="{ active: currentRoute.startsWith( '/board' )}">
                 자유 게시판
             </RouterLink>
             <RouterLink 
