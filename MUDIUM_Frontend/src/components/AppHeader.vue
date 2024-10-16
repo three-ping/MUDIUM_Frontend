@@ -8,31 +8,31 @@
             <RouterLink 
                 to="/musicalInfo" 
                 class="banner-link"
-                :class="{ active: currentRoute === '/musicalInfo' || currentRoute === '/' }">
+                :class="{ active: currentRoute.startsWith('/musicalInfo') || currentRoute === '/' }">
                 뮤지컬
             </RouterLink>
             <RouterLink 
                 to="/musicalBoard" 
                 class="banner-link"
-                :class="{ active: currentRoute === '/musicalBoard' }">
+                :class="{ active: currentRoute.startsWith('/musicalBoard') }">
                 작품 게시판
             </RouterLink>
             <RouterLink 
                 to="/board" 
                 class="banner-link"
-                :class="{ active: currentRoute.startsWith( '/board' )}">
+                :class="{ active: currentRoute.startsWith('/board') }">
                 자유 게시판
             </RouterLink>
             <RouterLink 
                 to="/etiquette" 
                 class="banner-link"
-                :class="{ active: currentRoute === '/etiquette' }">
+                :class="{ active: currentRoute.startsWith('/etiquette') }">
                 가이드북
             </RouterLink>
             <RouterLink 
                 to="/notice" 
                 class="banner-link"
-                :class="{ active: currentRoute === '/notice' }">
+                :class="{ active: currentRoute.startsWith('/notice') }">
                 공지사항
             </RouterLink>
             <div class="search-bar">
