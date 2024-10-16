@@ -22,18 +22,20 @@
             <th>작성자</th>
             <th>작성일</th>
             <th>좋아요</th>
+            <th>조회수</th>
           </tr>
         </thead>   
         <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
           <td class="td-id">{{ pageItem.id }}</td>
           <td class="td-title">
             <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.id } }">
-              {{ pageItem.title }}
+              {{ pageItem.title }} [{{ pageItem.comments }}]
             </router-link>
           </td>
           <td class="td-nickname">{{ pageItem.nickname }}</td>
           <td class="td-createdAt">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
           <td class="td-like">{{ pageItem.boardLike }}</td>
+          <td class="td-viewCount">{{ pageItem.viewCount }}</td>
         </tr>
       </table>
     </div> 
@@ -69,7 +71,6 @@ const fetchPageData = async () => {
   pageItems.length = 0;
   pageItems.push(...responseDTO.data.content);
   totalPageNumber.value = responseDTO.data.totalPages;
-
 };
 
 const queryPageData = async () => {
@@ -227,7 +228,7 @@ onMounted(() => {
 }
 
 .td-title {
-  width: 50%;
+  width: 43%;
 }
 
 .td-nickname {
@@ -239,6 +240,11 @@ onMounted(() => {
   text-align: center;
 }
 .td-like {
+  width: 10%;
+  text-align-last: center;
+}
+
+.td-viewCount {
   width: 10%;
   text-align-last: center;
 }
