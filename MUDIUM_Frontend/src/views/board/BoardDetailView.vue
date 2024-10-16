@@ -3,6 +3,7 @@
     <div class="board-detail-header">
         <h1 class="board-detail-title">{{ title }}</h1>
         <div class="board-detail-buttons">
+        <button class="board-button" @click="showDeleteModal = true">삭제</button>
         <button class="board-button" @click="editPost">수정</button>
         <button class="board-button" @click="backToBoard">글 목록</button>
         </div>
@@ -19,7 +20,10 @@
         </div>
     </template>
     <div class="board-detail-content">
-        <p>{{ content }}</p>
+        <div class="board-detail-content-read">
+            <p>{{ content }}</p>
+        </div>
+        <Like class="board-like" :likeCount="likeCount" :isLiked="isLiked" :boardId="id" :userId="userId" />
     </div>
     <div class="board-detail-comment">
         <h2>댓글을 입력하세요</h2>
@@ -35,27 +39,45 @@
         </div>
     </div>
     </div>
+
+    <Modal v-model:isVisible="showDeleteModal" @confirm="deletePost">
+      정말 삭제하시겠습니까?
+    </Modal>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import Like from "@/components/common/Like.vue";
+import Modal from "@/components/common/Modal.vue";
 
 const route = useRoute();
 const router = useRouter();
-const id = ref(route.params.id);
+const id = ref(Number(route.params.id));
 
-const title = ref('시카고 너무 재밌다 최재림 최고');
-const author = ref('최재림');
-const content = ref('역시 뮤지컬은 시카고!!');
+const title = ref('');
+const author = ref('');
+const content = ref('로딩중');
 const createdAt = ref(0);
 const updatedAt = ref(0);
 const newComment = ref('');
 const comments = ref([]);
+const likeCount = ref(0);
+const isLiked = ref(false);
+const userId = ref(1);
+const showDeleteModal = ref(false);
 
 const editPost = () => {
-// 수정 페이지로 이동하는 로직
-router.push(`/board/edit/${id.value}`);
+    router.push(`/board/edit/${id.value}`);
+};
+
+const deletePost = async () => {
+    await fetch(`http://localhost:8080/api/board/${id.value}/${userId.value}`, {
+        method: 'DELETE'
+    }
+    );
+    console.log(`http://localhost:8080/api/board/${id.value}/${userId.value}`);
+    router.push('/board');  
 };
 
 const fetchDetailBoard = async() => {
@@ -68,6 +90,8 @@ const fetchDetailBoard = async() => {
     content.value = responseDTO.data.content;
     createdAt.value = responseDTO.data.createdAt;
     updatedAt.value = responseDTO.data.updatedAt;
+    likeCount.value = Number(responseDTO.data.boardLike);
+
 }
 
 const fetchComments = async () => {
@@ -121,10 +145,19 @@ const options = {
 return date.toLocaleString('ko-KR', options);
 }
 
+const checkIsLiked = async () => {
+    const response = await fetch(`http://localhost:8080/api/board-like/${id.value}/${userId.value}`, {
+        method: "GET"
+    });
+    const responseDTO = await response.json();
+    isLiked.value = responseDTO.data;
+}
+
 
 onMounted(() => {
     fetchDetailBoard();
     fetchComments();
+    checkIsLiked();
 });
 </script>
 
@@ -155,9 +188,7 @@ font-size: 24px;
 margin: 0;
 }
 
-.board-detail-subheader {
-margin-bottom: 20px;
-}
+
 
 .board-detail-author-created {
 font-size: 14px;
@@ -232,10 +263,38 @@ display: block;
 margin-bottom: 5px;
 }
 
-.button-container {
-display: flex;
-justify-content: flex-end;
-gap: 10px;
-margin-bottom: 20px;
+.board-detail-container {
+position: relative;
+width: 100%;
+min-height: 500px; /* 최소 높이 설정, 필요에 따라 조정 */
+border: 1px solid #ccc;
+}
+
+.board-content {
+width: 100%;
+height: 100%;
+padding: 20px;
+box-sizing: border-box;
+}
+.board-detail-content {
+position: relative;
+min-height: 50vh;
+margin-bottom: 30px;
+border: 1px solid #eee;
+padding: 20px;
+overflow-y: auto;
+}
+
+.board-detail-content-read {
+margin-bottom: 100px; /* 좋아요 박스와 겹치지 않도록 여백 추가 */
+}
+
+.board-like {
+position: absolute;
+left: 50%;
+bottom: 20%; /* 아래에서 20% 위치 (전체 높이의 4/5 지점) */
+transform: translateX(-50%);
+border-radius: 8px;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 </style>

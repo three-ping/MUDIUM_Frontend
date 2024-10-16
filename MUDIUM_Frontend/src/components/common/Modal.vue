@@ -1,38 +1,35 @@
 <template>
     <div class="modal-overlay" v-if="isVisible">
-        <div class="modal-content">
-            <button class="close-button" @click="closeModal">X</button> 
-            <div class="modal-message">
-                <slot></slot> <!-- 외부에서 주입된 내용 -->
-            </div>
-            <div class="buttons">
-                <button class="common-button-radi7" @click="closeModal">No</button>
-                <button class="common-button-radi7-pink" @click="yesModal">Yes</button>
-            </div>
+    <div class="modal-content">
+        <button class="close-button" @click="closeModal"></button>
+        <div class="modal-message">
+        <slot>정말 삭제하시겠습니까?</slot>
         </div>
+        <div class="buttons">
+        <button class="common-button" @click="closeModal">취소</button>
+        <button class="common-button-purple" @click="confirmModal">확인</button>
+        </div>
+    </div>
     </div>
 </template>
 
 <script setup>
-
 const props = defineProps({
     isVisible: {
-        type: Boolean,
-        default: true
-    },
-    isYes: {
-        type: Boolean,
-        default: false
+    type: Boolean,
+    default: false
     }
 });
 
-const emit = defineEmits(['update:isVisible','update:isYes']);
+const emit = defineEmits(['update:isVisible', 'confirm']);
 
 const closeModal = () => {
     emit('update:isVisible', false);
 };
-const yesModal = () => {
-    emit('update:isYes', true);
+
+const confirmModal = () => {
+    emit('confirm');
+    emit('update:isVisible', false);
 };
 </script>
 
@@ -43,63 +40,83 @@ const yesModal = () => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 5;
+    z-index: 1000;
 }
 
 .modal-content {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: #f9f4e7;
-    padding: 20px;
-    border-radius: 5px;
-    width: 30vw;
-    height: 27vh;
-}
-
-.modal-message {
-    font-size: 1.5vw; 
-    text-align: center; 
-    margin-bottom: 20px; 
-    flex-grow: 1; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .close-button {
     position: absolute;
     top: 10px;
     right: 10px;
-    font-size: 1.7vw;
-    cursor: pointer;
+    background: none;
     border: none;
-    background-color: transparent;
-    color: #333333;
-    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+
+.close-button::before,
+.close-button::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    background-color: #333;
+}
+
+.close-button::before {
+    transform: rotate(45deg);   
+}
+
+.close-button::after {
+    transform: rotate(-45deg);
+}
+
+.modal-message {
+margin: 20px 0;
+text-align: center;
+font-size: 16px;
 }
 
 .buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 1vw;
-    margin-top: auto;
+display: flex;
+justify-content: center;
+gap: 10px;
 }
 
-.common-button-radi7-pink {
-    background-color: #FFC7C7;
-    color: #333;
-    border: none;
-    padding: 7px 28px;
-    border-radius: 7px;
-    font-size: 15px;
-    cursor: pointer;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+.common-button,
+.common-button-purple {
+padding: 10px 20px;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 14px;
+width: 100px;  /* 버튼 크기 일치 */
+}
+
+.common-button {
+background-color: #f0f0f0;
+}
+
+.common-button-purple {
+background-color: #8e44ad;
+color: white;
 }
 </style>

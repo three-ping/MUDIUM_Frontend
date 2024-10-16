@@ -3,12 +3,13 @@
     <div class="board-actions">
       <div class="search-bar">
         <select v-model="searchType">
-          <option value="author">작성자</option>
-          <option value="title">제목</option>
-          <option value="content">내용</option>
+          <option value="TITLE">제목</option>
+          <option value="NICKNAME">작성자</option>
+          <option value="CONTENT">내용</option>
         </select>
-        <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요">
-        <button @click="search" class="search-button">검색</button>
+        <input class="search-box" type="text" v-model="searchQuery" placeholder="검색어를 입력하세요">
+        <button @click="search" class="search-button" :disabled="!searchQuery.trim()">검색</button>
+        <button @click="fetchPageData" class="back-button" >목록</button>
       </div>
       <button @click="createBoard" class="create-button">글 쓰기</button>
     </div>
@@ -20,6 +21,7 @@
             <th>제목</th>
             <th>작성자</th>
             <th>작성일</th>
+            <th>좋아요</th>
           </tr>
         </thead>   
         <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
@@ -31,6 +33,7 @@
           </td>
           <td class="td-nickname">{{ pageItem.nickname }}</td>
           <td class="td-createdAt">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
+          <td class="td-like">{{ pageItem.boardLike }}</td>
         </tr>
       </table>
     </div> 
@@ -53,8 +56,10 @@ const requestURL = `api/board`;
 const pageNumber = ref(1);
 const totalPageNumber = ref(0);
 const pageItems = reactive([]);
-const searchType = ref('title');
+const searchType = ref('TITLE');
 const searchQuery = ref('');
+
+
 
 const fetchPageData = async () => {
   const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
@@ -97,20 +102,22 @@ const createBoard = () => {
 
 function convertToKoreanTime(timestamp) {
   const date = new Date(timestamp);
-  const options = {
-    timeZone: 'Asia/Seoul',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  };
-  return date.toLocaleString('ko-KR', options);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+
+  return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
 }
 
+
 onMounted(() => {
-  fetchPageData();
+  setTimeout(() => {
+    fetchPageData();
+  }, 100); 
 });
 </script>
 
@@ -134,9 +141,11 @@ onMounted(() => {
   margin-bottom: 20px;
 }
 
+
 .search-bar {
   display: flex;
   gap: 10px;
+  width: 60vw;
 }
 
 .search-bar select,
@@ -146,14 +155,24 @@ onMounted(() => {
   border-radius: 4px;
 }
 
+.search-box {
+  width: 50%;
+}
+
 .search-button,
-.create-button {
+.create-button,
+.back-button {
+  width: 8%;
   padding: 8px 15px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   color: white;
   font-weight: bold;
+}
+
+.back-button {
+  background-color: #6EABE1;
 }
 
 .search-button {
@@ -212,12 +231,16 @@ onMounted(() => {
 }
 
 .td-nickname {
-  width: 20%;
+  width: 15%;
 }
 
 .td-createdAt {
-  width: 20%;
+  width: 15%;
   text-align: center;
+}
+.td-like {
+  width: 10%;
+  text-align-last: center;
 }
 
 .td-title a {

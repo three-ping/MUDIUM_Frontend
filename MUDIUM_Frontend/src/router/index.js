@@ -3,14 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router';
 // 도메인별 라우트 가져오기
 import boardRoutes from "./board";
 import signupRoutes from "./signup";
-import HomeView from '@/views/HomeView.vue';
+import App from '@/App.vue';
 
 
 
 const routes = [
   {
-    path: '/',
-    component: HomeView 
+    path: '/'
   },
   ...boardRoutes,
   ...signupRoutes
