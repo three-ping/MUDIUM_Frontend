@@ -1,23 +1,20 @@
 <template>
-	<aside>
-		<nav>
-			<ul>
-				<li><a href="#" class="contrast"><strong>프로필</strong></a></li>
-				<li><a href="#" class="contrast"><strong>북마크</strong></a></li>
+	<SideBar />
 
-			</ul>
+	<div class="mypage-content">
 
-			<ul>
-				<li><a href="#"><strong>로그아웃</strong></a></li>
-			</ul>
-		</nav>
-
-	</aside>
-
-
+	</div>
 </template>
 
 <script setup>
+import SideBar from './components/SideBar.vue';
 </script>
 
-<style scoped></style>
+<style scoped>
+.mypage-content {
+	display: inline-block;
+	background-color: aqua;
+	width: calc(100% - 10rem);
+	height: 100%;
+}
+</style>
