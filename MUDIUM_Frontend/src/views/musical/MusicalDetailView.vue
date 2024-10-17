@@ -1,24 +1,26 @@
 <template>
-  <div class="musical-detail-container">
-    <!-- 포스터 섹션 -->
-    <div class="poster-section">
-      <img :src="musical.poster" alt="Poster" />
-    </div>
+  <section class="container-fluid">
+    <div class="musical-detail-container">
+      <!-- 포스터 섹션 -->
+      <div class="poster-section">
+        <img :src="musical.poster" alt="Poster" />
+      </div>
 
-    <!-- 상세 정보 섹션 -->
-    <div class="remain-section">
-    <div class="detail-section">
-      <h2>{{ musical.title }}</h2>
-      <p class="rating">{{ musical.rating }} 관람가</p>
-      <p class="scope">제작사: {{ musical.producer || '정보 없음' }}</p>
+      <!-- 상세 정보 섹션 -->
+      <div class="remain-section">
+        <div class="detail-section">
+          <h2>{{ musical.title }}</h2>
+          <p class="rating">{{ musical.rating }} 관람가</p>
+          <p class="scope">제작사: {{ musical.producer || '정보 없음' }}</p>
 
-      <div class="star-rating">
-        <StarRating></StarRating>
-        <!-- <p>현재 별점: {{ rating }}</p> -->
+          <div class="star-rating">
+            <StarRating></StarRating>
+            <!-- <p>현재 별점: {{ rating }}</p> -->
+          </div>
+        </div>
       </div>
     </div>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
@@ -58,10 +60,10 @@ onMounted(() => {
   align-items: center;
   justify-content: flex-start;
   padding: 50px;
-  background-color: rgba(240, 240, 255, 0.4); 
-  width: 100%; 
+  background-color: rgba(240, 240, 255, 0.4);
+  width: 100%;
   height: 300px;
-  margin: 100px auto; 
+  margin: 100px auto;
   gap: 40px;
   margin-top: 5%;
   margin-bottom: 5%;
@@ -82,11 +84,12 @@ onMounted(() => {
 .detail-section {
   flex: 2;
   border-radius: 12px;
-  z-index: 2; 
+  z-index: 2;
   margin-top: 32%;
   margin-left: 5%;
   width: 100%;
 }
+
 .detail-section h2 {
   font-size: 2rem;
   margin-bottom: 1px;
