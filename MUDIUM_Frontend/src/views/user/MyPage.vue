@@ -9,7 +9,7 @@
 				<p>threeping@gmail.com</p>
 			</div>
 		</div>
-		<div><button>프로필 수정</button></div>
+		<div class="container-fluid"><button>프로필 수정</button></div>
 	</section>
 </template>
 
