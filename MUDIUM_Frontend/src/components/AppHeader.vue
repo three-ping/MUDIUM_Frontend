@@ -64,7 +64,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const currentRoute = ref(route.path);
 
-const isLoggedIn = ref(true);
+const isLoggedIn = ref(false);
 // 경로가 변경될 때마다 currentRoute 업데이트
 watch(route, (newRoute) => {
     currentRoute.value = newRoute.path;
