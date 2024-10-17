@@ -1,7 +1,9 @@
 <template>
 	<header class="container-fluid">
 		<nav>
-			<img src="@/assets/images/Mudium.svg" width="150rem" alt="">
+			<RouterLink to="/">
+				<img src="@/assets/images/Mudium.svg" alt="Mudium" width="150rem">
+			</RouterLink>
 			<ul>
 				<li>
 					<a href="#" class="contrast"><strong>뮤지컬</strong></a>

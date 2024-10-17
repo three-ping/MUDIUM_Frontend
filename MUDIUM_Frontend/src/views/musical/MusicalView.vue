@@ -1,20 +1,18 @@
 <template>
-  <div class="musical-container">
-    <h1>현재 작품 순위</h1>
-    <div class="musical-card-container" id="musical-section">
-      <RouterLink 
-        v-for="(musical, index) in topMusicals"
-        :key="musical.musicalId"
-        :to="{ name: 'MusicalDetailView', params: { id: musical.musicalId.toString() } }"
-        class="musical-card"
-        >
+  <section class="container-fluid">
+    <div class="musical-container">
+      <h1>현재 작품 순위</h1>
+      <div class="musical-card-container" id="musical-section">
+        <RouterLink v-for="(musical, index) in topMusicals" :key="musical.musicalId"
+          :to="{ name: 'MusicalDetailView', params: { id: musical.musicalId.toString() } }" class="musical-card">
 
-        <div class="rank-badge">{{ index + 1 }}</div>
-        <img :src="musical.poster" :alt="musical.title" />
-        <div class="musical-title">{{ musical.title }}</div>
-      </RouterLink>
+          <div class="rank-badge">{{ index + 1 }}</div>
+          <img :src="musical.poster" :alt="musical.title" />
+          <div class="musical-title">{{ musical.title }}</div>
+        </RouterLink>
       </div>
     </div>
+  </section>
 </template>
 
 <script setup>
@@ -72,16 +70,18 @@ onMounted(() => {
 
 .musical-card {
   position: relative;
-  flex: 0 0 calc(20% - 20px); /* 5개씩 표시되도록 설정 */
+  flex: 0 0 calc(20% - 20px);
+  /* 5개씩 표시되도록 설정 */
   box-sizing: border-box;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   gap: 13px;
-  vertical-align: top; 
-  margin: 0; 
-  text-align: center; 
+  vertical-align: top;
+  margin: 0;
+  text-align: center;
 }
+
 /* 
 .musical-card div {
   display: inline-block;
@@ -128,8 +128,8 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 200px; 
-  display: inline-block; 
+  width: 200px;
+  display: inline-block;
   font-weight: bold;
   color: black;
 }

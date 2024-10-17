@@ -1,8 +1,8 @@
 <template>
   <Navigation />
   <main class="container-fluid">
-    <!-- <RouterView /> -->
-    <MyPage />
+    <RouterView />
+    <!-- <MyPage /> -->
   </main>
   <Footer />
 </template>
