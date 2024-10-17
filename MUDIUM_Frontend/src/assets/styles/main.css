@@ -600,6 +600,7 @@ progress,
 body,
 html {
   width: 100%;
+  height: 100vh;
   margin: 0;
   padding: 0;
 }
@@ -2412,6 +2413,7 @@ nav ul {
 nav {
   justify-content: space-between;
   overflow: visible;
+  width: 100%;
 }
 nav ol,
 nav ul {

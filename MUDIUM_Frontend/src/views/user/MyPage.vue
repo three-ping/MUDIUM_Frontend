@@ -1,11 +1,16 @@
 <template>
 	<SideBar />
 
-	<div class="mypage-content">
-		<div>
-
+	<section>
+		<div class="container-fluid">
+			<img src="@/assets/images/profile_default.svg" alt="">
+			<div>
+				<h2>뜨리핑님</h2>
+				<p>threeping@gmail.com</p>
+			</div>
 		</div>
-	</div>
+		<div><button>프로필 수정</button></div>
+	</section>
 </template>
 
 <script setup>
@@ -13,10 +18,9 @@ import SideBar from './components/SideBar.vue';
 </script>
 
 <style scoped>
-.mypage-content {
-	display: inline-block;
-
-	width: calc(100% - 10rem);
-	height: 100%;
+div img {
+	width: 10rem;
+	height: 10rem;
+	border-radius: 5rem;
 }
 </style>
