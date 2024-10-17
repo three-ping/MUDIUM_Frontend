@@ -19,6 +19,11 @@
         <span class="board-detail-updated">수정시간: {{ convertToKoreanTime(updatedAt) }}</span>
         </div>
     </template>
+    <div class="board-detail-subheader">
+        <div class="board-detail-viewCount">
+        <span class="board-detail-viewCount">조회수: {{ viewCount }}</span>
+        </div>
+    </div>
     <div class="board-detail-content">
         <div class="board-detail-content-read">
             <p>{{ content }}</p>
@@ -41,7 +46,7 @@
     </div>
 
     <Modal v-model:isVisible="showDeleteModal" @confirm="deletePost">
-      정말 삭제하시겠습니까?
+        정말 삭제하시겠습니까?
     </Modal>
 </template>
 
@@ -66,6 +71,7 @@ const likeCount = ref(0);
 const isLiked = ref(false);
 const userId = ref(1);
 const showDeleteModal = ref(false);
+const viewCount = ref(0);
 
 const editPost = () => {
     router.push(`/board/edit/${id.value}`);
@@ -91,7 +97,23 @@ const fetchDetailBoard = async() => {
     createdAt.value = responseDTO.data.createdAt;
     updatedAt.value = responseDTO.data.updatedAt;
     likeCount.value = Number(responseDTO.data.boardLike);
+    viewCount.value = Number(responseDTO.data.viewCount);
 
+    incrementViewCount();
+}
+
+const incrementViewCount = async () => {
+    const viewedPosts = JSON.parse(localStorage.getItem('viewedPosts') || '{}');
+    if (!viewedPosts[id.value]) {
+        viewedPosts[id.value] = true;
+        localStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
+
+        await fetch(`http://localhost:8080/api/board/${id.value}/count`, {
+            method: 'PUT'
+        });
+
+        viewCount.value++;
+    }
 }
 
 const fetchComments = async () => {
@@ -195,6 +217,14 @@ font-size: 14px;
 color: #666;
 display:flex;
 justify-content: space-between;
+}
+
+.board-detail-viewCount {
+    font-size: 14px;
+    color: #666;
+    display:flex;
+    flex-direction: column;
+    align-items: end;
 }
 
 .board-detail-updated {
