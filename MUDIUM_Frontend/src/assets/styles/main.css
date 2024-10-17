@@ -14,7 +14,7 @@
   --pico-line-height: 1.5;
   --pico-font-weight: 400;
   --pico-font-size: 10px;
-  --pico-text-underline-offset: 0.1rem;
+  /* --pico-text-underline-offset: 0.1rem; */
   --pico-border-radius: 0.25rem;
   --pico-border-width: 0.0625rem;
   --pico-outline-width: 0.125rem;
@@ -74,7 +74,7 @@
   --pico-text-decoration: none;
 } */
 a {
-  --pico-text-decoration: underline;
+  --pico-text-decoration: none;
 }
 a.secondary,
 a.contrast {
@@ -857,14 +857,14 @@ del {
  */
 :where(a:not([role="button"])),
 [role="link"] {
-  --pico-color: var(--pico-primary);
+  --pico-color: var(--pico-contrast);
   --pico-background-color: transparent;
-  --pico-underline: var(--pico-primary-underline);
+  /* --pico-underline: var(--pico-primary-underline); */
   outline: none;
   background-color: var(--pico-background-color);
   color: var(--pico-color);
-  -webkit-text-decoration: var(--pico-text-decoration);
-  text-decoration: var(--pico-text-decoration);
+  /* -webkit-text-decoration: var(--pico-text-decoration); */
+  text-decoration: none;
   text-decoration-color: var(--pico-underline);
   text-underline-offset: 0.125em;
   transition: background-color var(--pico-transition), color var(--pico-transition), box-shadow var(--pico-transition), -webkit-text-decoration var(--pico-transition);
@@ -874,8 +874,8 @@ del {
 :where(a:not([role="button"])):is([aria-current]:not([aria-current="false"]), :hover, :active, :focus),
 [role="link"]:is([aria-current]:not([aria-current="false"]), :hover, :active, :focus) {
   /* --pico-color: var(--pico-primary-hover); */
-  --pico-underline: var(--pico-primary-hover-underline);
-  --pico-text-decoration: underline;
+  /* --pico-underline: var(--pico-primary-hover-underline);
+  --pico-text-decoration: underline; */
 }
 :where(a:not([role="button"])):focus-visible,
 [role="link"]:focus-visible {
@@ -2454,7 +2454,7 @@ nav li :where(a, [role="link"]):not(:hover) {
 }
 
 nav li :where(a, [role="link"]):focus {
-  text-decoration: underline;
+  text-decoration: none;
 }
 nav li button,
 nav li [role="button"],
