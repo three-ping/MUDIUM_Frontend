@@ -2,23 +2,32 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 // 도메인별 라우트 가져오기
 import boardRoutes from "./board";
-import signupRoutes from "./signup";
-import HomeView from '@/views/HomeView.vue';
+// import LoginRoutes from "./login";
+import MusicalRoutes from "./musical";
+// import HomeView from '/HomeView.vue';
 
 
 
 const routes = [
   {
     path: '/',
-    component: HomeView 
+    redirect: '/musicalInfo'
   },
   ...boardRoutes,
-  ...signupRoutes
+  // ...LoginRoutes,
+  ...MusicalRoutes
 ];
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition; 
+    } else {
+      return { top: 0 };
+    }
+  }
 });
 
 export default router;
