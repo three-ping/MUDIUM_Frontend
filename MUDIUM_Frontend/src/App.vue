@@ -4,7 +4,7 @@
     <!-- <RouterView /> -->
     <MyPage />
   </main>
-  <Footer />
+  <!-- <Footer /> -->
 </template>
 
 <script setup>

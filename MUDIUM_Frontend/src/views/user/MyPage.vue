@@ -15,7 +15,7 @@ import SideBar from './components/SideBar.vue';
 <style scoped>
 .mypage-content {
 	display: inline-block;
-	background-color: aqua;
+
 	width: calc(100% - 10rem);
 	height: 100%;
 }
