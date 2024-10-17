@@ -2306,10 +2306,13 @@ dialog {
   color: var(--pico-color);
 }
 dialog article {
-  width: 100%;
+  width: 100rem;
   max-height: calc(100vh - var(--pico-spacing) * 2);
   margin: var(--pico-spacing);
   overflow: auto;
+}
+article section {
+  width: 100%;
 }
 @media (min-width: 576px) {
   dialog article {

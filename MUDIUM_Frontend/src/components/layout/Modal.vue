@@ -4,7 +4,9 @@
 			<header id="modal-header">
 				<img src="@/assets/images/MudiumText.svg" alt="">
 			</header>
-			<div></div>
+			<section>
+				<slot name="modalSection"></slot>
+			</section>
 			<footer></footer>
 		</article>
 	</dialog>

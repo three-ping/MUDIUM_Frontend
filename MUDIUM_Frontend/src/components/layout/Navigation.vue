@@ -44,7 +44,7 @@
 						<summary>계정</summary>
 						<ul dir="rtl">
 							<li>
-								<button class="contrast" @click="openModal">로그인</button>
+								<button class="contrast" @click.prevent="openLoginModal">로그인</button>
 							</li>
 							<li>
 								<button class="contrast">회원가입</button>
@@ -57,12 +57,12 @@
 		</nav>
 	</header>
 	<hr>
-	<Modal v-if="isLoginModalVisible" />
+	<LoginModal v-if="isLoginModalVisible" />
 </template>
 
 <script setup>
-import Modal from './Modal.vue';
-import { isMemoSame, ref, watch } from 'vue';
+import LoginModal from '@/views/user/components/LoginModal.vue';
+import { ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 // 현재 경로를 추적하기 위한 변수
@@ -76,8 +76,9 @@ watch(route, (newRoute) => {
 	currentRoute.value = newRoute.path;
 });
 
-const openModal = () => {
+const openLoginModal = () => {
 	isLoginModalVisible.value = true;
+
 }
 </script>
 
