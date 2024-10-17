@@ -202,6 +202,12 @@ details summary[role="button"]:not(.outline)::after {
   filter: brightness(0) invert(1);
 }
 
+details ul li button {
+  background-color: #fff;
+  color: var(--pico-code-color);
+  border: rgba(0, 0, 0, 0);
+}
+
 [aria-busy="true"]:not(input, select, textarea):is(button, [type="submit"], [type="button"], [type="reset"], [role="button"]):not(.outline)::before {
   filter: brightness(0) invert(1);
 }

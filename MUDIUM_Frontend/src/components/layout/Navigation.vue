@@ -37,44 +37,48 @@
 					</RouterLink>
 				</li>
 			</ul>
-			<ul v-if="!isLoggedIn">
+			<ul>
 				<li><input type="search"></li>
-				<li>
+				<li v-if="!isLoggedIn">
 					<details class="dropdown">
 						<summary>계정</summary>
 						<ul dir="rtl">
-							<li><a href="#" class="contrast">로그인</a></li>
-							<li><a href="#" class="contrast">회원가입</a></li>
+							<li>
+								<button class="contrast" @click="openModal">로그인</button>
+							</li>
+							<li>
+								<button class="contrast">회원가입</button>
+							</li>
 						</ul>
 					</details>
 				</li>
 			</ul>
-			<ul v-else>
-				<li>
-					<RouterLink to="/login" class="banner-link">로그인</RouterLink>
-				</li>
-				<li>
-					<RouterLink to="/signup" class="banner-link">회원가입</RouterLink>
-				</li>
-			</ul>
+
 		</nav>
 	</header>
 	<hr>
+	<Modal v-if="isLoginModalVisible" />
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import Modal from './Modal.vue';
+import { isMemoSame, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 // 현재 경로를 추적하기 위한 변수
 const route = useRoute();
 const currentRoute = ref(route.path);
 
+let isLoginModalVisible = ref(false);
 const isLoggedIn = ref(false);
 // 경로가 변경될 때마다 currentRoute 업데이트
 watch(route, (newRoute) => {
 	currentRoute.value = newRoute.path;
 });
+
+const openModal = () => {
+	isLoginModalVisible.value = true;
+}
 </script>
 
 <style scoped>
