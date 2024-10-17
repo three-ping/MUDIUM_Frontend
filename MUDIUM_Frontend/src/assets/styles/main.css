@@ -70,16 +70,16 @@
     --pico-font-size: 131.25%;
   }
 }
-a {
-  --pico-text-decoration: none;
-}
 /* a {
+  --pico-text-decoration: none;
+} */
+a {
   --pico-text-decoration: underline;
 }
 a.secondary,
 a.contrast {
-  --pico-text-decoration: underline;
-} */
+  --pico-text-decoration: none;
+}
 
 small {
   --pico-font-size: 0.875em;
@@ -239,8 +239,8 @@ details summary[role="button"]:not(.outline)::after {
   --pico-contrast: #181c25;
   --pico-contrast-background: #181c25;
   --pico-contrast-border: var(--pico-contrast-background);
-  --pico-contrast-underline: rgba(24, 28, 37, 0.5);
-  --pico-contrast-hover: #000;
+  --pico-contrast-underline: var(--pico-primary-hover-background);
+  --pico-contrast-hover: var(--pico-primary-ba);
   --pico-contrast-hover-background: #000;
   --pico-contrast-hover-border: var(--pico-contrast-hover-background);
   --pico-contrast-hover-underline: var(--pico-secondary-hover);
@@ -350,7 +350,7 @@ details summary[role="button"]:not(.outline)::after {
     --pico-contrast: #dfe3eb;
     --pico-contrast-background: #eff1f4;
     --pico-contrast-border: var(--pico-contrast-background);
-    --pico-contrast-underline: rgba(223, 227, 235, 0.5);
+    --pico-contrast-underline: var(--pico-primary);
     --pico-contrast-hover: #fff;
     --pico-contrast-hover-background: #fff;
     --pico-contrast-hover-border: var(--pico-contrast-hover-background);
@@ -873,7 +873,7 @@ del {
 }
 :where(a:not([role="button"])):is([aria-current]:not([aria-current="false"]), :hover, :active, :focus),
 [role="link"]:is([aria-current]:not([aria-current="false"]), :hover, :active, :focus) {
-  --pico-color: var(--pico-primary-hover);
+  /* --pico-color: var(--pico-primary-hover); */
   --pico-underline: var(--pico-primary-hover-underline);
   --pico-text-decoration: underline;
 }
@@ -896,9 +896,9 @@ del {
   --pico-color: var(--pico-contrast);
   --pico-underline: var(--pico-contrast-underline);
 }
-:where(a:not([role="button"])).contrast:is([aria-current]:not([aria-current="false"]), :hover, :active, :focus),
+:where(a:not([role="button"])).contrast:is([aria-current]:not([aria-current="false"]), :active, :focus),
 [role="link"].contrast:is([aria-current]:not([aria-current="false"]), :hover, :active, :focus) {
-  --pico-color: var(--pico-contrast-hover);
+  /* --pico-color: var(--pico-contrast-hover); */
   --pico-underline: var(--pico-contrast-hover-underline);
 }
 
@@ -2451,6 +2451,10 @@ nav li :where(a, [role="link"]) {
 }
 nav li :where(a, [role="link"]):not(:hover) {
   text-decoration: none;
+}
+
+nav li :where(a, [role="link"]):focus {
+  text-decoration: underline;
 }
 nav li button,
 nav li [role="button"],
