@@ -1,8 +1,8 @@
 <template>
   <Navigation />
   <!-- <AppHeader /> -->
-  <!-- <main class="container-fluid"> -->
-  <main>
+  <main class="container-fluid">
+    <!-- <main> -->
     <RouterView :key="$route.fullPath" />
   </main>
   <!-- <MyPage /> -->
