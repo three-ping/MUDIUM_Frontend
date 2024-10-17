@@ -1,5 +1,5 @@
 <template>
-	<dialog ref="modal" @click.self="closeModal(modal)" v-bind:open="isModalOpen">
+	<dialog ref="modal" @click.self="closeModal" :open="isModalOpen">
 		<article id="modal-popup">
 			<header id="modal-header">
 				<img src="@/assets/images/MudiumText.svg" alt="">
@@ -29,6 +29,8 @@ const modal = ref(null);
 const props = defineProps({
 	isModalOpen: Boolean
 })
+
+const emit = defineEmits(['close']);
 // Toggle modal
 const toggleModal = (event) => {
 	event.preventDefault();
@@ -54,16 +56,8 @@ const openModal = (modal) => {
 
 // Close modal
 const closeModal = (modal) => {
-	visibleModal = null;
-	const { documentElement: html } = document;
-	html.classList.add(closingClass);
-	setTimeout(() => {
-		html.classList.remove(closingClass, isOpenClass);
-		html.style.removeProperty(scrollbarWidthCssVar);
-		modal.close();
-	}, animationDuration);
+	emit('close')
 };
-
 // Get scrollbar width
 const getScrollbarWidth = () => {
 	const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
@@ -109,7 +103,6 @@ onBeforeUnmount(() => {
 	width: 8rem;
 }
 
-footer {}
 
 .jim-nightshade-regular {
 	font-family: "Jim Nightshade", cursive;

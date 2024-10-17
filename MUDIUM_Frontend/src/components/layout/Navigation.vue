@@ -57,7 +57,7 @@
 		</nav>
 	</header>
 	<hr>
-	<LoginModal :isLoginModalVisible="isLoginModalVisible" />
+	<LoginModal :isLoginModalVisible="isLoginModalVisible" @close="isLoginModalVisible = false" />
 </template>
 
 <script setup>
