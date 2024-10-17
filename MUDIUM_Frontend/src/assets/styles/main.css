@@ -624,6 +624,8 @@ header {
  * Section
  */
 section {
+  width: calc(100% - 10rem);
+
   margin-bottom: var(--pico-block-spacing-vertical);
 }
 
