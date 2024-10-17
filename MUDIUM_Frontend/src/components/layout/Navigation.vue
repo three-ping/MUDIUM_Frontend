@@ -1,12 +1,17 @@
 <template>
-	<header class="container-fluid">
+	<header class="container-fluid fixed-header">
 		<nav>
-			<RouterLink to="/">
-				<img src="@/assets/images/Mudium.svg" alt="Mudium" width="150rem">
-			</RouterLink>
 			<ul>
 				<li>
-					<RouterLink to="/musicalInfo" class="banner-link"
+					<RouterLink to="/">
+						<img src="@/assets/images/Mudium.svg" alt="Mudium" width="150rem">
+					</RouterLink>
+				</li>
+			</ul>
+
+			<ul>
+				<li>
+					<RouterLink to="/musicalInfo"
 						:class="{ active: currentRoute.startsWith('/musicalInfo') || currentRoute === '/' }">
 						<strong>뮤지컬</strong>
 					</RouterLink>
@@ -34,8 +39,15 @@
 			</ul>
 			<ul v-if="!isLoggedIn">
 				<li><input type="search"></li>
-				<li><a href="#" class="contrast">로그인</a></li>
-				<li><a href="#" class="contrast">회원가입</a></li>
+				<li>
+					<details class="dropdown">
+						<summary>계정</summary>
+						<ul dir="rtl">
+							<li><a href="#" class="contrast">로그인</a></li>
+							<li><a href="#" class="contrast">회원가입</a></li>
+						</ul>
+					</details>
+				</li>
 			</ul>
 			<ul v-else>
 				<li>
@@ -66,9 +78,11 @@ watch(route, (newRoute) => {
 </script>
 
 <style scoped>
+/* Style for the fixed header */
+
+
 .active::after {
 	content: "";
-	position: relative;
 	display: flex;
 	bottom: -5px;
 	left: 0;

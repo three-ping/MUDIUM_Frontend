@@ -604,6 +604,7 @@ html {
   margin: 0;
   padding: 0;
 }
+
 main {
   display: block;
   height: calc(100vh - 10rem);
@@ -1206,7 +1207,7 @@ figure figcaption {
  * Miscs
  */
 hr {
-  height: 0;
+  height: 1px;
 
   margin: var(--pico-typography-spacing-vertical) / 2 0;
   border: 0;
@@ -1863,7 +1864,7 @@ details summary::marker {
 details summary::-moz-list-bullet {
   list-style-type: none;
 }
-details summary::after {
+/* details summary::after {
   display: block;
   width: 1rem;
   height: 1rem;
@@ -1876,7 +1877,7 @@ details summary::after {
   background-repeat: no-repeat;
   content: "";
   transition: transform var(--pico-transition);
-}
+} */
 details summary:focus {
   outline: none;
 }
@@ -1952,7 +1953,7 @@ details.dropdown {
   position: relative;
   border-bottom: none;
 }
-details.dropdown summary::after,
+/* details.dropdown summary::after, */
 details.dropdown > button::after,
 details.dropdown > a::after {
   display: block;
@@ -2434,6 +2435,7 @@ nav ul {
 nav ol:first-of-type,
 nav ul:first-of-type {
   margin-left: calc(var(--pico-nav-element-spacing-horizontal) * -1);
+  /* min-width: 50rem; */
 }
 nav ol:last-of-type,
 nav ul:last-of-type {
@@ -2457,17 +2459,6 @@ nav li :where(a, [role="link"]):not(:hover) {
 nav li :where(a, [role="link"]):focus {
   text-decoration: none;
 }
-
-/* nav li :where(a, [role="link"]):focus ::after {
-  content: "";
-  position: absolute;
-  display: flex;
-  bottom: -5px;
-  left: 0;
-  width: 100%;
-  height: 3px;
-  background-color: purple;
-} */
 
 nav li button,
 nav li [role="button"],

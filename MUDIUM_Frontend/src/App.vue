@@ -1,8 +1,8 @@
 <template>
   <Navigation />
-  <AppHeader />
+  <!-- <AppHeader /> -->
   <main class="container-fluid">
-    <!-- <RouterView /> -->
+    <RouterView />
     <!-- <MyPage /> -->
   </main>
   <Footer />
