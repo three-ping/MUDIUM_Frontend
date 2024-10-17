@@ -39,7 +39,15 @@
                 <input type="text" placeholder="검색어를 입력하세요"/>
             </div>
 
-            <div class="login-banner">
+            <div v-if="isLoggedIn" class="user-info">
+                <RouterLink to="/calender">
+                    <img src="/src/assets/calendar-icon.svg" alt="캘린더" class="calendar-icon">
+                </RouterLink>
+                <RouterLink to="/myPage">
+                    <img src="/src/assets/mypage-icon.svg" alt="프로필" class="mypage-icon">
+                </RouterLink>
+            </div>
+            <div v-else class="login-banner">
                 <RouterLink to="/login" class="banner-link">로그인</RouterLink>
                 <RouterLink to="/signup" class="banner-link">회원가입</RouterLink>
             </div>
@@ -56,6 +64,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const currentRoute = ref(route.path);
 
+const isLoggedIn = ref(true);
 // 경로가 변경될 때마다 currentRoute 업데이트
 watch(route, (newRoute) => {
     currentRoute.value = newRoute.path;
@@ -129,11 +138,13 @@ watch(route, (newRoute) => {
 
     .appHeader .search-bar input {
         padding: 1%;
-        width: 40%;
+        width: 70%;
         font-size: 1vw;
-        width: 100%;
+        /* width: 100%; */
         border: 1x solid #ccc;
         border-radius: 10px;
+        margin-left: -15%;
+        margin-right: 30%;
     }
 
     .appHeader .login-banner {
@@ -154,4 +165,22 @@ watch(route, (newRoute) => {
         height: 3px;
         background-color: purple;
     }
+
+    .calendar-icon{
+    width: 50px;
+    height: 50px;
+    margin-left: -60%;
+  }
+
+  .calendar-icon{
+    width: 50px;
+    height: 50px;
+    margin-left: -100%;
+  }
+
+  .mypage-icon {
+    width: 50px;
+    height: 50px;
+    margin-left: 30%;
+  }
 </style>

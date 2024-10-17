@@ -14,7 +14,7 @@ const routes = [
     redirect: '/musicalInfo'
   },
   ...boardRoutes,
-  ...LoginRoutes,
+  // ...LoginRoutes,
   ...MusicalRoutes
 ];
 
