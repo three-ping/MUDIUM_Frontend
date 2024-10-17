@@ -1,10 +1,12 @@
 <template>
-  <Navigation />
-  <!-- <AppHeader /> -->
-  <main class="container-fluid">
-    <RouterView />
+  <!-- <Navigation /> -->
+  <AppHeader />
+  <!-- <main class="container-fluid"> -->
+    <main>
+    <RouterView :key="$route.fullPath" />
+    </main>
     <!-- <MyPage /> -->
-  </main>
+  <!-- </main> -->
   <Footer />
 </template>
 

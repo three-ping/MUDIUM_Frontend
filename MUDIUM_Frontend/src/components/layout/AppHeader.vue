@@ -24,7 +24,12 @@
                     공지사항
                 </RouterLink>
                 <div class="search-bar">
-                    <input type="text" placeholder="검색어를 입력하세요" />
+                    <input 
+                        type="text" 
+                        v-model="searchQuery" 
+                        placeholder="검색어를 입력하세요" 
+                        @keyup.enter="performSearch"
+                    />
                 </div>
 
                 <div v-if="isLoggedIn" class="user-info">
@@ -46,13 +51,29 @@
 
 <script setup>
 import { ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 // 현재 경로를 추적하기 위한 변수
 const route = useRoute();
+const router = useRouter();
 const currentRoute = ref(route.path);
 
 const isLoggedIn = ref(false);
+const hasSearched = ref(false);
+const searchQuery = ref('');
+
+const resetSearch = () => {
+  hasSearched.value = false;  // 검색 상태 초기화
+  searchQuery.value = '';     // 검색어 초기화
+};
+
+const performSearch = () => {
+  if (!searchQuery.value.trim()) return; // 검색어가 없으면 실행하지 않음
+  router.push({
+    path: '/musicalInfo',  // Search results will be shown here
+    query: { title: searchQuery.value }
+  });
+};
 // 경로가 변경될 때마다 currentRoute 업데이트
 watch(route, (newRoute) => {
     currentRoute.value = newRoute.path;
