@@ -606,7 +606,10 @@ html {
 }
 main {
   display: block;
-  height: calc(100vh - 40rem);
+  height: calc(100vh - 10rem);
+}
+footer {
+  height: 10rem;
 }
 body > header,
 body > main,
