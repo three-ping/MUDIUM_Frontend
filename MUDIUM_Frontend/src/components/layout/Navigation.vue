@@ -6,7 +6,7 @@
 			</RouterLink>
 			<ul>
 				<li>
-					<RouterLink to="/musicalInfo"
+					<RouterLink to="/musicalInfo" class="banner-link"
 						:class="{ active: currentRoute.startsWith('/musicalInfo') || currentRoute === '/' }">
 						<strong>뮤지컬</strong>
 					</RouterLink>
@@ -65,4 +65,15 @@ watch(route, (newRoute) => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+.active::after {
+	content: "";
+	position: relative;
+	display: flex;
+	bottom: -5px;
+	left: 0;
+	width: 100%;
+	height: 3px;
+	background-color: purple;
+}
+</style>
