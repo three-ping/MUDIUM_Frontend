@@ -67,9 +67,21 @@ watch(route, (newRoute) => {
         display: flex;
         width: 100vw;
         margin-top: 1%;
-        justify-content: space-between; /* 로고와 배너 간격 확보 */
-        align-items: center; /* 수직 가운데 정렬 */
+        justify-content: space-between; 
+        align-items: center; 
+        position: relative; 
+        padding-bottom: 10px;
     }
+
+    .appHeader::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 3%; 
+    right: 3%; 
+    height: 1px;
+    background-color: #ccc; 
+}
 
     .header-container {
         display: flex;
@@ -86,7 +98,7 @@ watch(route, (newRoute) => {
 
     .appHeader .logo img {
         display: flex;
-        width: 40%;
+        width: 27%;
         margin-left: 30px;
     }
 
@@ -96,7 +108,7 @@ watch(route, (newRoute) => {
         flex-grow: 1; 
         flex: 2;
         margin-left: -20%; 
-        gap: 5%;
+        gap: 8%;
     }
 
     .appHeader .banner .banner-link {
@@ -105,6 +117,7 @@ watch(route, (newRoute) => {
         color: black;
         text-decoration: none;
         position: relative;
+        margin-left: -3%;
     }
 
     .appHeader .search-bar {
@@ -128,6 +141,7 @@ watch(route, (newRoute) => {
         gap: 12%;
         align-items: center; 
         flex-grow: 1;
+        margin-right: -9%;
     }
 
     .appHeader .banner .banner-link.active::after {

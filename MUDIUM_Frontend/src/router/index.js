@@ -10,8 +10,9 @@ import MusicalRoutes from "./musical";
 const routes = [
   {
     path: '/',
+    redirect: '/musicalInfo'
   },
-  ...boardRoutes,
+  // ...boardRoutes,
   ...MusicalRoutes
 ];
 
