@@ -46,8 +46,8 @@
 				</li>
 			</ul>
 		</nav>
-		<hr>
 	</header>
+	<hr>
 </template>
 
 <script setup>
@@ -74,6 +74,8 @@ watch(route, (newRoute) => {
 	left: 0;
 	width: 100%;
 	height: 3px;
+	margin: 0;
+	padding: 0;
 	background-color: purple;
 }
 </style>

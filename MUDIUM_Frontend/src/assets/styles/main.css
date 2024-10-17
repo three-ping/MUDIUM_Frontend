@@ -1207,6 +1207,7 @@ figure figcaption {
  */
 hr {
   height: 0;
+
   margin: var(--pico-typography-spacing-vertical) / 2 0;
   border: 0;
   border-top: 1px solid var(--pico-muted-border-color);
