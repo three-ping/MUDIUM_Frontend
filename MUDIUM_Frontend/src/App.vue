@@ -1,8 +1,8 @@
 <template>
   <Navigation />
   <!-- <AppHeader /> -->
-  <!-- <main class="container-fluid"> -->
-  <main>
+  <main class="container-fluid">
+    <!-- <main> -->
     <RouterView :key="$route.fullPath" />
   </main>
   <!-- <MyPage /> -->
@@ -19,8 +19,8 @@ import Footer from './components/layout/Footer.vue';
 </script>
 
 <style>
-/* * {
+* {
     font-family: 'Noto Sans KR';
   text-decoration: none;
-} */
+}
 </style>
