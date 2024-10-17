@@ -24,9 +24,9 @@
                 자유 게시판
             </RouterLink>
             <RouterLink 
-                to="/etiquette" 
+                to="/guidebook/guidemain" 
                 class="banner-link"
-                :class="{ active: currentRoute === '/etiquette' }">
+                :class="{ active: currentRoute.startsWith('/guidebook/guidemain')}">
                 가이드북
             </RouterLink>
             <RouterLink 
