@@ -8,6 +8,7 @@
 				</li>
 				<li><a href="#" class="contrast"><strong>작품게시판</strong></a></li>
 				<li><a href="#" class="contrast"><strong>자유게시판</strong></a></li>
+				<li><a href="#" class="contrast"><strong>공지사항</strong></a></li>
 				<li><a href="#" class="contrast"><strong>가이드북</strong></a></li>
 			</ul>
 			<ul>

@@ -614,6 +614,9 @@ body > footer {
   padding-block: var(--pico-block-spacing-vertical);
 }
 
+header {
+  height: 6rem;
+}
 /**
  * Section
  */
