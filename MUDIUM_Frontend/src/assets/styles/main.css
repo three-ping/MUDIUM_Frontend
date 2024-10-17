@@ -70,6 +70,11 @@
     --pico-font-size: 131.25%;
   }
 }
+
+::-webkit-scrollbar {
+  display: none;
+}
+
 /* a {
   --pico-text-decoration: none;
 } */
@@ -2334,17 +2339,15 @@ dialog article > header :is(a, button)[rel="prev"] {
   padding: 0;
   float: right;
 }
-dialog article > footer {
-  text-align: right;
-}
+
 dialog article > footer button,
 dialog article > footer [role="button"] {
   margin-bottom: 0;
 }
-dialog article > footer button:not(:first-of-type),
+/* dialog article > footer button:not(:first-of-type),
 dialog article > footer [role="button"]:not(:first-of-type) {
   margin-left: calc(var(--pico-spacing) * 0.5);
-}
+} */
 dialog article .close,
 dialog article :is(a, button)[rel="prev"] {
   display: block;

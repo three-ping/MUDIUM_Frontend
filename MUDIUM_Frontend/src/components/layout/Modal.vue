@@ -1,5 +1,5 @@
 <template>
-	<dialog ref="modal" @click.self="closeModal(modal)" open>
+	<dialog ref="modal" @click.self="closeModal(modal)" v-bind:open="isModalOpen">
 		<article id="modal-popup">
 			<header id="modal-header">
 				<img src="@/assets/images/MudiumText.svg" alt="">
@@ -7,7 +7,9 @@
 			<section>
 				<slot name="modalSection"></slot>
 			</section>
-			<footer></footer>
+			<footer>
+				<slot name="modalFooter"></slot>
+			</footer>
 		</article>
 	</dialog>
 </template>
@@ -24,7 +26,9 @@ let visibleModal = null;
 
 // Reference to the modal dialog element
 const modal = ref(null);
-
+const props = defineProps({
+	isModalOpen: Boolean
+})
 // Toggle modal
 const toggleModal = (event) => {
 	event.preventDefault();
@@ -104,6 +108,8 @@ onBeforeUnmount(() => {
 #modal-header img {
 	width: 8rem;
 }
+
+footer {}
 
 .jim-nightshade-regular {
 	font-family: "Jim Nightshade", cursive;

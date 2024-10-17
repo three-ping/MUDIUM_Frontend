@@ -57,7 +57,7 @@
 		</nav>
 	</header>
 	<hr>
-	<LoginModal v-if="isLoginModalVisible" />
+	<LoginModal :isLoginModalVisible="isLoginModalVisible" />
 </template>
 
 <script setup>
