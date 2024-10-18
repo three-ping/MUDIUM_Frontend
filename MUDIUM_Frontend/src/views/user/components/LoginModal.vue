@@ -15,10 +15,11 @@ import axios from 'axios';
 import { ref } from 'vue';
 
 const props = defineProps({
-	isLoginModalVisible: Boolean
+	isLoginModalVisible: Boolean,
+	isLoggedIn: Boolean,
 });
 
-const emit = defineEmits(['update:isLoggedIn', 'close']);
+const emit = defineEmits(['update:isLoggedIn', 'close', 'update:userInfo']);
 
 const email = ref('');
 const password = ref('');
@@ -36,6 +37,7 @@ const loginNormalUser = async () => {
 		if (response.data.success) {
 			console.log("Normal Login Success");
 			emit('update:isLoggedIn', true);
+			emit('update:userInfo', response.data.user); // Emit user info
 			closeModal();
 		} else {
 			loginError.value = '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.';

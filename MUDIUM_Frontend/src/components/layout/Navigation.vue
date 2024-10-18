@@ -24,7 +24,6 @@
 				<li>
 					<RouterLink to="/board" :class="{ active: currentRoute.startsWith('/board') }">
 						<strong>자유 게시판</strong>
-
 					</RouterLink>
 				</li>
 				<RouterLink to="/etiquette" :class="{ active: currentRoute.startsWith('/etiquette') }">
@@ -45,7 +44,7 @@
 						<summary>계정</summary>
 						<ul dir="rtl">
 							<li>
-								<button class="contrast" @click.prevent="openLoginModal">로그인</button>
+								<button class="contrast" @click="$emit('openLoginModal')">로그인</button>
 							</li>
 							<li>
 								<button class="contrast">회원가입</button>
@@ -70,12 +69,8 @@
 			</ul>
 
 		</nav>
-		<LoginModal :isLoginModalVisible="isLoginModalVisible" @close="isLoginModalVisible = false"
-			@update:isLoggedIn="updateLoginStatus" />
 	</header>
 	<hr>
-	<LoginModal :isLoginModalVisible="isLoginModalVisible" @close="isLoginModalVisible = false"
-		@update:isLoggedIn="updateLoginStatus" />
 </template>
 
 <script setup>
