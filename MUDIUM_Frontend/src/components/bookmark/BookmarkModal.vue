@@ -40,14 +40,12 @@ const closeModal = () => {
     align-items: center;
     z-index: 9999;
   }
-  
   .modal-content {
     background: white;
     padding: 20px;
     border-radius: 8px;
     text-align: center;
   }
-  
   .modal-content button {
     margin: 10px;
     padding: 10px 20px;
