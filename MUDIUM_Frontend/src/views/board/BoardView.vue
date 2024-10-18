@@ -1,6 +1,8 @@
 <template>
   <div class="board-container">
     <div class="board-actions">
+      <button @click="createBoard" class="create-button">글 쓰기</button>
+
       <div class="search-bar">
         <select v-model="searchType">
           <option value="TITLE">제목</option>
@@ -9,9 +11,8 @@
         </select>
         <input class="search-box" type="text" v-model="searchQuery" placeholder="검색어를 입력하세요">
         <button @click="search" class="search-button" :disabled="!searchQuery.trim()">검색</button>
-        <button @click="goToList" class="back-button">목록</button>
+        <button @click="fetchPageData" class="back-button">목록</button>
       </div>
-      <button @click="createBoard" class="create-button">글 쓰기</button>
     </div>
     <div class="board">
       <table class="board-table">
@@ -38,7 +39,8 @@
             <td class="td-like" data-label="좋아요">{{ pageItem.boardLike }}</td>
             <td class="td-viewCount" data-label="조회수">{{ pageItem.viewCount }}</td>
           </tr>
-        </tbody>      </table>
+        </tbody>
+      </table>
     </div> 
     <Paging 
       :requestURL="requestURL" 
@@ -51,28 +53,16 @@
 <script setup>
 import Paging from '@/components/board/pagination.vue';
 import Detail from '@/views/board/BoardDetailView.vue';
-import { ref, reactive, onMounted, watch } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
+import { ref, reactive, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const route = useRoute();
 const requestURL = `api/board`;
 const pageNumber = ref(1);
 const totalPageNumber = ref(0);
 const pageItems = reactive([]);
 const searchType = ref('TITLE');
 const searchQuery = ref('');
-
-// 현재 페이지 번호를 저장하는 함수
-const saveCurrentPage = () => {
-  localStorage.setItem('lastVisitedPage', pageNumber.value.toString());
-};
-
-// 저장된 페이지 번호를 불러오는 함수
-const loadSavedPage = () => {
-  const savedPage = localStorage.getItem('lastVisitedPage');
-  return savedPage ? parseInt(savedPage) : 1;
-};
 
 const fetchPageData = async () => {
   const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
@@ -82,11 +72,10 @@ const fetchPageData = async () => {
   pageItems.length = 0;
   pageItems.push(...responseDTO.data.content);
   totalPageNumber.value = responseDTO.data.totalPages;
-  saveCurrentPage(); // 페이지 데이터를 가져온 후 현재 페이지 저장
 };
 
 const queryPageData = async () => {
-  const response = await fetch(`http://localhost:8080/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}&page=${pageNumber.value}`, {
+  const response = await fetch(`http://localhost:8080/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}`, {
     method: "GET"
   });
   const responseDTO = await response.json();
@@ -112,13 +101,6 @@ const createBoard = () => {
   router.push('create');
 };
 
-// 목록 버튼 클릭 시 호출되는 함수
-const goToList = () => {
-  const savedPage = loadSavedPage();
-  pageNumber.value = savedPage;
-  fetchPageData();
-};
-
 function convertToKoreanTime(timestamp) {
   const date = new Date(timestamp);
   const year = date.getFullYear();
@@ -131,18 +113,9 @@ function convertToKoreanTime(timestamp) {
 }
 
 onMounted(() => {
-  const savedPage = loadSavedPage();
-  pageNumber.value = savedPage;
-  fetchPageData();
-});
-
-// 라우트 변경 감지
-watch(() => route.name, (newRouteName) => {
-  if (newRouteName === 'BoardListView') {
-    const savedPage = loadSavedPage();
-    pageNumber.value = savedPage;
+  setTimeout(() => {
     fetchPageData();
-  }
+  }, 100); 
 });
 </script>
 
@@ -163,13 +136,13 @@ watch(() => route.name, (newRouteName) => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 30px; /* 게시판과 검색 부분 간격 증가 */
+  margin-bottom: 30px; 
 }
 
 .search-bar {
   display: flex;
   gap: 10px;
-  width: 80%; /* 검색 바 너비 증가 */
+  width: 80%; 
 }
 
 .search-bar select,
@@ -183,42 +156,7 @@ watch(() => route.name, (newRouteName) => {
   flex-grow: 1;
 }
 
-.search-button,
-.back-button,
-.create-button {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  min-width: 80px;
-}
 
-.back-button {
-  background-color: #6EABE1;
-  margin-right: 20px; /* 목록 버튼과 글쓰기 버튼 사이 간격 증가 */
-}
-
-.search-button {
-  background-color: #9A70CC;
-}
-
-.create-button {
-  background-color: #D53EC6;
-}
-
-.search-button,
-.create-button,
-.back-button {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-  min-width: 80px;
-}
 
 .back-button {
   background-color: #6EABE1;
@@ -227,6 +165,7 @@ watch(() => route.name, (newRouteName) => {
 .search-button {
   background-color: #9A70CC;
 }
+
 
 .create-button {
   background-color: #D53EC6;
@@ -322,23 +261,6 @@ watch(() => route.name, (newRouteName) => {
   .td-title::before {
     display: none;
   }
-
-  .search-bar {
-    flex-direction: column;
-  }
-
-  .search-bar select,
-  .search-bar input,
-  .search-button,
-  .back-button {
-    width: 100%;
-  }
-
-  .create-button {
-    width: 100%;
-    margin-top: 10px;
-  }
-
   .board-actions {
     flex-direction: column;
     align-items: stretch;
@@ -362,8 +284,8 @@ watch(() => route.name, (newRouteName) => {
   }
 
   .back-button {
-    margin-right: 0; /* 모바일에서는 마진 제거 */
-    margin-bottom: 15px; /* 대신 아래쪽 마진 추가 */
+    margin-right: 0; 
+    margin-bottom: 15px; 
   }
 }
 </style>

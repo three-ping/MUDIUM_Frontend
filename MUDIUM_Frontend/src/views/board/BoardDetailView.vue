@@ -1,50 +1,42 @@
 <template>
     <div class="board-detail">
-    <div class="board-detail-header">
-        <h1 class="board-detail-title">{{ title }}</h1>
-        <div class="board-detail-buttons">
-    <template v-if="userId == author_id">
-        <button class="board-button" @click="showDeleteModal = true">삭제</button>
-        <button class="board-button" @click="editPost">수정</button>
-    </template>
-        <button class="board-button" @click="backToBoard">글 목록</button>
+        <div class="board-detail-header">
+            <h1 class="board-detail-title">{{ title }}</h1>
+            <div class="board-detail-buttons">
+                <template v-if="userId == author_id">
+                    <button class="board-button-delete" @click="showDeleteModal = true">삭제</button>
+                    <button class="board-button-update" @click="editPost">수정</button>
+                </template>
+            <button class="board-button-back" @click="backToBoard">글 목록</button>
         </div>
     </div>
-    <div class="board-detail-subheader">
-        <div class="board-detail-author-created">
-        <span class="board-detail-author">작성자: {{ author }}</span>
-        <span class="board-detail-created">작성시간: {{ convertToKoreanTime(createdAt) }}</span>
+
+        <div class="board-detail-subheader">
+            <div class="board-detail-author-created">
+                <span class="board-detail-author">작성자: {{ author }}</span>
+                <span class="board-detail-created">작성시간: {{ convertToKoreanTime(createdAt) }}</span>
+            </div>
         </div>
-    </div>
-    <template v-if="updatedAt !== null">
-        <div class="board-detail-updated-template">
-        <span class="board-detail-updated">수정시간: {{ convertToKoreanTime(updatedAt) }}</span>
+
+        <template v-if="updatedAt !== null">
+            <div class="board-detail-updated-template">
+                <span class="board-detail-updated">수정시간: {{ convertToKoreanTime(updatedAt) }}</span>
+            </div>
+        </template>
+
+        <div class="board-detail-subheader">
+            <div class="board-detail-viewCount">
+                <span class="board-detail-viewCount">조회수: {{ viewCount }}</span>
+            </div>
         </div>
-    </template>
-    <div class="board-detail-subheader">
-        <div class="board-detail-viewCount">
-        <span class="board-detail-viewCount">조회수: {{ viewCount }}</span>
+
+        <div class="board-detail-content">
+            <div class="board-detail-content-read">
+                <p>{{ content }}</p>
+            </div>
+            <Like class="board-like" :likeCount="likeCount" :isLiked="isLiked" :boardId="id" :userId="userId" />
         </div>
-    </div>
-    <div class="board-detail-content">
-        <div class="board-detail-content-read">
-            <p>{{ content }}</p>
-        </div>
-        <Like class="board-like" :likeCount="likeCount" :isLiked="isLiked" :boardId="id" :userId="userId" />
-    </div>
-    <div class="board-detail-comment">
-        <h2>댓글을 입력하세요</h2>
-        <textarea v-model="newComment" placeholder="댓글을 입력하세요."></textarea>
-        <div class="button-container">
-        <button class="comment-submit" @click="submitComment">등록</button>
-        </div>
-    </div>
-    <div class="board-detail-comments">
-        <div class="comment" v-for="comment in comments" :key="comment.id">
-        <strong>{{ comment.author }}</strong>
-        <p>{{ comment.text }}</p>
-        </div>
-    </div>
+        <BoardComment :id="id" :userNickname="userNickname" :userId="userId"></BoardComment>
     </div>
 
     <Modal v-model:isVisible="showDeleteModal" @confirm="deletePost">
@@ -53,11 +45,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref,reactive, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Like from "@/components/common/Like.vue";
 import Modal from "@/components/common/Modal.vue";
-
+import BoardComment from './BoardComment.vue';
 const route = useRoute();
 const router = useRouter();
 const id = ref(Number(route.params.id));
@@ -67,11 +59,10 @@ const author = ref('');
 const content = ref('로딩중');
 const createdAt = ref(0);
 const updatedAt = ref(0);
-const newComment = ref('');
-const comments = ref([]);
 const likeCount = ref(0);
 const isLiked = ref(false);
 const userId = ref(1);
+const userNickname = ref("shushu_ping");
 const showDeleteModal = ref(false);
 const viewCount = ref(0);
 const author_id = ref(0);
@@ -85,7 +76,6 @@ const deletePost = async () => {
         method: 'DELETE'
     }
     );
-    console.log(`http://localhost:8080/api/board/${id.value}/${userId.value}`);
     router.push('/board');  
 };
 
@@ -120,35 +110,7 @@ const incrementViewCount = async () => {
     }
 }
 
-const fetchComments = async () => {
-    try {
 
-    comments.value = [
-        { id: 1, author: '김정모', text: '역시 뮤지컬은 시카고!! ...' },
-        { id: 2, author: '이서연', text: '저도 너무 재미있게 봤어요!' }
-    ];
-    } catch (error) {
-    console.error('댓글을 불러오는 데 실패했습니다:', error);
-    }
-};
-
-const submitComment = async () => {
-    if (newComment.value.trim() === '') return;
-    
-    try {
-
-    comments.value.push({
-        id: comments.value.length + 1,
-        author: '현재 사용자',
-        text: newComment.value
-    });
-    newComment.value = '';
-    
-    await fetchComments();
-    } catch (error) {
-    console.error('댓글 등록에 실패했습니다:', error);
-    }
-};
 
 const backToBoard = () => {
     router.push('/board'); 
@@ -182,7 +144,6 @@ const checkIsLiked = async () => {
 
 onMounted(() => {
     fetchDetailBoard();
-    fetchComments();
     checkIsLiked();
 });
 </script>
@@ -214,7 +175,13 @@ font-size: 24px;
 margin: 0;
 }
 
-
+.board-submit {
+border: none;
+padding: 10px 20px;
+border-radius: 4px;
+cursor: pointer;
+color: white;
+}
 
 .board-detail-author-created {
 font-size: 14px;
@@ -230,7 +197,10 @@ justify-content: space-between;
     flex-direction: column;
     align-items: end;
 }
-
+.board-detail-comment h2 {
+font-size: 18px;
+margin-bottom: 10px;
+}
 .board-detail-updated {
 font-size: 14px;
 color: #666;
@@ -250,52 +220,23 @@ padding: 20px;
 overflow-y: auto;
 }
 
-.board-detail-comment h2 {
-font-size: 18px;
-margin-bottom: 10px;
-}
 
-textarea {
-width: 100%;
-height: 100px;
-padding: 10px;
-margin-bottom: 10px;
-border: 1px solid #ccc;
-border-radius: 4px;
-}
-
-.comment-submit, .board-button {
-border: none;
-padding: 10px 20px;
-border-radius: 4px;
-cursor: pointer;
-color: white;
-}
-
-.comment-submit {
-background-color: #D53EC6;
-}
-
-.board-button {
+.board-button-update {
 background-color: #9A70CC;
+}
+
+.board-button-delete{
+    background-color: #D53EC6;
+}
+
+.board-button-back {
+    background-color: #6EABE1;
 }
 
 .board-detail-comments {
 margin-top: 30px;
 }
 
-.comment {
-background-color: #f9f9f9;
-border: 1px solid #eee;
-border-radius: 4px;
-padding: 10px;
-margin-bottom: 10px;
-}
-
-.comment strong {
-display: block;
-margin-bottom: 5px;
-}
 
 .board-detail-container {
 position: relative;
@@ -331,4 +272,18 @@ transform: translateX(-50%);
 border-radius: 8px;
 box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+.board-button-delete,
+.board-button-update,
+.board-button-back {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+
+
 </style>

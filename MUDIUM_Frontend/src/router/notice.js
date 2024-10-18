@@ -1,8 +1,8 @@
 export default [
     {
         path: '/notice',
-        component: () => import('@/views/board/NoticeRoot.vue'),
-        redirect: {path:"/board/view"},
+        component: () => import('@/views/notice/NoticeRoot.vue'),
+        redirect: {path:"/notice/view"},
         children: [
             {
                 path: 'view',
