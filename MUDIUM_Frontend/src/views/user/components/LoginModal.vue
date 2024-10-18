@@ -6,7 +6,7 @@
 		</template>
 
 		<template v-slot:modalFooter>
-			<button class="contrast auth-button">로그인</button>
+			<button class="contrast auth-button" @click="loginNormalUser">로그인</button>
 			<button class="auth-button" id="kakao-button">카카오 로그인</button>
 			<div class="container-fluid auth-floor">
 				<label for="registUserButton">회원가입/</label>
@@ -20,11 +20,23 @@
 
 <script setup>
 import Modal from '@/components/layout/Modal.vue';
+import axios from 'axios';
+// import api from '@/scripts/axios'
+const loginNormalUser = async () => {
+	const response = await axios.post("http://localhost:5173/api/login", {
+		email: "jinrodookubi@gmail.com",
+		password: "password123",
+		signup_path: "NORMAL"
+	});
+	if (response.data.success) {
+		console.log("Normal Login Success");
 
-const registUser = () => {
-	console.log("registUser clicked")
+	}
+
+	console.log("Normal User Login clicked")
 }
 const props = defineProps({
+
 	isLoginModalVisible: Boolean
 })
 </script>
