@@ -26,7 +26,7 @@
 						<strong>자유 게시판</strong>
 					</RouterLink>
 				</li>
-				<RouterLink to="/etiquette" :class="{ active: currentRoute.startsWith('/etiquette') }">
+				<RouterLink to="/guidebook/guidemain" :class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
 					<strong>가이드북</strong>
 				</RouterLink>
 
