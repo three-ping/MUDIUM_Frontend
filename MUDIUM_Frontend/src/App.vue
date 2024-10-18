@@ -1,26 +1,53 @@
 <template>
-  <Navigation />
-  <!-- <AppHeader /> -->
-  <main class="container-fluid">
-    <!-- <main> -->
-    <RouterView :key="$route.fullPath" />
-  </main>
-  <!-- <MyPage /> -->
-  <!-- </main> -->
-  <Footer />
+  <div id="app">
+    <Navigation @open-login-modal="openLoginModal" :userInfo="userStore.userInfo" @userInfo="userStore.updateUserInfo"
+      @logout="handleLogout" />
+    <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
+      @update:isLoggedIn="userStore.updateLoginStatus" @update:userInfo="userStore.updateUserInfo" />
+    <router-view />
+  </div>
 </template>
 
 <script setup>
-import { RouterView, RouterLink } from 'vue-router';
-import AppHeader from './components/layout/AppHeader.vue';
-import Navigation from './components/layout/Navigation.vue';
-import MyPage from './views/user/MyPage.vue';
-import Footer from './components/layout/Footer.vue';
+import { ref, onMounted, watchEffect, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { useUserStore } from './scripts/user/user';
+import Navigation from '@/components/layout/Navigation.vue';
+import LoginModal from '@/views/user/components/LoginModal.vue';
+
+const route = useRoute();
+const isLoginModalVisible = ref(false);
+const userStore = useUserStore();
+
+
+
+const openLoginModal = () => {
+  isLoginModalVisible.value = true;
+};
+
+const closeLoginModal = () => {
+  isLoginModalVisible.value = false;
+};
+
+const handleLogout = () => {
+  console.log('App - handleLogout')
+  userStore.clearUserInfo();
+}
+
+watchEffect(() => {
+  let userId = route.query.user_id;
+  console.log(route.query);
+  console.log(`userId: ${userId}`)
+  // Check if userId and userName are present in the URL
+  if (userId) {
+    userStore.updateUserInfo({
+      userId: userId,
+      isLoggedIn: true
+    });
+  }
+});
 </script>
 
 <style>
-* {
-    font-family: 'Noto Sans KR';
-  text-decoration: none;
-}
+/* Add any global styles here */
 </style>
