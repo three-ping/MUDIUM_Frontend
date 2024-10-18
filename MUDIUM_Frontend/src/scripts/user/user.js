@@ -6,13 +6,17 @@ export const useUserStore = defineStore("user", {
   }),
   actions: {
     updateUserInfo(info) {
-      this.userInfo = { ...this.userInfo, ...info };
+      console.log(`update userinfo: ${info}`);
+      this.userInfo = { ...info };
+      console.log(this.userInfo);
     },
     updateLoginStatus(status) {
       this.userInfo.isLoggedIn = status;
     },
     clearUserInfo() {
+      console.log("logout");
       this.userInfo = { isLoggedIn: false };
+      console.log(this.userInfo);
     },
   },
 });

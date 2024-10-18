@@ -79,7 +79,7 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { defineProps } from 'vue';
 
-const emit = defineEmits(['userInfo']);
+const emit = defineEmits(['userInfo', 'logout']);
 
 // 현재 경로를 추적하기 위한 변수
 const loginStatus = ref(false);
@@ -135,8 +135,13 @@ const navigateToMyPage = () => {
 };
 
 const logout = () => {
+	console.log("Navigation - logout")
+	// router.push('/');
 	// Perform logout logic here (e.g., clear tokens, reset state)
 	emit('logout')
+	emit('userInfo', { isLoggedIn: false })
+	router.push({ path: '/musicalInfo', query: {} }); // Navigate to musicalInfo without user_id
+
 };
 </script>
 
