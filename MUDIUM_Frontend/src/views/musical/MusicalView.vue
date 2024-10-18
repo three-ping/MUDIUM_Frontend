@@ -70,8 +70,10 @@ const fetchMusicals = async () => {
 
 const fetchSearchResults = async (query) => {
   try {
+    const sanitizedQuery = query.replace(/\s+/g, '');
+
     const response = await axios.get(
-      `http://localhost:8080/api/musical?title=${encodeURIComponent(query)}&page=0&size=300`
+      `http://localhost:8080/api/musical?title=${encodeURIComponent(sanitizedQuery)}&page=0&size=300`
     );
 
     // Check if response structure is valid and handle null values safely
@@ -140,23 +142,24 @@ watch(() => route.query.title, (newTitle) => {
   overflow-x: auto;
   scroll-behavior: smooth;
   gap: 20px;
-  width: 95%;
+  width: 60%;
   padding: 20px 0;
+  margin-top: 1.5%;
 }
 
 
 .musical-container h1 {
   display: flex;
-  align-items: left;
+  /* align-items: left; */
   margin-bottom: -1%;
-  font-size: 1.7rem;
+  font-size: 1.5rem;
+  margin-top: 1.5%;
 }
 
 
 .musical-card {
   position: relative;
   flex: 0 0 calc(20% - 20px);
-  /* 5개씩 표시되도록 설정 */
   box-sizing: border-box;
   display: flex;
   justify-content: space-around;
@@ -166,13 +169,6 @@ watch(() => route.query.title, (newTitle) => {
   margin: 0;
   text-align: center;
 }
-
-/* 
-.musical-card div {
-  display: inline-block;
-  flex-direction: column;
-  align-items: center;
-} */
 
 .rank-badge {
   position: absolute;
@@ -208,7 +204,7 @@ watch(() => route.query.title, (newTitle) => {
 
 .musical-title {
   font-size: 1rem;
-  margin-top: 0.9%;
+  /* margin-top: 0.9%; */
   text-align: center;
   white-space: nowrap;
   overflow: hidden;

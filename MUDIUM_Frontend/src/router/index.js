@@ -9,6 +9,7 @@ import reviewRoutes from "./review";
 import signupRoutes from "./signup";
 import guidebookRoutes from "./guidebook";
 import App from '@/App.vue';
+import secretReviewRoutes from "./secret-review";
 
 
 
@@ -21,7 +22,8 @@ const routes = [
   ...boardRoutes,
   // ...LoginRoutes,
   ...MusicalRoutes,
-  ...reviewRoutes
+  ...reviewRoutes,
+  ...secretReviewRoutes
 ];
 
 const router = createRouter({
