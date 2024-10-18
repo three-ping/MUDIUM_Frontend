@@ -1,53 +1,56 @@
 <template>
-    <div class="review-container">
-        <!-- 리뷰 헤더 -->
-        <div class="review-header">
-            <!-- 여기는 뮤지컬 사진과 이름이 나오는 것이 좋을 듯 -->
-            <img :src="secretReview.userProfile" alt="User Profile Image" class="user-avatar" />
-            <div class="user-info">
-                <h3>
-                    <span>
-                        {{ secretReview.musicalTitle }} 
-                        <span v-if="secretReview.isPremium" class="premium-badge">P</span>
-                    </span>
-                    <span class="dropdown-wrapper">
-                        <span @click="toggleDropdown" class="dropdown-icon">
-                            <img src="@/assets/images/threeDots.svg" alt="threeDots">
+    <div class="review-wrapper">
+        <div class="review-container">
+            <!-- 리뷰 헤더 -->
+            <div class="review-header">
+                <!-- 뮤지컬 사진과 이름이 나오는 부분 -->
+                <img :src="secretReview.userProfile" alt="User Profile Image" class="user-avatar" />
+                <div class="user-info">
+                    <h3>
+                        <span>
+                            {{ secretReview.musicalTitle }} 
+                            <span v-if="secretReview.isPremium" class="premium-badge">P</span>
                         </span>
-                        <div v-if="dropdownVisible" class="dropdown-menu">
-                            <button @click="editReview" class="update">수정</button>
-                            <button @click="deleteReview" class="delete">삭제</button>
-                        </div>
-                    </span>
-                </h3>
-                <p>{{ formatDate(secretReview.createdAt) }}</p>
+                        <span class="dropdown-wrapper">
+                            <span @click="toggleDropdown" class="dropdown-icon">
+                                <img src="@/assets/images/threeDots.svg" alt="threeDots">
+                            </span>
+                            <div v-if="dropdownVisible" class="dropdown-menu">
+                                <button @click="editReview" class="update">수정</button>
+                                <button @click="deleteReview" class="delete">삭제</button>
+                            </div>
+                        </span>
+                    </h3>
+                    <p>{{ formatDate(secretReview.createdAt) }}</p>
+                </div>
             </div>
-        </div>
+            <br>
 
-        <!-- 리뷰 내용 -->
-        <p class="review-content">{{ secretReview.content }}</p>
+            <!-- 리뷰 내용 -->
+            <p class="review-content">{{ secretReview.content }}</p>
 
-        <!-- 수정 모달 -->
-        <div v-if="showModal">
-            <ReviewModal
-                :isOpen="showModal"
-                :musicalTitle="secretReview.musicalTitle"
-                :isEditing="true"
-                :onClose="closeModal"
-                :onSubmit="handleReviewSubmit"
-                :initialReview="secretReview.content"
-            />
-        </div>
+            <!-- 수정 모달 -->
+            <div v-if="showModal">
+                <ReviewModal
+                    :isOpen="showModal"
+                    :musicalTitle="secretReview.musicalTitle"
+                    :isEditing="true"
+                    :onClose="closeModal"
+                    :onSubmit="handleReviewSubmit"
+                    :initialReview="secretReview.content"
+                />
+            </div>
 
-        <!-- 삭제 모달 -->
-        <div v-if="showDeleteModal">
-            <ReviewDeleteModal
-                :isOpen="showDeleteModal"
-                @close="closeModal"
-                @submit="handleDeleteReviewSubmit"
-            >
-                <p class="delete-confirmation">삭제하시겠습니까?</p>
-            </ReviewDeleteModal>
+            <!-- 삭제 모달 -->
+            <div v-if="showDeleteModal">
+                <ReviewDeleteModal
+                    :isOpen="showDeleteModal"
+                    @close="closeModal"
+                    @submit="handleDeleteReviewSubmit"
+                >
+                    <p class="delete-confirmation">삭제하시겠습니까?</p>
+                </ReviewDeleteModal>
+            </div>
         </div>
     </div>
 </template>
@@ -208,17 +211,33 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.review-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+}
+
 .review-container {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    width: 80%;
+    max-width: 1000px;
     padding: 16px;
-    margin-bottom: 20px;
+    margin: 20px auto;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+    border-radius: 8px;
+    /* border: 1px solid #e0e0e0; */
 }
 
 .review-header {
     display: flex;
     align-items: center;
     margin-bottom: 12px;
+}
+
+.review-content {
+    margin: 16px 0;
+    font-size: 16px;
+    white-space: pre-wrap;
 }
 
 .user-avatar {
@@ -237,14 +256,20 @@ onUnmounted(() => {
 
 .user-info h3 {
     margin: 0;
-    font-size: 16px;
+    font-size: 20px;
     display: flex;
     justify-content: space-between; /* 닉네임과 점 3개 아이콘 사이 공간 확보 */
 }
 
+.user-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
 .delete-confirmation {
     text-align: center; /* 가운데 정렬 */
-    font-size: 18px; /* 폰트 크기 조정 */
+    font-size: 20px; /* 폰트 크기 조정 */
     margin: 0; /* 기본 마진 제거 */
     padding: 10px 0; /* 상하 패딩 추가 (필요시) */
 }
@@ -262,24 +287,27 @@ onUnmounted(() => {
 
 .dropdown-menu {
     position: absolute;
-    top: 100%; /* 아이콘 바로 아래에 위치 */
-    left: -60px; /* 왼쪽 정렬 */
+    top: 100%;
+    right: 0;
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 10; /* 드롭다운 메뉴가 다른 요소 위에 나타나도록 */
-    min-width: 80px; /* 최소 너비 설정 */
+    z-index: 10;
+    min-width: 100px;
+    padding: 8px 0; /* 상하 패딩 추가 (버튼 간격 확보) */
 }
 
 .dropdown-menu button {
     display: block;
     width: 100%;
-    padding: 8px 16px;
+    padding: 12px 16px;
     border: none;
     background: none;
     text-align: center;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: normal;
 }
 
 .dropdown-menu button.update {
@@ -292,5 +320,26 @@ onUnmounted(() => {
 
 .dropdown-menu button:hover {
     background-color: #f0f0f0; /* 호버 효과 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .review-container {
+        width: 95%;
+        padding: 12px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-info h3 {
+        font-size: 14px;
+    }
+
+    .delete-confirmation {
+        font-size: 16px;
+    }
 }
 </style>

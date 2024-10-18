@@ -1,34 +1,36 @@
 <template>
-    <div class="review-container">
-        <h2 class="review-title">비밀 리뷰</h2>
-        <div class="sort-options">
-        <!-- 모달창 테스트 -->
-        <button @click="openModal">비밀리뷰 작성</button>
+    <div class="review-wrapper">
+        <div class="review-container">
+            <h2 class="review-title">비밀 리뷰</h2>
+            <!-- 모달창 테스트 -->
+            <button @click="openModal">비밀리뷰 작성</button>
             <ReviewModal
                 :isOpen="isModalOpen"
                 :musicalTitle="musicalTitle"
                 :onClose="closeModal"
                 :onSubmit="(review) => handleSubmit(review)"
             />
-        </div>
-        <div class="review-list" v-infinite-scroll="loadMore">
-            <div v-for="secretReview in displayedReviews" :key="secretReview.id" class="review-item">
-                <div class="review-header">
-                    <img :src="secretReview.userProfile" alt="User avatar" class="avatar" />
-                    <span class="musical-title">{{ secretReview.musicalTitle }}</span>
-                    <span class="rating">{{ secretReview.rating }}</span>
+            <div class="review-list" v-infinite-scroll="loadMore">
+                <div v-for="secretReview in displayedReviews" :key="secretReview.id" class="review-item">
+                    <div class="review-header">
+                        <div class="review-info">
+                            <img :src="secretReview.userProfile" alt="User avatar" class="avatar" />
+                            <span class="musical-title">{{ secretReview.musicalTitle }}</span>
+                        </div>
+                        <span class="rating">{{ secretReview.rating }}</span>
+                    </div>
+                    <p class="review-content">
+                        <router-link
+                            :to="{
+                                name: 'SecretReviewDetailView',
+                                params: { musicalId: secretReview.musicalId, secretReviewId: secretReview.secretReviewId },
+                            }"
+                            class="text-link"
+                        >
+                            {{ secretReview.content }}
+                        </router-link>
+                    </p>
                 </div>
-                <p class="review-content">
-                    <router-link
-                        :to="{
-                            name: 'SecretReviewDetailView',
-                            params: { musicalId: secretReview.musicalId, secretReviewId: secretReview.secretReviewId },
-                        }"
-                        class="text-link"
-                    >
-                        {{ secretReview.content }}
-                    </router-link>
-                </p>
             </div>
         </div>
     </div>
@@ -41,7 +43,7 @@ import { useRoute } from 'vue-router';
 
 import ReviewModal from '@/components/review/ReviewModal.vue';
 
-// // 모달창 테스트
+// 모달 관련
 const isModalOpen = ref(false);
 const openModal = () => {
     isModalOpen.value = true;
@@ -52,10 +54,9 @@ const closeModal = () => {
 
 // 비밀리뷰 작성하는 부분
 const handleSubmit = async (review) => {
-    // 여기서 백엔드로 리뷰 데이터를 전송하는 로직을 구현
     const reviewData = {
         userId: userId.value,
-        content: review
+        content: review,
     };
 
     try {
@@ -83,8 +84,6 @@ const handleSubmit = async (review) => {
     } catch (error) {
         console.error('리뷰 저장 중 오류 발생:', error);
     }
-    console.log("Submitted review: ", review);
-    window.location.reload();
 };
 
 const route = useRoute();
@@ -94,15 +93,14 @@ const page = ref(1);
 const perPage = 10;
 const hasMore = ref(true);
 const isLoading = ref(false);
-// const musicalId = ref(route.params.musicalId);
 const musicalTitle = ref('뮤지컬 제목!');
 const musicalId = ref(9);
 const userId = ref(6);
 
-// 조회 부분!!!
+// 리뷰 목록 조회
 const fetchReviews = async () => {
-    if (isLoading.value || !hasMore.value) return; // 이미 로딩 중이거나, 더 이상 불러올 데이터가 없는 경우 반환
-    isLoading.value = true; // 로딩 시작
+    if (isLoading.value || !hasMore.value) return;
+    isLoading.value = true;
 
     try {
         const response = await fetch(
@@ -114,36 +112,71 @@ const fetchReviews = async () => {
         }
         const data = await response.json();
         console.log(data.data);
-        musicalTitle.value = data.data[1].musicalTitle;
+        musicalTitle.value = data.data[1]?.musicalTitle || '뮤지컬 제목!';
 
-        // 페이지가 처음일 경우 기존 리뷰를 덮어쓰고, 아닐 경우 추가
         if (page.value === 1) {
             reviews.value = data.data;
         } else {
             reviews.value = [...reviews.value, ...data.data];
         }
 
-        // 받아온 데이터 개수가 'perPage'보다 작으면 더 이상 불러오지 않음
         if (data.data.length < perPage) {
             hasMore.value = false;
         }
 
-        // 페이지를 증가시켜 다음 데이터를 준비
         page.value++;
     } catch (error) {
         console.error('리뷰를 불러오는 데 실패했습니다:', error);
     } finally {
-        isLoading.value = false; // 로딩 종료
+        isLoading.value = false;
     }
 };
-
-const displayedReviews = computed(() => reviews.value); // 이 부분 추가함
-console.log(displayedReviews.value);
 
 const loadMore = () => {
     if (hasMore.value) {
         fetchReviews();
     }
+};
+
+const displayedReviews = computed(() => {
+    return reviews.value.map(secretReview => ({
+        ...secretReview,
+        content: truncateContent(secretReview.content),
+    }));
+});
+
+// 리뷰 내용 트렁케이션 함수
+const truncateContent = (content) => {
+    const maxLength = 100; // 최대 100자
+    const maxLines = 5; // 최대 5줄
+
+    // 줄 바꿈 문자를 기준으로 문자열 분할
+    const lines = content.split('\n');
+
+    // 줄 수와 글자 수를 기준으로 잘릴 내용 계산
+    let truncatedContent = '';
+    let currentLines = 0;
+
+    for (const line of lines) {
+        // 현재 줄 수가 최대 줄 수를 초과할 경우 "..." 추가 후 종료
+        if (currentLines >= maxLines) {
+            truncatedContent += '...';
+            break;
+        }
+
+        // 현재 줄의 길이가 남은 글자 수를 초과할 경우
+        if (truncatedContent.length + line.length > maxLength) {
+            const remainingChars = maxLength - truncatedContent.length;
+            truncatedContent += line.slice(0, remainingChars) + '...'; // 남은 글자 수만큼 추가 후 "..." 추가
+            break;
+        }
+
+        // 현재 줄 추가
+        truncatedContent += line + '\n';
+        currentLines++;
+    }
+
+    return truncatedContent.trim(); // 앞뒤 공백 제거
 };
 
 onMounted(() => {
@@ -160,19 +193,53 @@ useInfiniteScroll(
 </script>
 
 <style scoped>
+.review-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.review-container {
+    width: 70%;
+    max-width: 1200px;
+}
+
 .review-title {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 1rem;
 }
 
-.review-container {
-    max-width: 600px;
-    margin: 0 auto;
+.sort-select {
+    flex: 0 1 auto;
+    min-width: 140px;
+    max-width: 150px;
 }
 
-.sort-options {
-    margin-bottom: 20px;
+.sort-select select {
+    padding: 6px 10px;
+    font-size: 0.9rem;
+}
+
+.review-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+    background-color: #9a70cc;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 120px;
+    transition: background-color 0.3s ease;
+}
+
+.review-button:hover {
+    background-color: #8a60bc;
+}
+
+.review-list {
+    margin-top: 20px;
 }
 
 .review-item {
@@ -184,9 +251,20 @@ useInfiniteScroll(
 
 .review-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: s;
     margin-bottom: 10px;
+}
+
+.review-info{
+    display: flex;
+    align-items: center;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
 }
 
 .avatar {
@@ -198,7 +276,7 @@ useInfiniteScroll(
 
 .musical-title {
     font-weight: bold;
-    margin-right: 10px;
+    margin: 0 10px;
 }
 
 .rating {
@@ -207,16 +285,81 @@ useInfiniteScroll(
 
 .review-content {
     margin-bottom: 10px;
-    text-decoration: none;
-    color: inherit;
-    cursor: default;
+}
+
+.review-footer {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.reaction-container {
+    display: flex;
+    align-items: center;
+}
+
+.likes,
+.comments {
+    display: flex;
+    align-items: center;
+    margin-right: 50px;
+    min-width: 60px;
+}
+
+.review-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.count {
+    font-size: 0.9rem;
 }
 
 .text-link {
     text-decoration: none;
-    color: inherit; /* 부모 요소의 색상과 동일하게 설정 */
+    color: inherit;
+    white-space: pre-wrap;
 }
+
 .text-link:hover {
-    text-decoration: none; /* 호버 시에도 밑줄이 생기지 않도록 */
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .review-container {
+        width: 90%;
+        /* padding: 15px; */
+    }
+
+    .sort-options {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .sort-select,
+    .review-button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .review-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .user-info {
+        margin-bottom: 10px;
+    }
+
+    .reaction-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .likes,
+    .comments {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
 }
 </style>
