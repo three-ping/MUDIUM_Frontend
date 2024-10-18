@@ -60,7 +60,7 @@
 								<button class="contrast" @click="navigateToMyPage">마이페이지</button>
 							</li>
 							<li>
-								<button class="contrast" @click="handleLogout">로그아웃</button>
+								<button class="contrast" @click="logout">로그아웃</button>
 							</li>
 						</ul>
 					</details>
@@ -134,12 +134,9 @@ const navigateToMyPage = () => {
 	router.push('/mypage');
 };
 
-const handleLogout = () => {
+const logout = () => {
 	// Perform logout logic here (e.g., clear tokens, reset state)
-	isLoggedIn.value = false;
-	// Optionally, you can redirect to the home page or show a message
-	router.push('/');
-	// You might want to show a notification that the user has logged out
+	emit('logout')
 };
 </script>
 

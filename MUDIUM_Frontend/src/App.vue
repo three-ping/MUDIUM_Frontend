@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <Navigation @open-login-modal="openLoginModal" :userInfo="userInfo" @userInfo="handleUserInfo" />
+    <Navigation @open-login-modal="openLoginModal" :userInfo="userInfo" @userInfo="handleUserInfo"
+      @logout="handleLogout" />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
       @update:isLoggedIn="updateLoginStatus" @update:userInfo="handleUserInfo" />
     <router-view />
@@ -30,6 +31,12 @@ const updateLoginStatus = (status) => {
 const handleUserInfo = (info) => {
   userInfo.value = { ...userInfo.value, ...info }; // Merge new info with existing userInfo
 };
+
+const handleLogout = () => {
+  console.log('handleLogoutFunction')
+  userInfo.value = { isLoggedIn: false, };
+  console.log(userInfo.value)
+}
 
 </script>
 
