@@ -1,40 +1,38 @@
 <template>
-    <div>
+  <div>
     <button @click="toggleBookmark">
-        <span v-if="isBookmarked" v-html="bookmarkFillSvg"></span>
-        <span v-else v-html="bookmarkSvg"></span>
+      <span v-if="isBookmarked" v-html="bookmarkFillSvg"></span>
+      <span v-else v-html="bookmarkSvg"></span>
     </button>
     <div v-if="loading" class="loading">Loading...</div>
     <div v-if="error" class="error">{{ error }}</div>
-    <BookmarkModal 
-      :isOpen="isModalOpen" 
-      :message="modalMessage" 
-      @close="closeModal" 
-    />
-</div>
-  </template>
-  
-  <script setup>
-import { ref, onMounted } from 'vue';
-import BookmarkModal from '@/components/bookmark/BookmarkModal.vue';
+    <BookmarkModal
+      :isOpen="isModalOpen"
+      :message="modalMessage"
+      @close="closeModal" />
+  </div>
+</template>
 
+<script setup>
+import { ref, onMounted } from "vue";
+import BookmarkModal from "@/components/bookmark/BookmarkModal.vue";
 
 const props = defineProps({
   musicalId: {
     type: Number,
-    required: true
+    required: true,
   },
   initialBookmarked: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const isBookmarked = ref(props.initialBookmarked);
 const loading = ref(false);
 const error = ref(null);
 const isModalOpen = ref(false);
-const modalMessage = ref('');
+const modalMessage = ref("");
 
 // 북마크 해제
 const bookmarkSvg = `
@@ -60,35 +58,37 @@ const toggleBookmark = async () => {
   try {
     const url = isBookmarked.value
       ? `http://localhost:8080/api/bookmark`
-      : 'http://localhost:8080/api/bookmark/add';
+      : "http://localhost:8080/api/bookmark/add";
 
     const options = isBookmarked.value
-      ? { method: 'DELETE' }
+      ? { method: "DELETE" }
       : {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ musicalId: props.musicalId })
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ musicalId: props.musicalId }),
         };
 
     const response = await fetch(url, options);
 
     if (!response.ok) {
-      throw new Error('Failed to update bookmark');
+      throw new Error("Failed to update bookmark");
     }
 
     // 상태를 반전시킴
     isBookmarked.value = !isBookmarked.value;
-    modalMessage.value = isBookmarked.value ? '북마크가 추가되었습니다!' : '북마크가 제거되었습니다!';
-    isModalOpen.value = true; 
+    modalMessage.value = isBookmarked.value
+      ? "북마크가 추가되었습니다!"
+      : "북마크가 제거되었습니다!";
+    isModalOpen.value = true;
   } catch (err) {
-    error.value = '북마크 상태 변경 중 오류가 발생했습니다.';
+    error.value = "북마크 처리 중 오류가 발생했습니다.";
   } finally {
     loading.value = false;
   }
 };
 
 const closeModal = () => {
-  isModalOpen.value = false; 
+  isModalOpen.value = false;
 };
 
 // 컴포넌트가 마운트되었을 때 초기 상태를 설정

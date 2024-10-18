@@ -111,6 +111,7 @@ watch(() => props.isOpen, (newValue) => {
     border: none;
     font-size: 24px;
     cursor: pointer;
+    color: black;
 }
 
 .modal-body textarea {
