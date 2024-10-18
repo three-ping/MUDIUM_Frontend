@@ -19,8 +19,8 @@ import Footer from './components/layout/Footer.vue';
 </script>
 
 <style>
-/* * {
+* {
     font-family: 'Noto Sans KR';
   text-decoration: none;
-} */
+}
 </style>

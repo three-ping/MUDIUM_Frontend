@@ -3,8 +3,10 @@
     <div class="board-detail-header">
         <h1 class="board-detail-title">{{ title }}</h1>
         <div class="board-detail-buttons">
+    <template v-if="userId == author_id">
         <button class="board-button" @click="showDeleteModal = true">삭제</button>
         <button class="board-button" @click="editPost">수정</button>
+    </template>
         <button class="board-button" @click="backToBoard">글 목록</button>
         </div>
     </div>
@@ -72,6 +74,7 @@ const isLiked = ref(false);
 const userId = ref(1);
 const showDeleteModal = ref(false);
 const viewCount = ref(0);
+const author_id = ref(0);
 
 const editPost = () => {
     router.push(`/board/edit/${id.value}`);
@@ -93,6 +96,7 @@ const fetchDetailBoard = async() => {
     const responseDTO = await response.json();
     title.value = responseDTO.data.title;
     author.value = responseDTO.data.nickname;
+    author_id.value = responseDTO.data.userId;
     content.value = responseDTO.data.content;
     createdAt.value = responseDTO.data.createdAt;
     updatedAt.value = responseDTO.data.updatedAt;

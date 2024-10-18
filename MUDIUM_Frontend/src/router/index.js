@@ -5,6 +5,7 @@ import boardRoutes from "./board";
 // import LoginRoutes from "./login";
 import MusicalRoutes from "./musical";
 // import HomeView from '/HomeView.vue';
+import NoticeRoutes from "./notice";
 
 
 
@@ -15,7 +16,8 @@ const routes = [
   },
   ...boardRoutes,
   // ...LoginRoutes,
-  ...MusicalRoutes
+  ...MusicalRoutes,
+  ...NoticeRoutes
 ];
 
 const router = createRouter({
