@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <Navigation @open-login-modal="openLoginModal" :isLoggedIn="isLoggedIn" />
+    <Navigation @open-login-modal="openLoginModal" :isLoggedIn="isLoggedIn" @userInfo="handleUserInfo" />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
-      @update:isLoggedIn="updateLoginStatus" @update:userInfo="emitUserInfo" />
+      @update:isLoggedIn="updateLoginStatus" @update:userInfo="handleUserInfo" />
     <router-view />
   </div>
 </template>
@@ -14,6 +14,8 @@ import LoginModal from '@/views/user/components/LoginModal.vue';
 
 const isLoginModalVisible = ref(false);
 let isLoggedIn = ref(false);
+const userInfo = ref(null); // Add a ref to store userInfo
+
 const openLoginModal = () => {
   isLoginModalVisible.value = true;
 };
@@ -27,6 +29,10 @@ const updateLoginStatus = (status) => {
   // Handle login status update
 };
 
+const handleUserInfo = (info) => {
+  userInfo.value = info;
+  // Handle userInfo update
+};
 
 </script>
 

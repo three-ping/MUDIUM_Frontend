@@ -21,8 +21,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:isLoggedIn', 'close', 'update:userInfo']);
 
-const email = ref('');
-const password = ref('');
+const email = ref('jinrodookubi@gmail.com');
+const password = ref('password123');
 const loginError = ref('');
 
 const loginNormalUser = async () => {
@@ -37,7 +37,8 @@ const loginNormalUser = async () => {
 		if (response.data.success) {
 			console.log("Normal Login Success");
 			emit('update:isLoggedIn', true);
-			emit('update:userInfo', response.data.user); // Emit user info
+			emit('update:userInfo', response.data.data); // Emit user info
+			console.log(`userinfo: ${1}`)
 			closeModal();
 		} else {
 			loginError.value = '로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.';

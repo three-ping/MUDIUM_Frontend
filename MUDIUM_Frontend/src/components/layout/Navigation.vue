@@ -78,15 +78,19 @@ import LoginModal from '@/views/user/components/LoginModal.vue';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+const emit = defineEmits(['userInfo']);
+
 // 현재 경로를 추적하기 위한 변수
 const loginStatus = ref(false);
 
-const updateLoginStatus = (status) => {
+const updateLoginStatus = (status, userInfo = null) => {
 	loginStatus.value = status;
 	isLoggedIn.value = status;
 
 	if (status) {
 		console.log('User logged in successfully');
+		// Emit user information
+		emit('userInfo', userInfo);
 		// Navigate to the homepage
 		router.push('/');
 	} else {
