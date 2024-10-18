@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <AppHeader />
     <!-- <AppHeader /> -->
-    <!-- <Navigation @open-login-modal="openLoginModal" :userInfo="userStore.userInfo" @userInfo="userStore.updateUserInfo"
-      @logout="handleLogout" /> -->
+    <!-- <AppHeader /> -->
+    <AppHeader @open-login-modal="openLoginModal" :userInfo="userStore.userInfo" @userInfo="userStore.updateUserInfo"
+      @logout="handleLogout" />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
       @update:isLoggedIn="userStore.updateLoginStatus" @update:userInfo="userStore.updateUserInfo" />
     <router-view />
