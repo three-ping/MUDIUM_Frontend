@@ -1,6 +1,7 @@
 <template>
   <section class="container-fluid">
     <div class="musical-detail-container">
+
       <!-- 포스터 섹션 -->
       <div class="poster-section">
         <img :src="musical.poster" alt="Poster" />
@@ -9,7 +10,7 @@
     <!-- 상세 정보 섹션 -->
     <div class="remain-section">
     <div class="detail-section">
-      <h2>{{ musical.title }}</h2>
+      <h2>{{ musical.title || '제목 정보 없음' }}</h2>
       <p class="rating">{{ musical.rating }} 관람가</p>
       <p class="scope">제작사: {{ musical.producer || '정보 없음' }}</p>
       <p>평균 별점: {{ averageScope !== null ? averageScope.toFixed(1) : '0' }}</p>
@@ -41,24 +42,51 @@ const setRating = (newRating) => {
   rating.value = newRating;
 };
 
+// const fetchAverageScope = async (id) => {
+//   try {
+//     const response = await fetch('http://localhost:8080/api/musical?page=0&size=300');
+//     const data = await response.json();
+
+//     // 목록에서 해당 ID의 뮤지컬을 찾아 평균 별점을 가져옴
+//     const foundMusical = data.data.content.find((musical) => musical.musicalId === parseInt(id));
+//     if (foundMusical) {
+//       console.log('찾은 뮤지컬:', foundMusical);
+//       averageScope.value = parseFloat(foundMusical.averageScope); // 평균 별점 저장
+//       console.log('평균 별점:', averageScope.value);
+//     } else {
+//       averageScope.value = null; // 해당 뮤지컬이 목록에 없으면 null로 설정
+//     }
+//   } catch (error) {
+//     console.error('Error fetching musical list for average scope:', error);
+//   }
+// };
+
+
 const fetchAverageScope = async (id) => {
   try {
     const response = await fetch('http://localhost:8080/api/musical?page=0&size=300');
     const data = await response.json();
 
-    // 목록에서 해당 ID의 뮤지컬을 찾아 평균 별점을 가져옴
+    // 목록에서 해당 ID의 뮤지컬을 찾아 평균 별점과 포스터를 가져옴
     const foundMusical = data.data.content.find((musical) => musical.musicalId === parseInt(id));
     if (foundMusical) {
       console.log('찾은 뮤지컬:', foundMusical);
       averageScope.value = parseFloat(foundMusical.averageScope); // 평균 별점 저장
-      console.log('평균 별점:', averageScope.value);
+
+      // 이미 `musical.value`에 데이터가 있으므로 포스터만 업데이트
+      if (foundMusical.poster) {
+        musical.value = { ...musical.value, poster: foundMusical.poster }; // 기존 데이터 유지하면서 포스터 업데이트
+        console.log('포스터:', musical.value.poster);
+      }
     } else {
       averageScope.value = null; // 해당 뮤지컬이 목록에 없으면 null로 설정
+      musical.value = { ...musical.value, poster: null }; // 포스터도 없으면 null로 설정
     }
   } catch (error) {
     console.error('Error fetching musical list for average scope:', error);
   }
 };
+
 
 const fetchMusicalDetail = async () => {
   const id = route.params.id;
@@ -84,14 +112,14 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 50px;
+  padding: 4%;
   background-color: rgba(240, 240, 255, 0.4);
   width: 100%;
-  height: 300px;
+  height: 320px;
   margin: 100px auto;
-  gap: 40px;
-  margin-top: 5%;
-  margin-bottom: 5%;
+  /* gap: -1%; */
+  /* margin-top: 5%; */
+  /* margin-bottom: 5%; */
 }
 
 .poster-section {
@@ -100,9 +128,10 @@ onMounted(() => {
 }
 
 .poster-section img {
-  height: 100%;
-  width: 100%;
+  height: 120%;
+  /* width: 100%; */
   border-radius: 5%;
+  margin-top: -11%;
 }
 
 
@@ -116,22 +145,26 @@ onMounted(() => {
 }
 
 .detail-section h2 {
-  font-size: 2rem;
-  margin-bottom: 1px;
-  margin-top: -40%;
-
+  font-size: 1.7rem;
+  /* margin-bottom: 1px; */
+  margin-top: -20%;
 }
+
+.detail-section p {
+  margin: 0;
+}
+
 
 .rating {
   font-size: 1.2rem;
-  margin-bottom: 10px;
-  margin-top: 8%;
+  margin-bottom: 1%;
+  /* margin-top: 8%; */
   color: black;
 }
 
 .scope {
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   font-size: 1rem;
-  margin-bottom: 10%;
+  /* margin-bottom: 10%; */
 }
 </style>

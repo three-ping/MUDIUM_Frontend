@@ -1,11 +1,13 @@
 <template>
-  <div id="app">
-    <Navigation @open-login-modal="openLoginModal" :userInfo="userInfo" @userInfo="handleUserInfo"
-      @logout="handleLogout" />
-    <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
-      @update:isLoggedIn="updateLoginStatus" @update:userInfo="handleUserInfo" />
-    <router-view />
-  </div>
+  <Navigation />
+  <!-- <AppHeader /> -->
+  <main class="container-fluid">
+    <!-- <main> -->
+    <RouterView :key="$route.fullPath" />
+  </main>
+  <!-- <MyPage /> -->
+  <!-- </main> -->
+  <Footer />
 </template>
 
 <script setup>
@@ -41,5 +43,8 @@ const handleLogout = () => {
 </script>
 
 <style>
-/* Add any global styles here */
+* {
+  font-family: 'Noto Sans KR';
+  text-decoration: none;
+}
 </style>
