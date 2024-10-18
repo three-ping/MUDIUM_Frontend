@@ -8,4 +8,13 @@
 import ToggleTheme from './ToggleTheme.vue';
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+footer {
+	position: fixed;
+	display: flex;
+	align-items: center;
+	bottom: 0px;
+	width: 100%;
+    height: 70px;
+}
+</style>
