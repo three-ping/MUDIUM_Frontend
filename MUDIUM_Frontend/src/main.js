@@ -2,7 +2,12 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import { createPinia } from "pinia";
 // import router from "./router/index.js"; // 라우터 가져오기
-import "@/assets/styles/main.css";
+import "@/assets/styles/layout.css";
+import "@/assets/styles/buttons.css";
+import "@/assets/styles/cards.css";
+import "@/assets/styles/variable.css";
+import "@/assets/styles/typography.css";
+
 import router from "./router/index.js";
 
 const app = createApp(App);

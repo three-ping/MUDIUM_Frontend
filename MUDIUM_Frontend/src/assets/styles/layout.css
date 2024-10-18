@@ -1,0 +1,48 @@
+/* layout.css */
+.container {
+    width: var(--content-width);
+    margin: 0 auto;
+    padding: var(--spacing-lg) 0;
+}
+
+.header {
+    height: 10vh;
+    min-height: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--spacing-md);
+}
+
+.header .logo {
+    font-size: var(--font-size-heading-1);
+    color: white;
+}
+
+.nav {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.nav a {
+    font-size: var(--font-size-body);
+    color: white;
+    text-decoration: none;
+}
+
+.main-content {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: var(--spacing-md);
+}
+
+footer {
+    background-color: var(--secondary-color);
+    height: 8vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: var(--font-size-small);
+}

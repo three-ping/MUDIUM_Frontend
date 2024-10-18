@@ -1,0 +1,40 @@
+/* variables.css */
+
+/* 색상 팔레트 */
+:root {
+    --primary-color: #9236A4;
+    --secondary-color: #969EAF;
+    --success-color: #279977;
+    --warning-color: #C84F48;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+    --button-hover-color: #a73ebc;
+
+    /* 폰트 크기 (px 단위) */
+    --font-size-small: 14px;
+    --font-size-body: 16px;
+    --font-size-large: 20px;
+    --font-size-heading-1: 32px;
+    --font-size-heading-2: 24px;
+
+    /* 여백 (vw, vh 단위) */
+    --spacing-xs: 2vw;
+    --spacing-sm: 3vw;
+    --spacing-md: 5vw;
+    --spacing-lg: 10vw;
+
+    /* 버튼 크기 */
+    --button-width-small: 3vw;
+    --button-width-medium: 4vw;
+    --button-width-large: 5vw;
+    --button-height: 35px;
+    --button-border-radius: 1vw;
+
+    /* 레이아웃 */
+    --content-width: 80vw;
+    --card-width: 18vw;
+    --card-height: 30vh;
+
+    /* 박스 그림자 */
+    --box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.1);
+}

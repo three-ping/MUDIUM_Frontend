@@ -1,0 +1,32 @@
+/* typography.css */
+
+/* 모든 요소에 공통으로 적용할 스타일 */
+* {
+    font-family: 'Noto Sans KR', sans-serif;
+    text-decoration: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  h1 {
+    font-size: var(--font-size-heading-1);
+    color: var(--primary-color);
+  }
+  
+  h2 {
+    font-size: var(--font-size-heading-2);
+    color: var(--secondary-color);
+  }
+  
+  p {
+    font-size: var(--font-size-body);
+    color: var(--text-color);
+    line-height: 1.5;
+  }
+  
+  small {
+    font-size: var(--font-size-small);
+    color: var(--text-color);
+  }
+  

@@ -78,6 +78,7 @@ import LoginModal from '@/views/user/components/LoginModal.vue';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { defineProps } from 'vue';
+// import "@/assets/styles/main.css";
 
 const emit = defineEmits(['userInfo', 'logout']);
 

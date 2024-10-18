@@ -9,7 +9,7 @@
         </select>
         <input class="search-box" type="text" v-model="searchQuery" placeholder="검색어를 입력하세요">
         <button @click="search" class="search-button" :disabled="!searchQuery.trim()">검색</button>
-        <button @click="fetchPageData" class="back-button" >목록</button>
+        <button @click="fetchPageData" class="back-button">목록</button>
       </div>
       <button @click="createBoard" class="create-button">글 쓰기</button>
     </div>
@@ -24,7 +24,7 @@
             <th>좋아요</th>
             <th>조회수</th>
           </tr>
-        </thead>   
+        </thead>
         <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
           <td class="td-id">{{ pageItem.id }}</td>
           <td class="td-title">
@@ -38,11 +38,8 @@
           <td class="td-viewCount">{{ pageItem.viewCount }}</td>
         </tr>
       </table>
-    </div> 
-    <Paging 
-      :requestURL="requestURL" 
-      :pageNumber="pageNumber" 
-      :totalPageNumber="totalPageNumber" 
+    </div>
+    <Paging :requestURL="requestURL" :pageNumber="pageNumber" :totalPageNumber="totalPageNumber"
       @updatePageNumber="updatePageNumber" />
   </div>
 </template>
@@ -92,7 +89,7 @@ const updatePageNumber = (newPageNumber) => {
 const search = async () => {
   pageNumber.value = 1;
   await queryPageData();
-  if(pageItems.length == 0) {
+  if (pageItems.length == 0) {
     router.push("view/no-args");
   }
 };
@@ -118,7 +115,7 @@ function convertToKoreanTime(timestamp) {
 onMounted(() => {
   setTimeout(() => {
     fetchPageData();
-  }, 100); 
+  }, 100);
 });
 </script>
 
@@ -239,6 +236,7 @@ onMounted(() => {
   width: 15%;
   text-align: center;
 }
+
 .td-like {
   width: 10%;
   text-align-last: center;
