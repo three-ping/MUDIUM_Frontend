@@ -12,7 +12,7 @@
                             <img src="@/assets/images/threeDots.svg" alt="threeDots">
                         </span>
                         <div v-if="dropdownVisible" class="dropdown-menu">
-                            <button @click="editReview">수정</button>
+                            <button @click="editReview" class="update">수정</button>
                             <button @click="deleteReview" class="delete">삭제</button>
                         </div>
                     </span>
@@ -62,14 +62,14 @@
                 @close="closeModal"
                 @submit="handleDeleteReviewSubmit"
             >
-                <p>삭제하시겠습니까?</p>
+                <p class="delete-confirmation">삭제하시겠습니까?</p>
             </ReviewDeleteModal>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
+import { ref, onMounted, reactive, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ReviewModal from '../../components/review/ReviewModal.vue';
 import ReviewDeleteModal from '../../components/review/ReviewDeleteModal.vue';
@@ -102,6 +102,14 @@ const userId = ref(6);          // 이 부분은 동적으로 회원 받아야 �
 
 const toggleDropdown = () => {
     dropdownVisible.value = !dropdownVisible.value; // 드롭다운 토글!!
+};
+
+// 클릭 이벤트 핸들러
+const handleClickOutside = (event) => {
+    const dropdown = document.querySelector('.dropdown-wrapper');
+    if (dropdown && !dropdown.contains(event.target)) {
+        dropdownVisible.value = false; // 드롭다운 닫기
+    }
 };
 
 const fetchReview = async () => {
@@ -157,7 +165,7 @@ const handleReviewSubmit = async (updatedReview) => {
     } catch (error) {
         console.error('리뷰 업데이트 중 오류 발생:', error);
     }
-    window.location.reload();
+    // window.location.reload();
 };
 
 const deleteReview = () => {
@@ -232,6 +240,11 @@ const handleComment = () => {
 
 onMounted(() => {
     fetchReview();
+    document.addEventListener('click', handleClickOutside);
+});
+// 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+onUnmounted(() => {
+    document.removeEventListener('click', handleClickOutside);
 });
 </script>
 
@@ -356,6 +369,13 @@ onMounted(() => {
     color: #666;
 }
 
+.delete-confirmation {
+    text-align: center; /* 가운데 정렬 */
+    font-size: 18px; /* 폰트 크기 조정 */
+    margin: 0; /* 기본 마진 제거 */
+    padding: 10px 0; /* 상하 패딩 추가 (필요시) */
+}
+
 /* 드롭다운 스타일 */
 .dropdown-wrapper {
     position: relative;
@@ -387,6 +407,10 @@ onMounted(() => {
     background: none;
     text-align: center;
     cursor: pointer;
+}
+
+.dropdown-menu button.update {
+    color: black;
 }
 
 .dropdown-menu button.delete {
