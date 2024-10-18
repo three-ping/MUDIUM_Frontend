@@ -4,7 +4,12 @@
 			<input type="text" v-model="email" placeholder="이메일" class="auth-input">
 			<input type="password" v-model="password" placeholder="비밀번호" class="auth-input">
 			<p v-if="loginError" class="error-message">{{ loginError }}</p>
-			<button @click="loginNormalUser">로그인</button>
+			<!-- <button @click="loginNormalUser">로그인</button> -->
+		</template>
+
+		<template v-slot:modalFooter>
+			<button @click="loginNormalUser" class="btn-auth">로그인</button>
+			<button @click="loginKakaoUser" class="btn-auth btn-kakao">카카오로그인</button>
 		</template>
 	</Modal>
 </template>
@@ -21,8 +26,8 @@ const props = defineProps({
 
 const emit = defineEmits(['update:isLoggedIn', 'close', 'update:userInfo']);
 
-const email = ref('jinrodookubi@gmail.com');
-const password = ref('password123');
+const email = ref('');
+const password = ref('');
 const loginError = ref('');
 
 const loginNormalUser = async () => {
@@ -49,6 +54,8 @@ const loginNormalUser = async () => {
 	}
 };
 
+
+
 const closeModal = () => {
 	emit('close');
 };
@@ -64,5 +71,17 @@ const closeModal = () => {
 	color: red;
 	font-size: 0.9em;
 	margin-top: 0.5rem;
+}
+
+.btn-auth {
+	margin: 0.5rem;
+	display: block;
+	width: 100%;
+}
+
+.btn-kakao {
+	background-color: #FEE500;
+	color: black;
+	border: 0;
 }
 </style>
