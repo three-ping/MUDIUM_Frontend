@@ -53,12 +53,29 @@
 						</ul>
 					</details>
 				</li>
+				<li v-else>
+					<details class="dropdown">
+						<summary>마이페이지</summary>
+						<ul dir="rtl">
+							<li>
+								<button class="contrast" @click="navigateToMyPage">마이페이지</button>
+							</li>
+							<li>
+								<button class="contrast" @click="handleLogout">로그아웃</button>
+							</li>
+						</ul>
+					</details>
+				</li>
+
 			</ul>
 
 		</nav>
+		<LoginModal :isLoginModalVisible="isLoginModalVisible" @close="isLoginModalVisible = false"
+			@update:isLoggedIn="updateLoginStatus" />
 	</header>
 	<hr>
-	<LoginModal :isLoginModalVisible="isLoginModalVisible" @close="isLoginModalVisible = false" />
+	<LoginModal :isLoginModalVisible="isLoginModalVisible" @close="isLoginModalVisible = false"
+		@update:isLoggedIn="updateLoginStatus" />
 </template>
 
 <script setup>
@@ -67,6 +84,21 @@ import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 // 현재 경로를 추적하기 위한 변수
+const loginStatus = ref(false);
+
+const updateLoginStatus = (status) => {
+	loginStatus.value = status;
+	isLoggedIn.value = status;
+
+	if (status) {
+		console.log('User logged in successfully');
+		// Navigate to the homepage
+		router.push('/');
+	} else {
+		console.log('User logged out');
+		// You can add logout-specific actions here if needed
+	}
+};
 
 const route = useRoute();
 const router = useRouter();
@@ -94,6 +126,18 @@ const openLoginModal = () => {
 	isLoginModalVisible.value = true;
 
 }
+
+const navigateToMyPage = () => {
+	router.push('/mypage');
+};
+
+const handleLogout = () => {
+	// Perform logout logic here (e.g., clear tokens, reset state)
+	isLoggedIn.value = false;
+	// Optionally, you can redirect to the home page or show a message
+	router.push('/');
+	// You might want to show a notification that the user has logged out
+};
 </script>
 
 <style scoped>

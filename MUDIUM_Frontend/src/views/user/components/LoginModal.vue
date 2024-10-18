@@ -22,14 +22,15 @@
 import Modal from '@/components/layout/Modal.vue';
 import axios from 'axios';
 // import api from '@/scripts/axios'
-const loginNormalUser = async () => {
-	const response = await axios.post("http://localhost:5173/api/login", {
+let loginNormalUser = async () => {
+	let response = await axios.post("http://localhost:5173/api/login", {
 		email: "jinrodookubi@gmail.com",
 		password: "password123",
 		signup_path: "NORMAL"
 	});
 	if (response.data.success) {
 		console.log("Normal Login Success");
+		emit('update:isLoggedIn', true);
 
 	}
 
@@ -38,7 +39,24 @@ const loginNormalUser = async () => {
 const props = defineProps({
 
 	isLoginModalVisible: Boolean
-})
+});
+
+const emit = defineEmits(['update:isLoggedIn']);
+
+// Remove the redeclaration of loginNormalUser and update the existing function
+loginNormalUser = async () => {
+	let response = await axios.post("http://localhost:5173/api/login", {
+		email: "jinrodookubi@gmail.com",
+		password: "password123",
+		signup_path: "NORMAL"
+	});
+	if (response.data.success) {
+		console.log("Normal Login Success");
+		emit('update:isLoggedIn', true);
+	}
+
+	console.log("Normal User Login clicked");
+}
 </script>
 
 <style lang="scss" scoped>
