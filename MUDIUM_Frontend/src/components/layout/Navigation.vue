@@ -39,7 +39,7 @@
 			<ul>
 				<li><input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
 				</li>
-				<li v-if="!isLoggedIn">
+				<li v-if="!userInfo.isLoggedIn">
 					<details class="dropdown">
 						<summary>계정</summary>
 						<ul dir="rtl">
@@ -77,6 +77,7 @@
 import LoginModal from '@/views/user/components/LoginModal.vue';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { defineProps } from 'vue';
 
 const emit = defineEmits(['userInfo']);
 
@@ -107,8 +108,11 @@ let isLoginModalVisible = ref(false);
 const isLoggedIn = ref(false);
 const hasSearched = ref(false);
 const searchQuery = ref('');
+const props = defineProps({
+	userInfo: Object // Accept userInfo as a prop
+});
 
-
+// Use userInfo.isLoggedIn wherever needed in your template or script
 const performSearch = () => {
 	if (!searchQuery.value.trim()) return; // 검색어가 없으면 실행하지 않음
 	router.push({

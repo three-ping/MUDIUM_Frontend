@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navigation @open-login-modal="openLoginModal" :isLoggedIn="isLoggedIn" @userInfo="handleUserInfo" />
+    <Navigation @open-login-modal="openLoginModal" :userInfo="userInfo" @userInfo="handleUserInfo" />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
       @update:isLoggedIn="updateLoginStatus" @update:userInfo="handleUserInfo" />
     <router-view />
@@ -13,8 +13,7 @@ import Navigation from '@/components/layout/Navigation.vue';
 import LoginModal from '@/views/user/components/LoginModal.vue';
 
 const isLoginModalVisible = ref(false);
-let isLoggedIn = ref(false);
-const userInfo = ref(null); // Add a ref to store userInfo
+const userInfo = ref({ isLoggedIn: false }); // Initialize userInfo with isLoggedIn
 
 const openLoginModal = () => {
   isLoginModalVisible.value = true;
@@ -25,13 +24,11 @@ const closeLoginModal = () => {
 };
 
 const updateLoginStatus = (status) => {
-  isLoggedIn.value = true;
-  // Handle login status update
+  userInfo.value.isLoggedIn = status; // Update loginStatus inside userInfo
 };
 
 const handleUserInfo = (info) => {
-  userInfo.value = info;
-  // Handle userInfo update
+  userInfo.value = { ...userInfo.value, ...info }; // Merge new info with existing userInfo
 };
 
 </script>
