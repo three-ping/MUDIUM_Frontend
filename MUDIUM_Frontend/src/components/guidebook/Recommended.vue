@@ -45,7 +45,7 @@
       recommendations.value = data.data;  // 데이터를 ref에 저장
       console.log(recommendations);
     } catch (err) {
-      error.value = err.message;  // 에러 메시지 저장
+      error.value = "데이터를 불러오는 데 실패하였습니다!";
     } finally {
       loading.value = false;  // 로딩 상태 해제
     }
