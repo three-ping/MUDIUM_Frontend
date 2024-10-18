@@ -54,7 +54,7 @@
 				</li>
 				<li v-else>
 					<details class="dropdown">
-						<summary>마이페이지</summary>
+						<summary><img src="" alt="@/assets/images/profile_default.svg" height="50%"></summary>
 						<ul dir="rtl">
 							<li>
 								<button class="contrast" @click="navigateToMyPage">마이페이지</button>
