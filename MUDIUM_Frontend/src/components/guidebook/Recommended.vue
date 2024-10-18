@@ -8,7 +8,6 @@
           </tr>
         </thead>
         <tbody>
-          <!-- 데이터가 로드되면 항목을 표시 -->
           <tr v-for="(item, index) in recommendations" :key="index">
             <td>{{ item.musicalTitle }}</td>
             <td>{{ item.musicalDescription }}</td>
@@ -29,7 +28,6 @@
   const loading = ref(false);  // 로딩 상태
   const error = ref(null);  // 에러 상태
   
-  // API에서 데이터를 가져오는 함수
   const fetchRecommendations = async () => {
     loading.value = true;
     error.value = null;
@@ -41,17 +39,16 @@
         throw new Error('Failed to fetch recommendations');
       }
   
-      const data = await response.json();  // API 응답을 JSON으로 파싱
-      recommendations.value = data.data;  // 데이터를 ref에 저장
+      const data = await response.json();  
+      recommendations.value = data.data;  
       console.log(recommendations);
     } catch (err) {
       error.value = "데이터를 불러오는 데 실패하였습니다!";
     } finally {
-      loading.value = false;  // 로딩 상태 해제
+      loading.value = false;  
     }
   };
   
-  // 컴포넌트가 마운트되었을 때 데이터를 가져옴
   onMounted(() => {
     fetchRecommendations();
   });

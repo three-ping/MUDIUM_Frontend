@@ -2,13 +2,12 @@
     <table>
       <thead>
         <tr>
-          <th>뮤지컬</th>
+          <th>뮤지컬 용어</th>
           <th>설명</th>
           <th>작성일자</th>
         </tr>
       </thead>
       <tbody>
-        <!-- 데이터가 로드되면 항목을 표시 -->
         <tr v-for="(item, index) in term" :key="index">
           <td>{{ item.terms }}</td>
           <td>{{ item.termsDefinition }}</td>
@@ -17,7 +16,6 @@
       </tbody>
     </table>
     
-    <!-- 데이터가 없는 경우 로딩 또는 오류 메시지 -->
     <div v-if="loading" class="loading">Loading...</div>
     <div v-if="error" class="error">{{ error }}</div>
 </template>
@@ -41,17 +39,16 @@ const fetchTerms = async () => {
       throw new Error('Failed to fetch terms');
     }
 
-    const data = await response.json();  // API 응답을 JSON으로 파싱
-    term.value = data.data;  // 데이터를 ref에 저장
+    const data = await response.json(); 
+    term.value = data.data;  
     console.log(term);
   } catch (err) {
-    error.value = err.message;  // 에러 메시지 저장
+      error.value = "데이터를 불러오는 데 실패하였습니다!";
   } finally {
-    loading.value = false;  // 로딩 상태 해제
+    loading.value = false; 
   }
 };
 
-// 컴포넌트가 마운트되었을 때 데이터를 가져옴
 onMounted(() => {
   fetchTerms();
 });
