@@ -27,8 +27,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, onUnmounted } from 'vue';
 import Modal from '@/components/layout/Modal.vue';
 import axios from 'axios';
 
@@ -38,7 +37,6 @@ const props = defineProps({
 
 const emit = defineEmits(['update:isLoggedIn', 'close', 'update:userInfo']);
 
-const router = useRouter();
 const email = ref('');
 const password = ref('');
 const loginError = ref('');
@@ -66,39 +64,33 @@ const loginNormalUser = async () => {
 	}
 };
 
-const initiateKakaoLogin = () => {
-	const kakaoRedirectUri = `${window.location.origin}/kakao-callback`;
-	const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=454fe5e6a0e0c020cf155003e27761e2&redirect_uri=${encodeURIComponent(kakaoRedirectUri)}&response_type=code`;
-	window.location.href = kakaoLoginUrl;
-};
 
-const handleKakaoCallback = async () => {
-	const urlParams = new URLSearchParams(window.location.search);
-	const code = urlParams.get('code');
+// const initiateKakaoLogin = () => {
+// 	const kakaoRedirectUri = "http://127.0.0.1:8080/api/users/oauth2/kakao"; // This should match exactly what's in your Kakao Developer Console
+// 	const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=454fe5e6a0e0c020cf155003e27761e2&redirect_uri=${encodeURIComponent(kakaoRedirectUri)}&response_type=code`;
+// 	window.location.href = kakaoLoginUrl;
+// };
 
-	if (code) {
-		try {
-			const response = await axios.post(`/api/users/oauth2/kakao?code=${code}`);
-			if (response.data.success) {
-				console.log('Kakao Login Success');
-				emit('update:isLoggedIn', true);
-				emit('update:userInfo', response.data.data);
-				router.push('/'); // Redirect to home page or dashboard
-			} else {
-				loginError.value = '카카오 로그인에 실패했습니다. 다시 시도해주세요.';
-			}
-		} catch (error) {
-			console.error('Kakao login error:', error);
-			loginError.value = '카카오 로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
-		}
-	}
-};
 
-onMounted(() => {
-	if (window.location.pathname === '/kakao-callback') {
-		handleKakaoCallback();
-	}
-});
+
+// const handleKakaoCallback = async (code) => {
+// 	try {
+// 		console.log("kakaoCallback");
+// 		const response = await axios.get('/api/users/oauth2/kakao', { params: { code } });
+// 		if (response.data.success) {
+// 			console.log('Kakao Login Success');
+// 			emit('update:isLoggedIn', true);
+// 			emit('update:userInfo', response.data.data);
+// 			closeLoginModal();
+// 		} else {
+// 			loginError.value = '카카오 로그인에 실패했습니다. 다시 시도해주세요.';
+// 		}
+// 	} catch (error) {
+// 		console.error('Kakao login error:', error);
+// 		loginError.value = '카카오 로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
+// 	}
+// };
+
 
 const closeLoginModal = () => {
 	emit('close');
@@ -118,7 +110,66 @@ const openFindPassword = () => {
 	// Implement find password logic
 	console.log('Open find password');
 };
+
+// const checkForKakaoCode = () => {
+// 	const urlParams = new URLSearchParams(window.location.search);
+// 	const code = urlParams.get('code');
+// 	if (code) {
+// 		handleKakaoCallback(code);
+// 		// Clean up the URL
+// 		window.history.replaceState({}, document.title, window.location.pathname);
+// 	}
+// };
+
+// onMounted(() => {
+// 	checkForKakaoCode();
+// 	window.addEventListener('popstate', checkForKakaoCode);
+// });
+
+// onUnmounted(() => {
+// 	window.removeEventListener('popstate', checkForKakaoCode);
+// });
+
+
+const initiateKakaoLogin = () => {
+	const kakaoRedirectUri = "http://127.0.0.1:8080/api/users/oauth2/kakao"; // This should exactly match what's in Kakao Developer Console
+	const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=454fe5e6a0e0c020cf155003e27761e2&redirect_uri=${encodeURIComponent(kakaoRedirectUri)}&response_type=code`;
+	window.location.href = kakaoLoginUrl;
+};
+
+const handleKakaoCallback = async (code) => {
+	try {
+		const response = await axios.get('/api/users/oauth2/kakao', { params: { code } });
+		if (response.data.success) {
+			console.log('Kakao Login Success');
+			emit('update:isLoggedIn', true);
+			emit('update:userInfo', response.data.data);
+			closeLoginModal();
+		} else {
+			loginError.value = '카카오 로그인에 실패했습니다. 다시 시도해주세요.';
+		}
+	} catch (error) {
+		console.error('Kakao login error:', error);
+		loginError.value = '카카오 로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
+	}
+};
+
+const checkForKakaoCode = () => {
+	const urlParams = new URLSearchParams(window.location.search);
+	const code = urlParams.get('code');
+	if (code) {
+		handleKakaoCallback(code);
+		// Clean up the URL
+		window.history.replaceState({}, document.title, window.location.pathname);
+	}
+};
+
+onMounted(() => {
+	checkForKakaoCode();
+});
+
 </script>
+
 <style scoped>
 .login-form {
 	display: flex;
