@@ -89,4 +89,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 /* Add your custom styles here */
+/* .dropdown {
+	opacity: 0.7;
+} */
 </style>
