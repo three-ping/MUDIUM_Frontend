@@ -2,7 +2,7 @@
     <div class="musical-container">
     <!-- 검색 결과 표시 -->
     <div v-if="hasSearched && searchResults.length > 0">
-      <h1>검색 결과</h1>
+      <h1>검색 결과 {{ searchResults.length }}</h1>
       <div class="search-results-container">
         <div class="search-results-container">
     <RouterLink
@@ -152,7 +152,7 @@ watch(() => route.query.title, (newTitle) => {
   display: flex;
   /* align-items: left; */
   margin-bottom: -1%;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   margin-top: 1.5%;
 }
 
