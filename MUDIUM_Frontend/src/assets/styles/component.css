@@ -38,7 +38,7 @@
 
 .dialog .article {
   width: 60vw;
-  max-height: 40vh;
+  max-height: 60vh;
   margin: 0;
   display: flex;
   flex-direction: column;
@@ -62,7 +62,7 @@
 
 .article > header {
   top: 0;
-  height: 25%;
+  height: 20%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,7 +76,8 @@
 }
 
 .article > section {
-  overflow-y: auto;
+  height: 30vh;
+  overflow-y: scroll;
 }
 
 .article > footer {

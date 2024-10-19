@@ -38,6 +38,10 @@ li {
   color: #202020;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 /* 노트북 */
 @media screen and (max-width: 1683px) {
   :root {
