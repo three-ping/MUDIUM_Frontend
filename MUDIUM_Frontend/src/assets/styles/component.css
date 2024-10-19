@@ -58,7 +58,7 @@
   height: 20%;
   margin-right: calc(var(--spacing) * -1);
   margin-left: calc(var(--spacing) * -1);
-  /* padding: calc(var(--spacing) * 0.66) var(--spacing); */
+  padding: calc(var(--spacing) * 0.66) var(--spacing);
   background-color: var(--background-color);
   flex-direction: column;
   justify-content: center;

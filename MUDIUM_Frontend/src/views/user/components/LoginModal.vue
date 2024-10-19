@@ -109,7 +109,7 @@ const openFindPassword = () => {
 	padding: 3rem;
 	margin-bottom: 2rem;
 	border: 1px solid #ccc;
-	border-radius: 2rem;
+	border-radius: 1rem;
 	font-size: 3rem;
 }
 
@@ -131,7 +131,7 @@ const openFindPassword = () => {
 	margin-bottom: 2rem;
 	border: none;
 	border-radius: 1rem;
-	font-size: 16px;
+	font-size: 2rem;
 	font-weight: bold;
 	cursor: pointer;
 	display: flex;
