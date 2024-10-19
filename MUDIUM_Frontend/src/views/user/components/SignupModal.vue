@@ -5,16 +5,18 @@
 				<form @submit.prevent="handleSignup">
 					<div class="form-group">
 						<div class="input-button-wrapper">
-							<input type="email" v-model="email" placeholder="이메일" required>
+							<input type="email" v-model="email" placeholder="이메일" required :disabled="isEmailVerified">
 							<button type="button" class="verify-button" @click="sendVerification"
-								:disabled="isEmailSent">
+								:disabled="isEmailSent || isEmailVerified">
 								{{ isEmailSent ? '전송됨' : '인증번호 발송' }}
 							</button>
 						</div>
+						<div v-if="emailError" class="error-message">{{ emailError }}</div>
 					</div>
 					<div v-if="isEmailSent" class="form-group">
 						<div class="input-button-wrapper">
-							<input type="text" v-model="verificationCode" placeholder="인증번호를 입력해주세요" required>
+							<input type="text" v-model="verificationCode" placeholder="인증번호를 입력해주세요" required
+								:disabled="isEmailVerified">
 							<button type="button" class="verify-button" @click="verifyCode" :disabled="isEmailVerified">
 								{{ isEmailVerified ? '확인됨' : '확인' }}
 							</button>
@@ -22,7 +24,8 @@
 					</div>
 					<div v-if="isEmailVerified" class="form-group">
 						<div class="input-button-wrapper">
-							<input type="text" v-model="nickname" placeholder="닉네임을 입력해주세요" required>
+							<input type="text" v-model="nickname" placeholder="닉네임을 입력해주세요" required
+								:disabled="isNicknameVerified">
 							<button type="button" class="verify-button" @click="verifyNickname"
 								:disabled="isNicknameVerified">
 								{{ isNicknameVerified ? '확인됨' : '중복 확인' }}
@@ -37,6 +40,9 @@
 					</div>
 					<div v-if="isNicknameVerified" class="form-group">
 						<input type="password" v-model="confirmPassword" placeholder="비밀번호를 확인해주세요" required>
+						<div v-if="password && confirmPassword" class="password-validation">
+							{{ passwordValidationMessage }}
+						</div>
 					</div>
 					<button type="submit" class="signup-button" :disabled="!isFormValid">회원가입 하기</button>
 				</form>
@@ -72,10 +78,23 @@ const confirmPassword = ref('');
 const isEmailSent = ref(false);
 const isEmailVerified = ref(false);
 const isNicknameVerified = ref(false);
+const emailError = ref('');
+
+const passwordValidationMessage = computed(() => {
+	if (!password.value || !confirmPassword.value) return '';
+	if (password.value === confirmPassword.value) {
+		return '비밀번호가 일치합니다.';
+	} else {
+		return '비밀번호가 일치하지 않습니다.';
+	}
+});
 
 const isFormValid = computed(() => {
-	return isEmailVerified.value && isNicknameVerified.value &&
-		username.value && password.value && confirmPassword.value &&
+	return isEmailVerified.value &&
+		isNicknameVerified.value &&
+		username.value &&
+		password.value &&
+		confirmPassword.value &&
 		password.value === confirmPassword.value;
 });
 
@@ -85,13 +104,35 @@ const closeSignupModal = () => {
 
 const sendVerification = async () => {
 	try {
+		emailError.value = ''; // Clear any previous error
 		const response = await axios.post('/api/users/send-verification', null, { params: { email: email.value } });
 		if (response.data.success) {
 			isEmailSent.value = true;
 			alert('이메일 인증 코드가 전송되었습니다.');
 		}
+		else {
+			const errorData = response.data.error;
+			emailError.value = errorData.message;
+			console.log("duplicated email");
+			alert(errorData.message);
+			isEmailSent.value = false;
+		}
 	} catch (error) {
-		alert('이메일 인증 코드 전송 실패');
+		if (error.response && error.response.data && !error.response.data.success) {
+			const errorData = error.response.data.error;
+			if (errorData.code == 4010015) {
+				emailError.value = errorData.message;
+				console.log("duplicted email");
+				alert(errorData.message);
+			} else {
+				emailError.value = '이메일 인증 코드 전송 실패';
+				alert('이메일 인증 코드 전송에 실패했습니다.');
+			}
+		} else {
+			emailError.value = '이메일 인증 코드 전송 실패';
+			alert('이메일 인증 코드 전송에 실패했습니다.');
+		}
+		isEmailSent.value = false;
 	}
 };
 
@@ -157,10 +198,9 @@ const switchToLogin = () => {
 };
 </script>
 
-
-
 <style scoped>
 .signup-form {
+	max-height: 80vh;
 	overflow-y: auto;
 	padding: 2rem;
 }
@@ -170,21 +210,22 @@ const switchToLogin = () => {
 }
 
 .input-button-wrapper {
-	height: 8rem;
 	display: flex;
 	align-items: stretch;
 }
 
 .input-button-wrapper>input,
-.input-button-wrapper>button {
-	font-size: 2rem;
+.input-button-wrapper>button,
+.form-group>input {
+	height: 6rem;
+	font-size: 2.4rem;
 }
 
 .input-button-wrapper>input {
 	flex: 8;
 	padding: 0 1.5rem;
 	border: 1px solid #ccc;
-	border-radius: 1rem;
+	border-radius: 1rem 0 0 1rem;
 }
 
 .input-button-wrapper>button {
@@ -192,7 +233,7 @@ const switchToLogin = () => {
 	padding: 0 1rem;
 	border: 1px solid #ccc;
 	border-left: none;
-	border-radius: 1rem;
+	border-radius: 0 1rem 1rem 0;
 	background-color: var(--primary-color);
 	color: white;
 	cursor: pointer;
@@ -203,11 +244,21 @@ const switchToLogin = () => {
 
 .form-group>input {
 	width: 100%;
-	height: 6rem;
 	padding: 0 1.5rem;
 	border: 1px solid #ccc;
 	border-radius: 1rem;
-	font-size: 2.4rem;
+}
+
+.password-validation {
+	margin-top: 0.5rem;
+	font-size: 2rem;
+	color: var(--primary-color);
+}
+
+.error-message {
+	color: red;
+	font-size: 2rem;
+	margin-top: 0.5rem;
 }
 
 .auth-links {
@@ -222,7 +273,6 @@ const switchToLogin = () => {
 .auth-links a {
 	color: var(--secondary-color);
 	text-decoration: none;
-
 }
 
 .auth-links a:hover {
@@ -242,5 +292,15 @@ const switchToLogin = () => {
 
 .signup-button:hover {
 	background-color: var(--button-hover-color);
+}
+
+.signup-button:disabled {
+	background-color: #ccc;
+	cursor: not-allowed;
+}
+
+input:disabled {
+	background-color: #f0f0f0;
+	color: #888;
 }
 </style>
