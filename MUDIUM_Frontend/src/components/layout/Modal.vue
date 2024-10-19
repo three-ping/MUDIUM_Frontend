@@ -1,5 +1,5 @@
 <template>
-	<dialog ref="modal" @click.self="closeModal(modal)" :open="props.isModalOpen">
+	<dialog ref="modal" @click.self="closeModal" :open="isModalOpen">
 		<article id="modal-popup" class="article">
 			<header id="modal-header">
 				<img src="@/assets/images/MudiumText.svg" alt="">
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue';
 
 const modal = ref(null);
 const props = defineProps({
@@ -24,22 +24,13 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
-const closeModal = (modal) => {
-	console.log(`isModalOpen: ${props.isModalOpen}`)
+const closeModal = () => {
 	emit('close');
 };
 
 // Get scrollbar width
 const getScrollbarWidth = () => {
 	return window.innerWidth - document.documentElement.clientWidth;
-};
-
-// Handle clicks outside the modal content
-const handleClickOutside = (event) => {
-	if (!props.isModalOpen) return;
-	const modalContent = modal.value.querySelector('article');
-	const isClickInside = modalContent.contains(event.target);
-	if (!isClickInside) closeModal();
 };
 
 // Handle Esc key press to close the modal
@@ -64,18 +55,16 @@ watch(() => props.isModalOpen, (newValue) => {
 		modal.value.showModal();
 	} else {
 		document.documentElement.classList.remove('modal-is-open');
+		modal.value.close();
 	}
 });
 
 // Lifecycle hooks
 onMounted(() => {
-	document.addEventListener('click', handleClickOutside);
 	document.addEventListener('keydown', handleEscapeKey);
-
 });
 
 onBeforeUnmount(() => {
-	document.removeEventListener('click', handleClickOutside);
 	document.removeEventListener('keydown', handleEscapeKey);
 });
 </script>
@@ -89,7 +78,6 @@ onBeforeUnmount(() => {
 #modal-header img {
 	width: 8rem;
 }
-
 
 .jim-nightshade-regular {
 	font-family: "Jim Nightshade", cursive;

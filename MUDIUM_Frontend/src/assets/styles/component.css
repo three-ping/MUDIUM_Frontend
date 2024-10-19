@@ -50,6 +50,7 @@
 }
 .article > header,
 .article > footer {
+  min-height: 15%;
   margin-right: calc(var(--spacing) * -1);
   margin-left: calc(var(--spacing) * -1);
   padding: calc(var(--spacing) * 0.66) var(--spacing);
