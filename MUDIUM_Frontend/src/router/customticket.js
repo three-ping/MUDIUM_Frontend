@@ -1,7 +1,7 @@
 export default [
     {
       path: '/customticket',
-      component: () => import('@/components/customticket/Customticket.vue'),
+      component: () => import('@/views/customticket/Customticket.vue'),
       },
     {
       path: '/customticket/:id',
