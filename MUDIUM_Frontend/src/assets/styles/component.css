@@ -35,53 +35,58 @@
   background-color: var(--modal-overlay-background-color);
   color: var(--text-color);
 }
+
 .dialog .article {
   width: 60vw;
-  min-height: 40vh;
-  max-height: calc(100vh - var(--spacing) * 2);
-  margin: var(--spacing);
-  overflow: auto;
-}
-.article {
-  margin-bottom: var(--spacing);
-  padding: var(--spacing) var(--spacing);
+  max-height: 40vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* justify-content: space-between; */
   border-radius: var(--border-radius);
   background: var(--card-background-color);
   box-shadow: var(--card-box-shadow);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
+
 .article > header,
+.article > section,
 .article > footer {
-  display: flex;
-  height: 20%;
-  margin-right: calc(var(--spacing) * -1);
-  margin-left: calc(var(--spacing) * -1);
-  padding: calc(var(--spacing) * 0.66) var(--spacing);
-  background-color: var(--background-color);
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  width: 100%;
+  display: block;
+  flex-shrink: 0;
+  left: 0;
+  right: 0;
+  /* padding: 1rem; */
 }
+
 .article > header {
-  margin-top: calc(var(--spacing) * -1);
-  margin-bottom: var(--spacing);
-  border-bottom: var(--border-width) solid var(--card-border-color);
-  border-top-right-radius: var(--border-radius);
-  border-top-left-radius: var(--border-radius);
+  top: 0;
+  height: 25%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: var(--background-color);
+  border-bottom: var(--border-width) solid var(--card-border-color);
 }
+
 .article > header img {
-  height: 100%;
-  margin-bottom: 0;
+  height: 80%;
+  margin: 0;
 }
+
+.article > section {
+  overflow-y: auto;
+}
+
 .article > footer {
-  /* margin-top: var(--spacing); */
-  margin-bottom: calc(var(--spacing) * -1);
+  background-color: var(--background-color);
   border-top: var(--border-width) solid var(--card-border-color);
-  border-bottom-right-radius: var(--border-radius);
-  border-bottom-left-radius: var(--border-radius);
+  text-align: center;
+}
+
+.separator {
+  border: none;
+  border-top: 1px solid var(--card-border-color);
+  margin: 0;
 }

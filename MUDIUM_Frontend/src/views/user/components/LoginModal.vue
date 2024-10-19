@@ -166,37 +166,8 @@ const openFindPassword = () => {
 	text-decoration: none;
 }
 
-.separator {
-	margin: 0 10px;
-	color: #ccc;
-}
 
-/* New styles to match the image */
-:deep(.dialog) {
-	border-radius: 10px;
-	overflow: hidden;
-}
 
-:deep(#modal-header) {
-	text-align: center;
-	padding: 2rem 0;
-}
-
-:deep(#modal-header img) {
-	height: 10rem;
-}
-
-:deep(.separator) {
-	margin: 0;
-}
-
-:deep(section) {
-	padding: 1rem;
-}
-
-:deep(footer) {
-	padding: 1rem;
-}
 
 .auth-input {
 	background-color: #f5f5f5;
@@ -219,10 +190,13 @@ const openFindPassword = () => {
 
 .auth-links {
 	margin-top: 1rem;
+	justify-content: center;
+
 }
 
 .auth-links a {
 	font-size: 2rem;
+
 	/* color: #999; */
 }
 

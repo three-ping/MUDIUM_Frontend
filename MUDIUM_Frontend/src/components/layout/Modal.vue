@@ -75,6 +75,6 @@ onBeforeUnmount(() => {
 
 section,
 footer {
-	padding: 3rem;
+	padding: 1rem;
 }
 </style>
