@@ -147,17 +147,4 @@ const logout = () => {
 
 <style scoped>
 /* Style for the fixed header */
-
-
-.active::after {
-	content: "";
-	display: flex;
-	bottom: -5px;
-	left: 0;
-	width: 100%;
-	height: 3px;
-	margin: 0;
-	padding: 0;
-	background-color: purple;
-}
 </style>
