@@ -39,7 +39,7 @@
 			<ul>
 				<li><input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
 				</li>
-				<li v-if="!userInfo.isLoggedIn">
+				<!-- <li v-if="!userInfo.isLoggedIn">
 					<details class="dropdown">
 						<summary>계정</summary>
 						<ul dir="rtl">
@@ -64,7 +64,7 @@
 							</li>
 						</ul>
 					</details>
-				</li>
+				</li> -->
 
 			</ul>
 

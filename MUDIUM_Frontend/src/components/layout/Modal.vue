@@ -1,6 +1,6 @@
 <template>
-	<dialog ref="modal" @click.self="closeModal" :open="isModalOpen">
-		<article id="modal-popup">
+	<dialog ref="modal" @click.self="closeModal" open class="dialog">
+		<article id="modal-popup" class="article">
 			<header id="modal-header">
 				<img src="@/assets/images/MudiumText.svg" alt="">
 			</header>

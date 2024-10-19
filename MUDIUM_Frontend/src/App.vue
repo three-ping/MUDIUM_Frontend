@@ -1,13 +1,11 @@
 <template>
-  <div id="app">
-    <!-- <AppHeader /> -->
-    <!-- <AppHeader /> -->
-    <AppHeader @open-login-modal="openLoginModal" :userInfo="userStore.userInfo" @userInfo="userStore.updateUserInfo"
-      @logout="handleLogout" />
+  <div id="app" class="root-container">
+    <Navigation />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
       @update:isLoggedIn="userStore.updateLoginStatus" @update:userInfo="userStore.updateUserInfo" />
     <router-view />
   </div>
+  <Modal />
 </template>
 
 <script setup>
@@ -16,7 +14,6 @@ import { useRoute } from 'vue-router';
 import { useUserStore } from './scripts/user/user';
 import Navigation from '@/components/layout/Navigation.vue';
 import LoginModal from '@/views/user/components/LoginModal.vue';
-import AppHeader from './components/AppHeader.vue';
 const route = useRoute();
 const isLoginModalVisible = ref(false);
 const userStore = useUserStore();
