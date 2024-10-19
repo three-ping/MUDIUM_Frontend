@@ -37,6 +37,7 @@
 }
 .dialog article {
   width: 60vw;
+  min-height: 40vh;
   max-height: calc(100vh - var(--spacing) * 2);
   margin: var(--spacing);
   overflow: auto;
@@ -50,7 +51,7 @@
 }
 .article > header,
 .article > footer {
-  min-height: 15%;
+  min-height: 20%;
   margin-right: calc(var(--spacing) * -1);
   margin-left: calc(var(--spacing) * -1);
   padding: calc(var(--spacing) * 0.66) var(--spacing);

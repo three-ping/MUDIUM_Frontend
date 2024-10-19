@@ -1,14 +1,23 @@
 <template>
 	<Modal :isModalOpen="isLoginModalVisible" @close="closeLoginModal">
 		<template v-slot:modalSection>
-			<input type="text" v-model="email" placeholder="이메일" class="auth-input">
-			<input type="password" v-model="password" placeholder="비밀번호" class="auth-input">
-			<p v-if="loginError" class="error-message">{{ loginError }}</p>
-		</template>
-
-		<template v-slot:modalFooter>
-			<button @click="loginNormalUser" class="btn-auth">로그인</button>
-			<button @click="loginKakaoUser" class="btn-auth btn-kakao">카카오로그인</button>
+			<div class="login-form">
+				<input type="text" v-model="email" placeholder="아이디" class="auth-input">
+				<input type="password" v-model="password" placeholder="비밀번호" class="auth-input">
+				<p v-if="loginError" class="error-message">{{ loginError }}</p>
+				<button @click="loginNormalUser" class="btn-auth btn-login">로그인</button>
+				<button @click="loginKakaoUser" class="btn-auth btn-kakao">
+					<img src="@/assets/images/kakao-icon.svg" alt="Kakao" class="kakao-icon">
+					카카오 로그인
+				</button>
+				<div class="auth-links">
+					<a href="#" @click.prevent="openSignup">회원가입</a>
+					<span class="separator">|</span>
+					<a href="#" @click.prevent="openFindId">아이디 찾기</a>
+					<span class="separator">|</span>
+					<a href="#" @click.prevent="openFindPassword">비밀번호 찾기</a>
+				</div>
+			</div>
 		</template>
 	</Modal>
 </template>
@@ -64,8 +73,92 @@ const loginKakaoUser = async () => {
 const closeLoginModal = () => {
 	emit('close');
 };
+
+const openSignup = () => {
+	// Implement signup logic
+	console.log('Open signup');
+};
+
+const openFindId = () => {
+	// Implement find ID logic
+	console.log('Open find ID');
+};
+
+const openFindPassword = () => {
+	// Implement find password logic
+	console.log('Open find password');
+};
 </script>
 
 <style scoped>
-/* ... (styles remain unchanged) ... */
+.login-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+}
+
+.logo {
+	width: 120px;
+	margin-bottom: 20px;
+}
+
+.auth-input {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+.error-message {
+	color: red;
+	font-size: 14px;
+	margin-bottom: 10px;
+}
+
+.btn-auth {
+	width: 100%;
+	padding: 10px;
+	margin-bottom: 10px;
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.btn-login {
+	background-color: #000;
+	color: #fff;
+}
+
+.btn-kakao {
+	background-color: #FEE500;
+	color: #000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.kakao-icon {
+	width: 20px;
+	height: 20px;
+	margin-right: 10px;
+}
+
+.auth-links {
+	margin-top: 20px;
+	font-size: 14px;
+}
+
+.auth-links a {
+	color: #666;
+	text-decoration: none;
+}
+
+.separator {
+	margin: 0 10px;
+	color: #ccc;
+}
 </style>

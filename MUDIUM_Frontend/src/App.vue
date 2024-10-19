@@ -5,6 +5,7 @@
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
       @update:isLoggedIn="userStore.updateLoginStatus" @update:userInfo="userStore.updateUserInfo" />
     <router-view />
+    <Modal />
   </div>
 </template>
 
@@ -13,7 +14,7 @@ import { ref } from 'vue';
 import { useUserStore } from './scripts/user/user';
 import Navigation from '@/components/layout/Navigation.vue';
 import LoginModal from '@/views/user/components/LoginModal.vue';
-
+import Modal from './components/layout/Modal.vue';
 const isLoginModalVisible = ref(false);
 const userStore = useUserStore();
 
