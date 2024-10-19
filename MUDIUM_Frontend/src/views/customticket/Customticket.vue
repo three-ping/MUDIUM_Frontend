@@ -1,5 +1,12 @@
    <template>
     <div>
+
+  
+      <!-- 이미지 파일 업로드 -->
+      <div>
+        <input type="file" @change="handleImageUpload" />
+      </div>
+
       <div class="controls">
         <label>
           홀로그램 색상 1:
@@ -9,11 +16,6 @@
           홀로그램 색상 2:
           <input type="color" v-model="hologramColor2" @input="applyHologramStyle" />
         </label>
-      </div>
-  
-      <!-- 이미지 파일 업로드 -->
-      <div>
-        <input type="file" @change="handleImageUpload" />
       </div>
   
       <!-- 포스터 클릭 시 뒤집히는 컨테이너 -->
@@ -47,9 +49,14 @@
   
   <script>
   import { ref, onMounted } from 'vue';
-  
+  import { useRoute } from 'vue-router';
+
   export default {
     setup() {
+
+      // const route = useRoute();
+      // const userId = route.params.userId; 
+
       const container = ref(null);
       const overlay = ref(null);
       const isFlipped = ref(false);
@@ -60,7 +67,7 @@
   
       const newComment = ref('');
       const backMessage = ref(''); // 댓글 저장할 변수
-  
+
       // 이미지 파일 업로드 핸들러
       const handleImageUpload = (event) => {
         const file = event.target.files[0];
@@ -151,7 +158,8 @@
           hologramColor1: hologramColor1.value,
           hologramColor2: hologramColor2.value,
           comment: backMessage.value,
-          userId: 1  // 로그인된 사용자 ID
+          userId: 1 
+          // userId: userId
         };
   
         console.log('저장할 티켓 데이터:', ticketData);
@@ -167,7 +175,27 @@
           .then(response => response.json())
           .then(data => {
             console.log('서버 응답:', data);
-          })
+
+
+          if (data.success) {
+      // 성공적으로 저장되었다는 알림
+      alert('티켓이 성공적으로 저장되었습니다.');
+
+      // 홀로그램 색상과 파일 업로드 초기화
+      hologramColor1.value = '';  // 홀로그램 색상 1 초기화
+      hologramColor2.value = '';  // 홀로그램 색상 2 초기화
+      uploadedImage.value = null; // 업로드된 이미지 초기화
+
+      // 백 메시지 초기화
+      backMessage.value = '';
+
+      // 파일 선택창과 홀로그램만 보이게 다시 설정
+      // 필요한 로직이 여기에 추가될 수 있음 (예: UI를 다시 리셋하는 로직)
+    } else {
+      alert('티켓 저장에 실패했습니다.');
+    }
+  })
+
           .catch(error => {
             console.error('티켓 저장 중 오류 발생:', error);
           });
@@ -193,6 +221,7 @@
         handleImageUpload,
         backMessage,
         saveCustomTicket,
+        // userId
       };
     },
   };

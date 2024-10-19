@@ -24,11 +24,13 @@
               <p v-if="ticket.comment">{{ ticket.comment }}</p>
               <p v-else>코멘트가 없습니다. 코멘트를 추가해주세요.</p>
               <div class="card-actions"> 
+                <div class="top-right-buttons">
                 <!-- 수정 버튼 클릭시 editTicket 함수 호출 -->
-                <button class="edit-btn" @click.stop="editTicket(index)">수정</button>
+                  <button class="edit-btn" @click.stop="editTicket(ticket.userId, ticket.customTicketId)">수정</button>
                 <!-- 삭제 버튼 클릭시 deleteTicket 함수 호출 -->
-                <button class="delete-btn" @click.stop="deleteTicket(index)">삭제</button>
-          </div>
+                  <button class="delete-btn" @click.stop="deleteTicket(ticket.userId, ticket.customTicketId)">삭제</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -39,14 +41,17 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
 
 const customTickets = ref([]);
 const isFlipped = ref([]); // 티켓마다 flip 상태를 관리하는 배열
 const container = ref(null); // container ref 추가
 const overlay = ref(null); // overlay ref 추가
+const route = useRoute();
 
 const fetchCustomTickets = () => {
-  const userId = 1;  // 로그인된 유저 ID
+  // const userId = 1;  // 로그인된 유저 ID
+  const userId = route.params.id;
   fetch(`http://localhost:8080/api/customticket/${userId}`)
     .then(response => response.json())
     .then(data => {
@@ -138,29 +143,33 @@ const handleMouseOut = (e, index) => {
 // };
 
 
-// const deleteTicket = async (userId, customTicketId) => {
-//   const confirmDelete = confirm('정말로 이 티켓을 삭제하시겠습니까?');
-//   if (!confirmDelete) return;
+const deleteTicket = async (userId, customTicketId) => {
+  console.log("Deleting ticket with customTicketId:", customTicketId); 
+  const confirmDelete = confirm('정말로 이 티켓을 삭제하시겠습니까?');
+  if (!confirmDelete) return;
 
-//   try {
-//     const response = await fetch(`http://localhost:5173/customticket/delete/${userId}/${customTicketId}`, {
-//       method: 'DELETE',
-//     });
+  try {
+    const response = await fetch(`http://localhost:8080/api/customticket/delete/${customTicketId}/${userId}`, {
+      method: 'DELETE',
+    });
 
-//     if (response.ok) {
-//       alert('티켓이 성공적으로 삭제되었습니다.');
-//     } else {
-//       alert('티켓 삭제에 실패했습니다.');
-//     }
-//   } catch (error) {
-//     console.error('Error deleting ticket:', error);
-//   }
-// };
+    if (response.ok) {
+      alert('티켓이 성공적으로 삭제되었습니다.');
+      fetchCustomTickets(); 
+    } else {
+      alert('티켓 삭제에 실패했습니다.');
+    }
+  } catch (error) {
+    console.error('Error deleting ticket:', error);
+  }
+};
 
 
 onMounted(() => {
   fetchCustomTickets();  // 컴포넌트가 마운트될 때 API 호출
 });
+
+
 </script>
 
 <style>
@@ -171,9 +180,8 @@ onMounted(() => {
 }
 
 .ticket-card {
-  width: 220px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  /* width: 220px; */
+  /* border-radius: 8px; */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   perspective: 1000px;
@@ -212,6 +220,11 @@ onMounted(() => {
   text-align: center;
 }
 
+.back-content p {
+  color: black;
+  opacity: 0.7;
+}
+
 .card-image {
   width: 220px;
   height: 310px;
@@ -222,8 +235,11 @@ onMounted(() => {
 
 .overlay {
   position: absolute;
-  width: 220px;
-  height: 310px;
+  /* display: flex; */
+  /* width: 220px; */
+  /* height: 310px; */
+  width: 100%;
+  height: 100%;
   filter: brightness(1.1) opacity(0.8);
   mix-blend-mode: color-dodge;
   background-size: 200% 200%;
@@ -259,5 +275,13 @@ onMounted(() => {
 
 .edit-btn:hover, .delete-btn:hover {
   background-color: rgba(255, 255, 255, 1);
+}
+
+.top-right-buttons {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 5px; 
 }
 </style>
