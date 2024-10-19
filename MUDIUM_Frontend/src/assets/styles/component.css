@@ -35,7 +35,7 @@
   background-color: var(--modal-overlay-background-color);
   color: var(--text-color);
 }
-.dialog article {
+.dialog .article {
   width: 60vw;
   min-height: 40vh;
   max-height: calc(100vh - var(--spacing) * 2);
@@ -48,13 +48,17 @@
   border-radius: var(--border-radius);
   background: var(--card-background-color);
   box-shadow: var(--card-box-shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .article > header,
 .article > footer {
-  min-height: 20%;
+  display: flex;
+  height: 20%;
   margin-right: calc(var(--spacing) * -1);
   margin-left: calc(var(--spacing) * -1);
-  padding: calc(var(--spacing) * 0.66) var(--spacing);
+  /* padding: calc(var(--spacing) * 0.66) var(--spacing); */
   background-color: var(--background-color);
 }
 .article > header {
@@ -63,7 +67,13 @@
   border-bottom: var(--border-width) solid var(--card-border-color);
   border-top-right-radius: var(--border-radius);
   border-top-left-radius: var(--border-radius);
-  min-height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.article > header img {
+  height: 100%;
+  margin-bottom: 0;
 }
 .article > footer {
   margin-top: var(--spacing);

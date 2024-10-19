@@ -62,27 +62,12 @@ onBeforeUnmount(() => {
 	display: flex;
 }
 
-.article {
-	width: 400px;
-	background-color: white;
-	border-radius: 10px;
-	overflow: hidden;
-}
 
-#modal-header {
-	background-color: #ffffff;
-	padding: 20px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
 
-#modal-header img {
-	width: 120px;
-}
+
 
 section,
 footer {
-	padding: 20px;
+	padding: 3rem;
 }
 </style>
