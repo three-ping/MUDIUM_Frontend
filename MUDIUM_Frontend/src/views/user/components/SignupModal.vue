@@ -6,34 +6,39 @@
 					<div class="form-group">
 						<div class="input-button-wrapper">
 							<input type="email" v-model="email" placeholder="이메일" required>
-							<button type="button" class="verify-button" @click="sendVerification">인증번호 발송</button>
+							<button type="button" class="verify-button" @click="sendVerification"
+								:disabled="isEmailSent">
+								{{ isEmailSent ? '전송됨' : '인증번호 발송' }}
+							</button>
 						</div>
 					</div>
-					<div class="form-group">
-						<div class="input-button-wrapper">
-							<input type="text" v-model="username" placeholder="이름" required>
-
-						</div>
-					</div>
-					<div class="form-group">
+					<div v-if="isEmailSent" class="form-group">
 						<div class="input-button-wrapper">
 							<input type="text" v-model="verificationCode" placeholder="인증번호를 입력해주세요" required>
-							<button type="button" class="verify-button" @click="verifyCode">확인</button>
+							<button type="button" class="verify-button" @click="verifyCode" :disabled="isEmailVerified">
+								{{ isEmailVerified ? '확인됨' : '확인' }}
+							</button>
 						</div>
 					</div>
-					<div class="form-group">
+					<div v-if="isEmailVerified" class="form-group">
 						<div class="input-button-wrapper">
 							<input type="text" v-model="nickname" placeholder="닉네임을 입력해주세요" required>
-							<button type="button" class="verify-button" @click="verifyNickname">중복 확인</button>
+							<button type="button" class="verify-button" @click="verifyNickname"
+								:disabled="isNicknameVerified">
+								{{ isNicknameVerified ? '확인됨' : '중복 확인' }}
+							</button>
 						</div>
 					</div>
-					<div class="form-group">
+					<div v-if="isNicknameVerified" class="form-group">
+						<input type="text" v-model="username" placeholder="이름" required>
+					</div>
+					<div v-if="isNicknameVerified" class="form-group">
 						<input type="password" v-model="password" placeholder="비밀번호를 입력해주세요" required>
 					</div>
-					<div class="form-group">
+					<div v-if="isNicknameVerified" class="form-group">
 						<input type="password" v-model="confirmPassword" placeholder="비밀번호를 확인해주세요" required>
 					</div>
-					<button type="submit" class="signup-button">회원가입 하기</button>
+					<button type="submit" class="signup-button" :disabled="!isFormValid">회원가입 하기</button>
 				</form>
 			</div>
 		</template>
@@ -47,7 +52,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import axios from 'axios';
 import Modal from '@/components/layout/Modal.vue';
 
 const props = defineProps({
@@ -59,46 +65,99 @@ const emit = defineEmits(['close', 'signup-success', 'switch-to-login']);
 const email = ref('');
 const verificationCode = ref('');
 const nickname = ref('');
+const username = ref('');
 const password = ref('');
 const confirmPassword = ref('');
-const username = ref('');
+
+const isEmailSent = ref(false);
+const isEmailVerified = ref(false);
+const isNicknameVerified = ref(false);
+
+const isFormValid = computed(() => {
+	return isEmailVerified.value && isNicknameVerified.value &&
+		username.value && password.value && confirmPassword.value &&
+		password.value === confirmPassword.value;
+});
+
 const closeSignupModal = () => {
 	emit('close');
 };
 
-const sendVerification = () => {
-	// Implement send verification logic
-	console.log('Sending verification to:', email.value);
+const sendVerification = async () => {
+	try {
+		const response = await axios.post('/api/users/send-verification', null, { params: { email: email.value } });
+		if (response.data.success) {
+			isEmailSent.value = true;
+			alert('이메일 인증 코드가 전송되었습니다.');
+		}
+	} catch (error) {
+		alert('이메일 인증 코드 전송 실패');
+	}
 };
 
-const verifyCode = () => {
-	// Implement verification code check logic
-	console.log('Verifying code:', verificationCode.value);
+const verifyCode = async () => {
+	try {
+		const response = await axios.post('/api/users/verify-code', null, {
+			params: { email: email.value, code: verificationCode.value }
+		});
+		if (response.data.success) {
+			isEmailVerified.value = true;
+			alert('이메일 인증 성공');
+		} else {
+			alert('이메일 인증 실패');
+		}
+	} catch (error) {
+		alert('이메일 인증 실패');
+	}
 };
 
-const verifyNickname = () => {
-	// Implement nickname verification logic
-	console.log('Verifying nickname:', nickname.value);
+const verifyNickname = async () => {
+	try {
+		const response = await axios.get(`/api/users/check-nickname/${nickname.value}`);
+		if (response.data.success) {
+			isNicknameVerified.value = true;
+			alert('사용 가능한 닉네임입니다.');
+		} else {
+			alert('이미 사용 중인 닉네임입니다.');
+		}
+	} catch (error) {
+		alert('닉네임 확인 실패');
+	}
 };
 
-const handleSignup = () => {
-	if (password.value !== confirmPassword.value) {
-		alert('Passwords do not match');
+const handleSignup = async () => {
+	if (!isFormValid.value) {
+		alert('모든 필드를 올바르게 입력해주세요.');
 		return;
 	}
 
-	// Implement signup logic here
-	console.log('Signing up with:', { email: email.value, nickname: nickname.value, password: password.value });
+	try {
+		const response = await axios.post('/api/users/signup', {
+			user_name: username.value,
+			password: password.value,
+			nickname: nickname.value,
+			email: email.value,
+			signup_path: 'NORMAL'
+		});
 
-	// After successful signup
-	emit('signup-success');
-	closeSignupModal();
+		if (response.data.success) {
+			alert('회원가입 성공');
+			emit('signup-success');
+			closeSignupModal();
+		} else {
+			alert('회원가입 실패');
+		}
+	} catch (error) {
+		alert('회원가입 실패');
+	}
 };
 
 const switchToLogin = () => {
 	emit('switch-to-login');
 };
 </script>
+
+
 
 <style scoped>
 .signup-form {

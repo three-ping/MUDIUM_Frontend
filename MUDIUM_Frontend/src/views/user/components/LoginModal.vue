@@ -46,7 +46,7 @@ const loginError = ref('');
 const loginNormalUser = async () => {
 	try {
 		loginError.value = '';
-		const response = await axios.post("http://localhost:5173/api/login", {
+		const response = await axios.post("http://localhost:5173/api/users/login", {
 			email: email.value,
 			password: password.value,
 			signup_path: "NORMAL"
