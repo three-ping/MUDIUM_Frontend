@@ -1,7 +1,8 @@
 <template>
   <div class="root-container">
     <Navigation @open-login-modal="openLoginModal" @open-signup-modal="openSignupModal" />
-    <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal" />
+    <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
+      @update:isLoggedIn="handleLoginSuccess" @update:userInfo="updateUserInfo" />
     <router-view />
     <Modal />
   </div>
@@ -28,6 +29,17 @@ const closeLoginModal = () => {
 const openSignupModal = () => {
   // Implement signup modal logic here
   console.log('Open signup modal');
+};
+
+const handleLoginSuccess = (isLoggedIn) => {
+  if (isLoggedIn) {
+    userStore.updateLoginStatus(true);
+    closeLoginModal();
+  }
+};
+
+const updateUserInfo = (userInfo) => {
+  userStore.updateUserInfo(userInfo);
 };
 </script>
 

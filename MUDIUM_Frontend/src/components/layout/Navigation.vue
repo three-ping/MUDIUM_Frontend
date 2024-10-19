@@ -35,23 +35,23 @@
 					</RouterLink>
 				</li>
 			</ul>
-
 			<div class="nav-right">
 				<input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
-				<div v-if="!userStore.userInfo.isLoggedIn" class="auth-links">
+				<div v-if="!userStore.isLoggedIn" class="auth-links">
 					<a href="#" @click.prevent="openLoginModal">로그인</a>
 					<span class="auth-separator">|</span>
 					<a href="#" @click.prevent="openSignupModal">회원가입</a>
 				</div>
-				<div v-else class="profile-container">
+				<div v-else class="profile-container dropdown">
 					<img src="@/assets/images/profile_default.svg" alt="Profile" class="profile-img"
 						@click="toggleProfileMenu">
-					<div v-if="isProfileMenuOpen" class="profile-menu">
-						<a href="#" @click.prevent="navigateToMyPage">마이페이지</a>
-						<a href="#" @click.prevent="logout">로그아웃</a>
-					</div>
+					<ul class="dropdown-menu profile-menu" v-if="isProfileMenuOpen">
+						<li><a href="#" @click.prevent="navigateToMyPage">마이페이지</a></li>
+						<li><a href="#" @click.prevent="logout">로그아웃</a></li>
+					</ul>
 				</div>
 			</div>
+
 		</nav>
 	</header>
 </template>
