@@ -11,6 +11,12 @@
 					</div>
 					<div class="form-group">
 						<div class="input-button-wrapper">
+							<input type="text" v-model="username" placeholder="이름" required>
+
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="input-button-wrapper">
 							<input type="text" v-model="verificationCode" placeholder="인증번호를 입력해주세요" required>
 							<button type="button" class="verify-button" @click="verifyCode">확인</button>
 						</div>
@@ -55,7 +61,7 @@ const verificationCode = ref('');
 const nickname = ref('');
 const password = ref('');
 const confirmPassword = ref('');
-
+const username = ref('');
 const closeSignupModal = () => {
 	emit('close');
 };
@@ -96,7 +102,6 @@ const switchToLogin = () => {
 
 <style scoped>
 .signup-form {
-	max-height: 80vh;
 	overflow-y: auto;
 	padding: 2rem;
 }
@@ -106,21 +111,21 @@ const switchToLogin = () => {
 }
 
 .input-button-wrapper {
+	height: 8rem;
 	display: flex;
 	align-items: stretch;
 }
 
 .input-button-wrapper>input,
 .input-button-wrapper>button {
-	height: 10rem;
-	font-size: 2.4rem;
+	font-size: 2rem;
 }
 
 .input-button-wrapper>input {
 	flex: 8;
 	padding: 0 1.5rem;
 	border: 1px solid #ccc;
-	border-radius: 1rem 0 0 1rem;
+	border-radius: 1rem;
 }
 
 .input-button-wrapper>button {
@@ -128,7 +133,7 @@ const switchToLogin = () => {
 	padding: 0 1rem;
 	border: 1px solid #ccc;
 	border-left: none;
-	border-radius: 0 1rem 1rem 0;
+	border-radius: 1rem;
 	background-color: var(--primary-color);
 	color: white;
 	cursor: pointer;
