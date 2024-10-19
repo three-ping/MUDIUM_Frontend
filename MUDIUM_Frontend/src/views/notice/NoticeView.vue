@@ -10,7 +10,9 @@
           <button @click="search" class="search-button" :disabled="!searchQuery.trim()">검색</button>
           <button @click="goToList" class="back-button">목록</button>
         </div>
-        <button @click="createBoard" class="create-button">글 쓰기</button>
+        <template v-if="userRole == `ROLE_ADMIN`">
+          <button @click="createBoard" class="create-button">글 쓰기</button>
+        </template>
       </div>
       <div class="board">
         <table class="board-table">
@@ -19,22 +21,20 @@
               <th>번호</th>
               <th>제목</th>
               <th>작성일</th>
-              <th>조회수</th>
             </tr>
           </thead>   
           <tbody>
             <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
               <td class="td-id" data-label="번호">{{ pageItem.id }}</td>
               <td class="td-title" data-label="제목">
-                <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.id } }">
-                  {{ pageItem.title }} [{{ pageItem.comments }}]
+                <router-link :to="{ name: 'NoticeDetailView', params: { id: pageItem.id } }">
+                  {{ pageItem.title }}
                 </router-link>
               </td>
               <td class="td-createdAt" data-label="작성일">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
-              <td class="td-viewCount" data-label="조회수">{{ pageItem.viewCount }}</td>
             </tr>
           </tbody>     
-         </table>
+        </table>
       </div> 
       <Paging 
         :requestURL="requestURL" 
@@ -45,7 +45,7 @@
   </template>
   
   <script setup>
-  import Paging from '@/components/board/pagination.vue';
+  import Paging from '@/components/notice/pagination.vue';
   import { ref, reactive, onMounted, watch } from 'vue';
   import { useRouter, useRoute } from 'vue-router';
   
@@ -57,6 +57,8 @@
   const pageItems = reactive([]);
   const searchType = ref('TITLE');
   const searchQuery = ref('');
+  const userRole = ref("ROLE_ADMIN");
+  // const userRole = ref("ROLE_MEMBER");
   
   // 현재 페이지 번호를 저장하는 함수
   const saveCurrentPage = () => {
@@ -77,7 +79,7 @@
     pageItems.length = 0;
     pageItems.push(...responseDTO.data.content);
     totalPageNumber.value = responseDTO.data.totalPages;
-    saveCurrentPage(); // 페이지 데이터를 가져온 후 현재 페이지 저장
+    saveCurrentPage(); 
   };
   
   const queryPageData = async () => {
@@ -150,7 +152,6 @@
     max-width: 1200px;
     margin: 20px auto;
     padding: 0 20px;
-    font-family: Arial, sans-serif;
   }
   
   .board-actions {
@@ -215,18 +216,6 @@
     min-width: 80px;
   }
   
-  .back-button {
-    background-color: #6EABE1;
-  }
-  
-  .search-button {
-    background-color: #9A70CC;
-  }
-  
-  .create-button {
-    background-color: #D53EC6;
-    align-self: flex-end;
-  }
   
   .board {
     width: 100%;
@@ -243,7 +232,7 @@
   }
   
   .board-table-header {
-    background-color: #D53EC6;
+    background-color: #279977;
   }
   
   .board-table th,
@@ -275,6 +264,30 @@
   .td-title a:hover {
     text-decoration: underline;
   }
+
+  .board-table th, .board-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* 번호 열 너비 설정 */
+.td-id {
+  width: 10%; /* 열 너비 10%로 설정 */
+  text-align: center;
+}
+
+/* 제목 열 너비 설정 */
+.td-title {
+  width: 70%; /* 열 너비 70%로 설정 */
+  text-align: left;
+}
+
+/* 작성일 열 너비 설정 */
+.td-createdAt {
+  width: 20%; /* 열 너비 20%로 설정 */
+  text-align: right;
+}
+
   
   @media screen and (max-width: 768px) {
     .board-table, .board-table tbody, .board-table tr, .board-table td {
