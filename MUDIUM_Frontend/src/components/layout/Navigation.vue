@@ -37,7 +37,7 @@
 			</ul>
 			<div class="nav-right">
 				<input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
-				<div v-if="!userStore.isLoggedIn" class="auth-links">
+				<div v-if="!userStore.userInfo.isLoggedIn" class="auth-links">
 					<a href="#" @click.prevent="openLoginModal">로그인</a>
 					<span class="auth-separator">|</span>
 					<a href="#" @click.prevent="openSignupModal">회원가입</a>
@@ -105,3 +105,53 @@ const toggleProfileMenu = () => {
 	isProfileMenuOpen.value = !isProfileMenuOpen.value;
 };
 </script>
+<style scoped>
+.nav-links {
+	display: flex;
+	list-style-type: none;
+}
+
+.nav-links li {
+	position: relative;
+	margin-right: 20px;
+}
+
+.dropdown-menu {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: white;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 4px;
+	padding: 10px 0;
+	z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+	display: block;
+}
+
+.dropdown-menu li {
+	margin: 0;
+	padding: 5px 15px;
+	white-space: nowrap;
+}
+
+.dropdown-menu a {
+	color: #333;
+	text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.profile-menu {
+	right: 0;
+	left: auto;
+}
+
+/* ... (rest of the existing styles) */
+</style>
