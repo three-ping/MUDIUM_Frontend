@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div class="root-container">
     <Navigation @open-login-modal="openLoginModal" @open-signup-modal="openSignupModal" :userInfo="userStore.userInfo"
       @userInfo="userStore.updateUserInfo" @logout="userStore.clearUserInfo" />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
