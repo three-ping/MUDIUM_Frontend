@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="root-container">
     <Navigation />
-    <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
-      @update:isLoggedIn="userStore.updateLoginStatus" @update:userInfo="userStore.updateUserInfo" />
+    <!-- <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
+      @update:isLoggedIn="userStore.updateLoginStatus" @update:userInfo="userStore.updateUserInfo" /> -->
     <router-view />
   </div>
-  <Modal />
+  <!-- <Modal /> -->
 </template>
 
 <script setup>
