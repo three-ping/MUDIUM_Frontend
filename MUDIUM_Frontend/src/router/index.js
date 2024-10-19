@@ -6,6 +6,8 @@ import boardRoutes from "./board";
 import MusicalRoutes from "./musical";
 // import HomeView from '/HomeView.vue';
 import reviewRoutes from "./review";
+import customticketRoutes from "./customticket";
+
 // import signupRoutes from "./signup";
 import guidebookRoutes from "./guidebook";
 import App from '@/App.vue';
@@ -24,6 +26,7 @@ const routes = [
   ...reviewRoutes,
   ...secretReviewRoutes,
   ...userRoutes,
+  ...customticketRoutes
 ];
 
 const router = createRouter({
