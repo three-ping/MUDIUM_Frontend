@@ -4,9 +4,11 @@
 			<header id="modal-header">
 				<img src="@/assets/images/MudiumText.svg" alt="Mudium logo">
 			</header>
+			<hr class="seperator">
 			<section>
 				<slot name="modalSection"></slot>
 			</section>
+			<hr class="seperator">
 			<footer>
 				<slot name="modalFooter"></slot>
 			</footer>
@@ -62,6 +64,11 @@ onBeforeUnmount(() => {
 	display: flex;
 }
 
+.separator {
+	border: none;
+	border-top: 1px solid #ccc;
+	margin: 0;
+}
 
 
 

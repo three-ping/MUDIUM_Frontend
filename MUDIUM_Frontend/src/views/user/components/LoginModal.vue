@@ -5,18 +5,24 @@
 				<input type="text" v-model="email" placeholder="아이디" class="auth-input">
 				<input type="password" v-model="password" placeholder="비밀번호" class="auth-input">
 				<p v-if="loginError" class="error-message">{{ loginError }}</p>
+			</div>
+		</template>
+		<template v-slot:modalFooter>
+
+			<div class="login-buttons">
 				<button @click="loginNormalUser" class="btn-auth btn-login">로그인</button>
 				<button @click="loginKakaoUser" class="btn-auth btn-kakao">
 					<img src="@/assets/images/kakao-icon.svg" alt="Kakao" class="kakao-icon">
 					카카오 로그인
 				</button>
-				<div class="auth-links">
-					<a href="#" @click.prevent="openSignup">회원가입</a>
-					<span class="separator">|</span>
-					<a href="#" @click.prevent="openFindId">아이디 찾기</a>
-					<span class="separator">|</span>
-					<a href="#" @click.prevent="openFindPassword">비밀번호 찾기</a>
-				</div>
+			</div>
+
+			<div class="auth-links">
+				<a href="#" @click.prevent="openSignup">회원가입</a>
+				<span class="separator">|</span>
+				<a href="#" @click.prevent="openFindId">아이디 찾기</a>
+				<span class="separator">|</span>
+				<a href="#" @click.prevent="openFindPassword">비밀번호 찾기</a>
 			</div>
 		</template>
 	</Modal>
@@ -95,21 +101,16 @@ const openFindPassword = () => {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	padding: 20px;
-}
-
-.logo {
-	width: 120px;
-	margin-bottom: 20px;
+	/* padding: 2rem; */
 }
 
 .auth-input {
 	width: 100%;
-	padding: 10px;
-	margin-bottom: 10px;
+	padding: 3rem;
+	margin-bottom: 2rem;
 	border: 1px solid #ccc;
-	border-radius: 5px;
-	font-size: 16px;
+	border-radius: 2rem;
+	font-size: 3rem;
 }
 
 .error-message {
@@ -118,14 +119,24 @@ const openFindPassword = () => {
 	margin-bottom: 10px;
 }
 
+.login-buttons {
+	display: block;
+	width: 100%;
+}
+
 .btn-auth {
 	width: 100%;
-	padding: 10px;
-	margin-bottom: 10px;
+	display: block;
+	padding: 3rem;
+	margin-bottom: 2rem;
 	border: none;
-	border-radius: 5px;
+	border-radius: 1rem;
 	font-size: 16px;
+	font-weight: bold;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .btn-login {
@@ -136,9 +147,6 @@ const openFindPassword = () => {
 .btn-kakao {
 	background-color: #FEE500;
 	color: #000;
-	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 
 .kakao-icon {
@@ -148,17 +156,77 @@ const openFindPassword = () => {
 }
 
 .auth-links {
-	margin-top: 20px;
-	font-size: 14px;
+	margin-top: 2rem;
+	font-size: 2rem;
+	text-align: center;
 }
 
 .auth-links a {
-	color: #666;
+	color: var(--text-color);
 	text-decoration: none;
 }
 
 .separator {
 	margin: 0 10px;
 	color: #ccc;
+}
+
+/* New styles to match the image */
+:deep(.dialog) {
+	border-radius: 10px;
+	overflow: hidden;
+}
+
+:deep(#modal-header) {
+	text-align: center;
+	padding: 2rem 0;
+}
+
+:deep(#modal-header img) {
+	height: 10rem;
+}
+
+:deep(.separator) {
+	margin: 0;
+}
+
+:deep(section) {
+	padding: 1rem;
+}
+
+:deep(footer) {
+	padding: 1rem;
+}
+
+.auth-input {
+	background-color: #f5f5f5;
+	border: none;
+}
+
+.btn-auth {
+	height: 8rem;
+	font-size: 3rem;
+}
+
+.btn-kakao {
+	position: relative;
+}
+
+.kakao-icon {
+	position: absolute;
+	left: 20px;
+}
+
+.auth-links {
+	margin-top: 1rem;
+}
+
+.auth-links a {
+	font-size: 2rem;
+	/* color: #999; */
+}
+
+.separator {
+	color: #c0c0c0;
 }
 </style>

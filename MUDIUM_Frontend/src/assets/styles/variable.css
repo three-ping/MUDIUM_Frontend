@@ -12,10 +12,10 @@
   --modal-overlay-backdrop-filter: blur(0.375rem);
   --modal-overlay-background-color: rgba(8, 9, 10, 0.75);
 
-  ---border-radius: 0.25rem;
-  ---border-width: 0.0625rem;
-  ---outline-width: 0.125rem;
-  ---transition: 0.2s ease-in-out;
+  --border-radius: 1rem;
+  --border-width: 0.0625rem;
+  --outline-width: 0.125rem;
+  --transition: 0.2s ease-in-out;
 
   --card-background-color: var(--background-color);
   --card-border-color: var(--muted-border-color);
