@@ -38,7 +38,7 @@
 
 			<div class="nav-right">
 				<input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
-				<div v-if="!userInfo.isLoggedIn" class="auth-links">
+				<div v-if="!userStore.userInfo.isLoggedIn" class="auth-links">
 					<a href="#" @click.prevent="openLoginModal">로그인</a>
 					<span class="auth-separator">|</span>
 					<a href="#" @click.prevent="openSignupModal">회원가입</a>
@@ -59,18 +59,16 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 const currentRoute = ref(route.path);
 const searchQuery = ref('');
 const isProfileMenuOpen = ref(false);
 
-const emit = defineEmits(['openLoginModal', 'openSignupModal', 'userInfo', 'logout']);
-
-const props = defineProps({
-	userInfo: Object
-});
+const emit = defineEmits(['openLoginModal', 'openSignupModal']);
 
 const performSearch = () => {
 	if (!searchQuery.value.trim()) return;
@@ -98,8 +96,7 @@ const navigateToMyPage = () => {
 };
 
 const logout = () => {
-	emit('logout');
-	emit('userInfo', { isLoggedIn: false });
+	userStore.clearUserInfo();
 	router.push({ path: '/musicalInfo', query: {} });
 	isProfileMenuOpen.value = false;
 };
