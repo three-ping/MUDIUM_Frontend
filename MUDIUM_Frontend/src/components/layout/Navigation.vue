@@ -1,13 +1,11 @@
 <template>
 	<header class="container-fluid fixed-header">
 		<nav>
-			<ul>
-				<li>
-					<RouterLink to="/">
-						<img src="@/assets/images/Mudium.svg" alt="Mudium" class="logo">
-					</RouterLink>
-				</li>
-			</ul>
+			<div class="nav-left">
+				<RouterLink to="/">
+					<img src="@/assets/images/Mudium.svg" alt="Mudium" class="logo">
+				</RouterLink>
+			</div>
 
 			<ul class="nav-links">
 				<li>
@@ -38,23 +36,22 @@
 				</li>
 			</ul>
 
-			<ul class="nav-right">
-				<li>
-					<input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
-				</li>
-				<li v-if="!userInfo.isLoggedIn">
-					<button class="btn-login" @click="$emit('openLoginModal')">로그인</button>
-					<button class="btn-signup">회원가입</button>
-				</li>
-				<li v-else>
+			<div class="nav-right">
+				<input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
+				<div v-if="!userInfo.isLoggedIn" class="auth-links">
+					<a href="#" @click.prevent="openLoginModal">로그인</a>
+					<span class="auth-separator">|</span>
+					<a href="#" @click.prevent="openSignupModal">회원가입</a>
+				</div>
+				<div v-else class="profile-container">
 					<img src="@/assets/images/profile_default.svg" alt="Profile" class="profile-img"
 						@click="toggleProfileMenu">
 					<div v-if="isProfileMenuOpen" class="profile-menu">
-						<button @click="navigateToMyPage">마이페이지</button>
-						<button @click="logout">로그아웃</button>
+						<a href="#" @click.prevent="navigateToMyPage">마이페이지</a>
+						<a href="#" @click.prevent="logout">로그아웃</a>
 					</div>
-				</li>
-			</ul>
+				</div>
+			</div>
 		</nav>
 	</header>
 </template>
@@ -69,7 +66,7 @@ const currentRoute = ref(route.path);
 const searchQuery = ref('');
 const isProfileMenuOpen = ref(false);
 
-const emit = defineEmits(['openLoginModal', 'userInfo', 'logout']);
+const emit = defineEmits(['openLoginModal', 'openSignupModal', 'userInfo', 'logout']);
 
 const props = defineProps({
 	userInfo: Object
@@ -86,6 +83,14 @@ const performSearch = () => {
 watch(route, (newRoute) => {
 	currentRoute.value = newRoute.path;
 });
+
+const openLoginModal = () => {
+	emit('openLoginModal');
+};
+
+const openSignupModal = () => {
+	emit('openSignupModal');
+};
 
 const navigateToMyPage = () => {
 	router.push('/mypage');

@@ -8,7 +8,7 @@ nav {
   justify-content: space-between;
   align-items: center;
   height: 100%;
-  padding: 0 2rem;
+  padding: 0 1rem;
 }
 
 .nav-left,
@@ -26,7 +26,6 @@ nav {
   list-style: none;
   margin: 0;
   padding: 0;
-  justify-content: space-between;
 }
 
 .nav-links li {
@@ -34,8 +33,8 @@ nav {
 }
 
 .nav-links a {
-  font-size: 1.5rem;
-  color: #2d2d2d;
+  font-size: 2rem;
+  color: var(--text-color);
   text-decoration: none;
   position: relative;
 }
@@ -55,33 +54,27 @@ nav {
 }
 
 .nav-right input[type="search"] {
-  padding: 5px 10px;
+  padding: 0.5rem 1rem;
   border: 1px solid #ccc;
-  border-radius: 20px;
+  border-radius: 1rem;
   margin-right: 15px;
 }
 
-.auth-buttons {
+.auth-links {
   display: flex;
+  align-items: center;
 }
 
-.btn-login,
-.btn-signup {
-  padding: 5px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: 10px;
+.auth-links a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 2rem;
+  font-weight: 500;
 }
 
-.btn-login {
-  background-color: transparent;
-  color: #333;
-}
-
-.btn-signup {
-  background-color: #8a2be2;
-  color: white;
+.auth-separator {
+  color: #ccc;
+  margin: 0 0.5rem;
 }
 
 .profile-container {
@@ -106,16 +99,13 @@ nav {
   z-index: 1000;
 }
 
-.profile-menu button {
+.profile-menu a {
   display: block;
-  width: 100%;
   padding: 5px 10px;
-  border: none;
-  background-color: transparent;
-  cursor: pointer;
-  text-align: left;
+  color: var(--text-color);
+  text-decoration: none;
 }
 
-.profile-menu button:hover {
+.profile-menu a:hover {
   background-color: #f0f0f0;
 }
