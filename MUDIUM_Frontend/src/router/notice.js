@@ -13,21 +13,21 @@ export default [
                 name: 'NoticeDetailView',
                 component: () => import('@/views/notice/NoticeDetailView.vue')    
             },
-            // {
-            //     path: 'create',  
-            //     name: 'BoardCreate',
-            //     component: () => import('@/views/board/BoardCreate.vue')    
-            // },
+            {
+                path: 'create',  
+                name: 'NoticeCreate',
+                component: () => import('@/views/notice/NoticeCreate.vue')    
+            },
             // {
             //     path: 'view/no-args',  
             //     name: 'BoardNoArgs',
             //     component: () => import('@/views/board/BoardNoArgs.vue')    
             // },
-            // {
-            //     path: 'edit/:id',  
-            //     name: 'BoardUpdate',
-            //     component: () => import('@/views/board/BoardUpdate.vue')    
-            // }
-        ],
-    },
+            {
+                path: 'edit/:id',  
+                name: 'NoticeUpdate',
+                component: () => import('@/views/notice/NoticeUpdate.vue')    
+            }
+        ]
+    }
 ];
