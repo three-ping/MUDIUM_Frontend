@@ -1,6 +1,6 @@
 <template>
 	<Modal :isModalOpen="isSignupModalVisible" @close="closeSignupModal">
-		<template v-slot:modalSection>
+		<template #modalSection>
 			<div class="signup-form">
 				<form @submit.prevent="handleSignup">
 					<div class="form-group">
@@ -44,11 +44,13 @@
 							{{ passwordValidationMessage }}
 						</div>
 					</div>
-					<button type="submit" class="signup-button" :disabled="!isFormValid">회원가입 하기</button>
+					<button type="submit" class="signup-button" :disabled="!isFormValid">
+						회원가입 하기
+					</button>
 				</form>
 			</div>
 		</template>
-		<template v-slot:modalFooter>
+		<template #modalFooter>
 			<div class="auth-links">
 				<span>이미 계정이 있으신가요?</span>
 				<a href="#" @click.prevent="switchToLogin">로그인</a>
@@ -59,6 +61,8 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useUserStore } from '@/stores/userStore';
+import { useRouter } from 'vue-router';
 import axios from 'axios';
 import Modal from '@/components/layout/Modal.vue';
 
@@ -67,6 +71,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close', 'signup-success', 'switch-to-login']);
+
+const userStore = useUserStore();
+const router = useRouter();
 
 const email = ref('');
 const verificationCode = ref('');
@@ -82,56 +89,37 @@ const emailError = ref('');
 
 const passwordValidationMessage = computed(() => {
 	if (!password.value || !confirmPassword.value) return '';
-	if (password.value === confirmPassword.value) {
-		return '비밀번호가 일치합니다.';
-	} else {
-		return '비밀번호가 일치하지 않습니다.';
-	}
+	return password.value === confirmPassword.value
+		? '비밀번호가 일치합니다.'
+		: '비밀번호가 일치하지 않습니다.';
 });
 
-const isFormValid = computed(() => {
-	return isEmailVerified.value &&
-		isNicknameVerified.value &&
-		username.value &&
-		password.value &&
-		confirmPassword.value &&
-		password.value === confirmPassword.value;
-});
+const isFormValid = computed(() =>
+	isEmailVerified.value &&
+	isNicknameVerified.value &&
+	username.value &&
+	password.value &&
+	confirmPassword.value &&
+	password.value === confirmPassword.value
+);
 
-const closeSignupModal = () => {
-	emit('close');
-};
+const closeSignupModal = () => emit('close');
 
 const sendVerification = async () => {
 	try {
-		emailError.value = ''; // Clear any previous error
+		emailError.value = '';
 		const response = await axios.post('/api/users/send-verification', null, { params: { email: email.value } });
 		if (response.data.success) {
 			isEmailSent.value = true;
 			alert('이메일 인증 코드가 전송되었습니다.');
-		}
-		else {
+		} else {
 			const errorData = response.data.error;
 			emailError.value = errorData.message;
-			console.log("duplicated email");
 			alert(errorData.message);
 			isEmailSent.value = false;
 		}
 	} catch (error) {
-		if (error.response && error.response.data && !error.response.data.success) {
-			const errorData = error.response.data.error;
-			if (errorData.code == 4010015) {
-				emailError.value = errorData.message;
-				console.log("duplicted email");
-				alert(errorData.message);
-			} else {
-				emailError.value = '이메일 인증 코드 전송 실패';
-				alert('이메일 인증 코드 전송에 실패했습니다.');
-			}
-		} else {
-			emailError.value = '이메일 인증 코드 전송 실패';
-			alert('이메일 인증 코드 전송에 실패했습니다.');
-		}
+		handleError(error, '이메일 인증 코드 전송 실패');
 		isEmailSent.value = false;
 	}
 };
@@ -148,7 +136,7 @@ const verifyCode = async () => {
 			alert('이메일 인증 실패');
 		}
 	} catch (error) {
-		alert('이메일 인증 실패');
+		handleError(error, '이메일 인증 실패');
 	}
 };
 
@@ -162,7 +150,7 @@ const verifyNickname = async () => {
 			alert('이미 사용 중인 닉네임입니다.');
 		}
 	} catch (error) {
-		alert('닉네임 확인 실패');
+		handleError(error, '닉네임 확인 실패');
 	}
 };
 
@@ -183,18 +171,49 @@ const handleSignup = async () => {
 
 		if (response.data.success) {
 			alert('회원가입 성공');
-			emit('signup-success');
-			closeSignupModal();
+			await autoLogin();
 		} else {
 			alert('회원가입 실패');
 		}
 	} catch (error) {
-		alert('회원가입 실패');
+		handleError(error, '회원가입 실패');
 	}
 };
 
-const switchToLogin = () => {
-	emit('switch-to-login');
+const autoLogin = async () => {
+	try {
+		const response = await axios.post("/api/users/login", {
+			email: email.value,
+			password: password.value,
+			signup_path: "NORMAL"
+		});
+
+		if (response.data.success) {
+			userStore.updateLoginStatus(true);
+			userStore.updateUserInfo(response.data.data);
+			closeSignupModal();
+			router.push('/'); // Redirect to home page after successful login
+		} else {
+			console.error('Auto-login failed');
+			emit('signup-success');
+			closeSignupModal();
+		}
+	} catch (error) {
+		handleError(error, "Auto-login error");
+		emit('signup-success');
+		closeSignupModal();
+	}
+};
+
+const switchToLogin = () => emit('switch-to-login');
+
+const handleError = (error, defaultMessage) => {
+	if (error.response && error.response.data && !error.response.data.success) {
+		const errorData = error.response.data.error;
+		alert(errorData.message || defaultMessage);
+	} else {
+		alert(defaultMessage);
+	}
 };
 </script>
 
