@@ -1,5 +1,5 @@
 <template>
-	<Modal :isModalOpen="props.isLoginModalVisible" @close="closeModal">
+	<Modal :isModalOpen="props.isLoginModalVisible" @close="closeLoginModal">
 		<template v-slot:modalSection>
 			<input type="text" v-model="email" placeholder="이메일" class="auth-input">
 			<input type="password" v-model="password" placeholder="비밀번호" class="auth-input">
@@ -21,7 +21,6 @@ import { ref } from 'vue';
 
 const props = defineProps({
 	isLoginModalVisible: Boolean,
-	isLoggedIn: Boolean,
 });
 
 const emit = defineEmits(['update:isLoggedIn', 'close', 'update:userInfo']);
@@ -67,7 +66,8 @@ const loginKakaoUser = async () => {
 
 
 
-const closeModal = () => {
+const closeLoginModal = () => {
+	console.log('closeLoginModal')
 	emit('close');
 };
 </script>

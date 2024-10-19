@@ -1,16 +1,121 @@
-nav,
-nav ul {
-  display: flex;
+header {
+  height: 12rem;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 nav {
+  display: flex;
   justify-content: space-between;
-  overflow: visible;
-}
-nav ol,
-nav ul {
   align-items: center;
-  margin-bottom: 0;
-  padding: 0;
+  height: 100%;
+  padding: 0 2rem;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 10rem;
+}
+
+.nav-links {
+  display: flex;
   list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: space-between;
+}
+
+.nav-links li {
+  margin: 0 1rem;
+}
+
+.nav-links a {
+  font-size: 1.5rem;
+  color: #2d2d2d;
+  text-decoration: none;
+  position: relative;
+}
+
+.nav-links a.active {
+  font-weight: bold;
+}
+
+.nav-links a.active::after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--promary-color);
+}
+
+.nav-right input[type="search"] {
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  margin-right: 15px;
+}
+
+.auth-buttons {
+  display: flex;
+}
+
+.btn-login,
+.btn-signup {
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.btn-login {
+  background-color: transparent;
+  color: #333;
+}
+
+.btn-signup {
+  background-color: #8a2be2;
+  color: white;
+}
+
+.profile-container {
+  position: relative;
+}
+
+.profile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profile-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.profile-menu button {
+  display: block;
+  width: 100%;
+  padding: 5px 10px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.profile-menu button:hover {
+  background-color: #f0f0f0;
 }

@@ -1,5 +1,5 @@
 <template>
-	<dialog ref="modal" @click.self="closeModal" open class="dialog">
+	<dialog ref="modal" @click.self="closeModal(modal)" :open="props.isModalOpen">
 		<article id="modal-popup" class="article">
 			<header id="modal-header">
 				<img src="@/assets/images/MudiumText.svg" alt="">
@@ -15,79 +15,66 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
 
-const isOpenClass = "modal-is-open";
-const openingClass = "modal-is-opening";
-const closingClass = "modal-is-closing";
-const scrollbarWidthCssVar = "--pico-scrollbar-width";
-const animationDuration = 400; // ms
-let visibleModal = null;
-
-// Reference to the modal dialog element
 const modal = ref(null);
 const props = defineProps({
 	isModalOpen: Boolean
-})
+});
 
 const emit = defineEmits(['close']);
-// Toggle modal
-const toggleModal = (event) => {
-	event.preventDefault();
-	const targetModal = document.getElementById(event.currentTarget.dataset.target);
-	if (!targetModal) return;
-	targetModal.open ? closeModal(targetModal) : openModal(targetModal);
-};
 
-// Open modal
-const openModal = (modal) => {
-	const { documentElement: html } = document;
-	const scrollbarWidth = getScrollbarWidth();
-	if (scrollbarWidth) {
-		html.style.setProperty(scrollbarWidthCssVar, `${scrollbarWidth}px`);
-	}
-	html.classList.add(isOpenClass, openingClass);
-	setTimeout(() => {
-		visibleModal = modal;
-		html.classList.remove(openingClass);
-	}, animationDuration);
-	modal.showModal();
-};
-
-// Close modal
 const closeModal = (modal) => {
-	emit('close')
+	console.log(`isModalOpen: ${props.isModalOpen}`)
+	emit('close');
 };
+
 // Get scrollbar width
 const getScrollbarWidth = () => {
-	const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-	return scrollbarWidth;
+	return window.innerWidth - document.documentElement.clientWidth;
 };
 
 // Handle clicks outside the modal content
 const handleClickOutside = (event) => {
-	if (!visibleModal) return;
-	const modalContent = visibleModal.querySelector('article');
+	if (!props.isModalOpen) return;
+	const modalContent = modal.value.querySelector('article');
 	const isClickInside = modalContent.contains(event.target);
-	if (!isClickInside) closeModal(visibleModal);
+	if (!isClickInside) closeModal();
 };
 
 // Handle Esc key press to close the modal
 const handleEscapeKey = (event) => {
-	if (event.key === 'Escape' && visibleModal) {
-		closeModal(visibleModal);
+	if (event.key === 'Escape' && props.isModalOpen) {
+		closeModal();
 	}
 };
 
+// Watch for changes in isModalOpen prop
+watch(() => props.isModalOpen, (newValue) => {
+	if (newValue) {
+		const { documentElement: html } = document;
+		const scrollbarWidth = getScrollbarWidth();
+		if (scrollbarWidth) {
+			html.style.setProperty('--pico-scrollbar-width', `${scrollbarWidth}px`);
+		}
+		html.classList.add('modal-is-open', 'modal-is-opening');
+		setTimeout(() => {
+			html.classList.remove('modal-is-opening');
+		}, 400);
+		modal.value.showModal();
+	} else {
+		document.documentElement.classList.remove('modal-is-open');
+	}
+});
+
 // Lifecycle hooks
 onMounted(() => {
-	// Event listeners for closing modal by clicking outside or pressing Esc
 	document.addEventListener('click', handleClickOutside);
 	document.addEventListener('keydown', handleEscapeKey);
+
 });
 
 onBeforeUnmount(() => {
-	// Cleanup event listeners
 	document.removeEventListener('click', handleClickOutside);
 	document.removeEventListener('keydown', handleEscapeKey);
 });
