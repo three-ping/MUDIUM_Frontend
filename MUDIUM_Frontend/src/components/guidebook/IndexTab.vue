@@ -5,7 +5,7 @@
             v-for="(item, key) in tab"
             :key="`tab-${key}`"
             :class="{'on':key === currentTab}"
-            @click="() => $emit('click',key)">
+            @click="$emit('click',key)">
             {{ item.name }}
             </li>
         </ul>

@@ -4,14 +4,12 @@
         <tr>
           <th>관람 매너</th>
           <th>설명</th>
-          <th>작성일자</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="(item, index) in term" :key="index">
           <td>{{ item.etiquette }}</td>
           <td>{{ item.etiquetteDescription }}</td>
-          <td>{{ item.createdAt }}</td>
         </tr>
       </tbody>
     </table>

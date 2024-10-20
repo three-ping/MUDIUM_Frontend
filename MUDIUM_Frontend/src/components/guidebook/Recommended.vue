@@ -4,19 +4,16 @@
           <tr>
             <th>뮤지컬</th>
             <th>설명</th>
-            <th>작성일자</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in recommendations" :key="index">
             <td>{{ item.musicalTitle }}</td>
             <td>{{ item.musicalDescription }}</td>
-            <td>{{ item.createdAt }}</td>
           </tr>
         </tbody>
       </table>
       
-      <!-- 데이터가 없는 경우 로딩 또는 오류 메시지 -->
       <div v-if="loading" class="loading">Loading...</div>
       <div v-if="error" class="error">{{ error }}</div>
   </template>
@@ -57,17 +54,18 @@
   <style scoped>
 
   table {
-    width: 70%;
+    width: 80%;
     border-collapse: collapse;
     margin-top: 1px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 50px;
     padding: 20px;
 }
   
   th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
+    border: 2px solid #ddd;
+    padding: 15px;
     text-align: center;
   }
   
