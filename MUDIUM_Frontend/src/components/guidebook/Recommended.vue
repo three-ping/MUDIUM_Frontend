@@ -16,7 +16,6 @@
         </tbody>
       </table>
       
-      <!-- 데이터가 없는 경우 로딩 또는 오류 메시지 -->
       <div v-if="loading" class="loading">Loading...</div>
       <div v-if="error" class="error">{{ error }}</div>
   </template>
@@ -57,7 +56,7 @@
   <style scoped>
 
   table {
-    width: 70%;
+    width: 80%;
     border-collapse: collapse;
     margin-top: 1px;
     margin-left: auto;
@@ -66,8 +65,8 @@
 }
   
   th, td {
-    border: 1px solid #ddd;
-    padding: 10px;
+    border: 2px solid #ddd;
+    padding: 15px;
     text-align: center;
   }
   
