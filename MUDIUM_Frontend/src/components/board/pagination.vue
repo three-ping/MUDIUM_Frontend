@@ -61,6 +61,7 @@ updatePages();
 </script>
 
 <style scoped>
+
 .pagination {
     display: flex;
     justify-content: center;
@@ -94,7 +95,7 @@ updatePages();
 }
 
 .pagination .number-page-button button {
-    min-width: 30px;
+    min-width: 15px;
 }
 
 .pagination .number-page-button button.active {
@@ -105,5 +106,9 @@ updatePages();
 .first-page-button button,
 .last-page-button button {
     font-weight: bold;
+}
+button {
+    width: 2vw;
+    height: 4vh;
 }
 </style>
