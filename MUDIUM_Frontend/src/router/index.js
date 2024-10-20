@@ -17,8 +17,8 @@ import userRoutes from "./user";
 
 const routes = [
   {
-    path: "/",
-    redirect: "/musicalInfo",
+    path: '/',
+    redirect: '/mudium'
   },
   ...guidebookRoutes,
   ...boardRoutes,

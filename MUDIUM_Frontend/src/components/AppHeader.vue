@@ -1,7 +1,7 @@
 <template>
   <nav class="appHeader">
       <div class="header-container">
-      <RouterLink to="/musicalInfo" class="logo" @click="resetSearch">
+      <RouterLink to="/mudium" class="logo" @click="resetSearch">
           <img src="/src/assets/images/logo2.svg" alt="Mudium">
       </RouterLink>
       <div class="banner">

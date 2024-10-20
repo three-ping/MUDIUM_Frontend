@@ -1,33 +1,45 @@
 <template>
   <section class="container-fluid">
+    <!-- 뮤지컬 상세 정보 -->
     <div class="musical-detail-container">
-      <!-- 포스터 섹션 -->
       <div class="poster-section">
         <img :src="musical.poster" alt="Poster" />
       </div>
-
-      <!-- 상세 정보 섹션 -->
-      <div class="remain-section">
-        <div class="detail-section">
-          <h2>{{ musical.title || "제목 정보 없음" }}</h2>
-          <p class="rating">{{ musical.rating }} 관람가</p>
-          <p class="scope">제작사: {{ musical.producer || "정보 없음" }}</p>
-          <p>
-            평균 별점:
-            {{ averageScope !== null ? averageScope.toFixed(1) : "0" }}
-          </p>
-          <!-- 해당 뮤지컬에 대한 북마크 -->
-          <BookmarkButton
-            :musicalId="musical.musicalId"
-            :initialBookmarked="musical.bookmarked"
+      <div class="detail-section">
+        <h2>{{ musical.title || '제목 정보 없음' }}</h2>
+        <p class="rating">{{ musical.rating }} 관람가</p>
+        <p class="production">제작사: {{ musical.production || '정보 없음' }}</p>
+        <p v-if="averageScope" class="average-scope">
+          평균 별점: {{ averageScope.scope }}
+          ({{ averageScope.people }} 참여)
+        </p>
+        <p v-else class="average-scope">평균 별점: 정보 없음</p>
+        <div class="star-rating">
+          <StarRating 
+            :rating="averageScope ? averageScope.scope : 0"
+            @set-rating="setRating"
           />
+        </div>
+      </div>
+    </div>
 
-          <div class="star-rating">
-            <StarRating></StarRating>
+    <!-- 리뷰 리스트 -->
+    <div v-if="reviews.length > 0" class="review-list">
+      <h3>리뷰</h3>
+      <ul>
+        <li v-for="review in reviews" :key="review.reviewId">
+          <ReviewCard :content="review.content" :scope="review.scope" :nickName="review.nickName" />
+        </li>
+      </ul>
+    </div>
 
-            <!-- <StarRating :rating="musical.averageScope || 0" @set-rating="setRating" /> -->
-            <!-- <p>현재 별점: {{ musical.averageScope || '정보 없음' }}</p> -->
-          </div>
+    <!-- 공연 정보 섹션 -->
+    <div class="performance-list">
+      <h3>공연 정보</h3>
+      <div class="performance-grid">
+        <div v-for="performance in performanceList" :key="performance.performanceId" class="performance-item">
+          <img :src="performance.poster" alt="Performance Poster" />
+          <p>{{ performance.region }}</p>
         </div>
       </div>
     </div>
@@ -35,81 +47,85 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps } from "vue";
-import { useRoute } from "vue-router";
-import StarRating from "@/components/scope/StarRating.vue";
-import Bookmark from "@/components/bookmark/Bookmark.vue";
+import { ref, onMounted, defineProps } from 'vue';
+import { useRoute } from 'vue-router';
+import StarRating from '@/components/scope/StarRating.vue';
+import ReviewCard from '@/components/review/ReviewCard.vue'; // 새로운 컴포넌트 임포트
 
 const route = useRoute();
-const props = defineProps({ id: String });
+const props = defineProps({ id: String });// 초기 별점
 const musical = ref({});
-const rating = ref(0); // 초기 별점
-// const hoverRating = ref(0);
-const averageScope = ref(null);
-
+const averageScope = ref({});
+const performanceList = ref([]);
+const reviews = ref([]);
 const setRating = (newRating) => {
   rating.value = newRating;
 };
 
-// const fetchAverageScope = async (id) => {
-//   try {
-//     const response = await fetch('http://localhost:8080/api/musical?page=0&size=300');
-//     const data = await response.json();
+const fetchPerformanceList = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/performance/${id}`);
+    const data = await response.json();
+    performanceList.value = data.data;
+  } catch (error) {
+    console.error('Error fetching performance list:', error);
+  }
+};
 
-//     // 목록에서 해당 ID의 뮤지컬을 찾아 평균 별점을 가져옴
-//     const foundMusical = data.data.content.find((musical) => musical.musicalId === parseInt(id));
-//     if (foundMusical) {
-//       console.log('찾은 뮤지컬:', foundMusical);
-//       averageScope.value = parseFloat(foundMusical.averageScope); // 평균 별점 저장
-//       console.log('평균 별점:', averageScope.value);
-//     } else {
-//       averageScope.value = null; // 해당 뮤지컬이 목록에 없으면 null로 설정
-//     }
-//   } catch (error) {
-//     console.error('Error fetching musical list for average scope:', error);
-//   }
-// };
+const fetchReviews = async (id) => {
+  try {
+    const response = await fetch(`http://localhost:8080/api/review/${id}`);
+    const data = await response.json();
+    reviews.value = data.data;
+    console.log(reviews.value);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+  } // 이 부분 추가
+};
 
 const fetchAverageScope = async (id) => {
   try {
-    const response = await fetch(
-      "http://localhost:8080/api/musical?page=0&size=300"
-    );
+    const response = await fetch(`http://localhost:8080/api/scope/${id}`);
     const data = await response.json();
 
-    // 목록에서 해당 ID의 뮤지컬을 찾아 평균 별점과 포스터를 가져옴
-    const foundMusical = data.data.content.find(
-      (musical) => musical.musicalId === parseInt(id)
-    );
-    if (foundMusical) {
-      console.log("찾은 뮤지컬:", foundMusical);
-      averageScope.value = parseFloat(foundMusical.averageScope); // 평균 별점 저장
-
-      // 이미 `musical.value`에 데이터가 있으므로 포스터만 업데이트
-      if (foundMusical.poster) {
-        musical.value = { ...musical.value, poster: foundMusical.poster }; // 기존 데이터 유지하면서 포스터 업데이트
-        console.log("포스터:", musical.value.poster);
-      }
+    // 응답 데이터 구조가 다름
+    if (data.success && data.data) {
+      console.log('찾은 별점:', data.data.scope);
+      averageScope.value = {
+        scope: data.data.scope,
+        people: data.data.people,
+        musicalId: data.data.musicalId
+      };
     } else {
-      averageScope.value = null; // 해당 뮤지컬이 목록에 없으면 null로 설정
-      musical.value = { ...musical.value, poster: null }; // 포스터도 없으면 null로 설정
+      averageScope.value = null;
     }
   } catch (error) {
-    console.error("Error fetching musical list for average scope:", error);
+    console.error('평균 별점 가져오기 오류:', error);
   }
 };
+
 
 const fetchMusicalDetail = async () => {
   const id = route.params.id;
   try {
     const response = await fetch(`http://localhost:8080/api/musical/${id}`);
     const data = await response.json();
-    musical.value = data.data;
-    console.log(musical.value);
+    musical.value = {
+      title: data.data.title,
+      rating: data.data.rating,
+      production: data.data.production,
+      poster: data.data.poster,
+      synopsys: data.data.synopsys,
+      reviewVideos: data.data.reviewVideos,
+      musicalId: data.data.musicalId
+    };
+    console.log(musical.value); 
 
-    await fetchAverageScope(id);
+    await fetchAverageScope(musical.value.musicalId);
+    await fetchPerformanceList(musical.value.musicalId);
+    await fetchReviews(musical.value.musicalId);
   } catch (error) {
-    console.error("Error fetching musical detail:", error);
+    console.error('Error fetching musical detail:', error);
   }
 };
 
@@ -117,63 +133,110 @@ onMounted(() => {
   fetchMusicalDetail();
 });
 </script>
+
 <style scoped>
-/* 전체 배경 컨테이너 */
+.container-fluid {
+  flex-direction: column;
+  background-color: #fff;
+  color: #000;
+  padding: 20px;
+  width: 95%;
+  max-width: 1200px;
+  margin: 50px auto;
+}
+
 .musical-detail-container {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  padding: 4%;
-  background-color: rgba(240, 240, 255, 0.4);
-  width: 100%;
-  height: 320px;
-  margin: 100px auto;
-  /* gap: -1%; */
-  /* margin-top: 5%; */
-  /* margin-bottom: 5%; */
+  background-color: #f0f0fb;
+  border-radius: 10px;
+  margin-bottom: 30px;
 }
 
 .poster-section {
-  height: 150%;
-  width: 30%;
+  flex: -1 0 40%;
+  margin: -5% 10% -5% 0%;
 }
 
 .poster-section img {
-  height: 120%;
-  /* width: 100%; */
-  border-radius: 5%;
-  margin-top: -11%;
+  box-shadow: 0 0 10px -5px;
+  width: 300px;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
 }
 
 .detail-section {
-  flex: 2;
-  border-radius: 12px;
-  z-index: 2;
-  margin-top: 32%;
-  margin-left: 5%;
-  width: 100%;
+  flex: 1;
 }
 
 .detail-section h2 {
-  font-size: 1.7rem;
-  /* margin-bottom: 1px; */
-  margin-top: -20%;
+  font-size: 2rem;
+  margin-bottom: 15px;
 }
 
 .detail-section p {
-  margin: 0;
-}
-
-.rating {
-  font-size: 1.2rem;
-  margin-bottom: 1%;
-  /* margin-top: 8%; */
-  color: black;
-}
-
-.scope {
-  /* margin-bottom: 20px; */
+  margin-bottom: 8px;
   font-size: 1rem;
-  /* margin-bottom: 10%; */
+}
+
+.star-rating {
+  margin-top: 15px;
+}
+
+.review-list {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.review-list h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.review-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.review-list li {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.performance-list {
+  width: 100%;
+  margin-top: 30px;
+  margin-left: 20px;
+}
+
+.performance-list h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.performance-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  justify-items: start; /* 왼쪽 정렬 */
+}
+
+.performance-item {
+  text-align: center;
+}
+
+.performance-item img {
+  box-shadow: 0 0 10px -4px;
+  width: 230px; /* 고정 너비 */
+  height: 310px; /* 고정 높이 */
+  object-fit: cover; /* 이미지 비율 유지 */
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.performance-item p {
+  font-size: 1rem;
 }
 </style>
