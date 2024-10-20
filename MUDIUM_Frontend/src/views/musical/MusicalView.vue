@@ -7,6 +7,7 @@
         <RouterLink v-for="musical in searchResults" :key="musical.musicalId"
           :to="{ name: 'MusicalDetailView', params: { id: musical.musicalId.toString() } }" class="search-musical-card">
           <img :src="musical.poster" :alt="musical.title" class="musical-poster" />
+          <!-- <div class="musical-title">{{ musical.title }}</div> -->
           <div class="musical-title">{{ musical.title }}</div>
         </RouterLink>
       </div>
@@ -65,34 +66,47 @@ fetchSearchResults('');
 
 .search-results-container {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 20px;
-  width: 95%;
+  grid-template-columns: repeat(5, 1fr);
+  width: 100%;
   padding: 20px 0;
+  margin-left: 1%;
 }
+
 
 .search-musical-card {
   position: relative;
-  width: 100%;
+  width: 250px;  /* 포스터 카드의 고정된 너비 */
+  height: 350px; /* 포스터 카드의 고정된 높이 */
   text-align: center;
+  margin-bottom: 25%;
+}
+
+.musical-title {
+  margin-top: 1%; 
+  white-space: nowrap;       
+  overflow: hidden;         
+  text-overflow: ellipsis;   
+  font-size: 0.8rem;         
+  color: white;             
+  max-width: 70%;         
+  text-align: center;       
+  margin-left: auto;         
+  margin-right: auto;       
+  display: block;           
 }
 
 .search-musical-card img {
   width: 100%;
-  height: 90%;
-  border-radius: 8px;
+  height: 100%;
+  border-radius: 8px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.musical-container {
-  display: flex;
-  flex-direction: column;
-  margin-left: 5%;
-  gap: 20px;
+  object-fit: cover;  
+  
 }
 
 .musical-container h1 {
   font-size: 1.5rem;
   margin-top: 1.5%;
 }
+
 </style>

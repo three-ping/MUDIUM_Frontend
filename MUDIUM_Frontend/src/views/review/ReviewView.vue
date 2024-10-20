@@ -93,7 +93,10 @@ const handleSubmit = async (review) => {
         console.log('Review saved successfully:', result);
 
         closeModal();
-        await resetAndRefetchReviews();
+        page.value = 1; // 페이지 초기화
+        reviews.length = 0; // 기존 리뷰 초기화
+        hasMore.value = true; // 데이터 더 불러오기 활성화
+        await fetchReviews(); // 리뷰 다시 불러오기
     } catch (error) {
         console.error('Error saving review:', error);
     }

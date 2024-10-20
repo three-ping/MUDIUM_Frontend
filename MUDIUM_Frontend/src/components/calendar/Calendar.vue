@@ -1,150 +1,181 @@
 <template>
-  <div class="calendar">
-    <div class="calendar-header">
-      <button @click="prevMonth">Previous</button>
-      <span>{{ currentYear }}년 {{ currentMonth + 1 }}월</span>
-      <button @click="nextMonth">Next</button>
+<div class="container">
+    <div class="image-change-buttons">
+      <button @click="nextBackground">이미지 변경</button>
     </div>
-    <div class="calendar-grid">
-      <div v-for="day in daysOfWeek" :key="day" class="calendar-day-header">
-        {{ day }}
+  <div :style="{ backgroundImage: `url(${currentBackgroundImage})` }" class="background-container">
+    <div class="calendar-wrapper">
+      <div class="calendar-header">
+        <button @click="previousMonth" class="icon-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+          <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"/>
+        </svg>        </button>
+        <h2>{{ currentMonth }} {{ currentYear }}</h2>
+        <button @click="nextMonth" class="icon-button">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+          <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
+        </svg>        </button>
       </div>
-      <div 
-        v-for="(day, index) in daysInMonth" 
-        :key="index" 
-        :class="['calendar-day', { 'current-day': isToday(day) }]"
-      >
-        {{ day }}
+      <div class="calendar-grid">
+        <div class="day" v-for="day in days" :key="day">{{ day }}</div>
+        <div 
+          class="date" 
+          v-for="(date, index) in datesInMonth" 
+          :key="index"
+          :class="{ 'today': isToday(date) }"
+          @click="selectDate(date)"
+        >
+          {{ date.getDate() }}
+        </div>
       </div>
     </div>
   </div>
+</div>
 </template>
 
+
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 
-// 현재 날짜를 기준으로 초기화
-const today = new Date();
-const currentYear = ref(today.getFullYear());
-const currentMonth = ref(today.getMonth());
+const currentDate = ref(new Date());
+const selectedDate = ref(null);
 
-const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const backgroundImages = ref({});
+const currentBackgroundIndex = ref(0);
 
-// 주어진 달의 일수를 계산
-const getDaysInMonth = (year, month) => {
-  return new Date(year, month + 1, 0).getDate();
-};
-
-// 주어진 달의 첫 번째 날의 요일을 계산
-const getFirstDayOfMonth = (year, month) => {
-  return new Date(year, month, 1).getDay();
-};
-
-// 월의 날짜 배열 계산
-const daysInMonth = computed(() => {
-  const days = [];
-  const daysInCurrentMonth = getDaysInMonth(currentYear.value, currentMonth.value);
-  const firstDay = getFirstDayOfMonth(currentYear.value, currentMonth.value);
-
-  // 첫 주 빈 칸 채우기 (이전 달의 날짜는 표시하지 않음)
-  for (let i = 0; i < firstDay; i++) {
-    days.push('');
-  }
-
-  // 현재 달의 날짜 추가
-  for (let day = 1; day <= daysInCurrentMonth; day++) {
-    days.push(day);
-  }
-
-  return days;
+const currentBackgroundImage = computed(() => {
+  const imageNames = Object.keys(backgroundImages.value);
+  if (imageNames.length === 0) return '';
+  const currentImageName = imageNames[currentBackgroundIndex.value];
+  return `data:image/jpeg;base64,${backgroundImages.value[currentImageName]}`;
 });
 
-// 오늘 날짜인지 여부 확인
-const isToday = (day) => {
+const fetchImages = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/calendar-theme/images');
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    const data = await response.json();
+    backgroundImages.value = data;
+    console.log('Images fetched successfully');
+  } catch (error) {
+    console.error('Error fetching images:', error);
+  }
+};
+
+onMounted(fetchImages);
+
+const currentMonth = computed(() => currentDate.value.toLocaleString('default', { month: 'long' }));
+const currentYear = computed(() => currentDate.value.getFullYear());
+
+const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+const datesInMonth = computed(() => {
+  const year = currentDate.value.getFullYear();
+  const month = currentDate.value.getMonth();
+  const firstDayOfMonth = new Date(year, month, 1);
+  const lastDayOfMonth = new Date(year, month + 1, 0);
+  const dates = [];
+
+  for (let i = firstDayOfMonth.getDay() - 1; i > 0; i--) {
+    dates.push(new Date(year, month, -i + 1));
+  }
+
+  for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
+    dates.push(new Date(year, month, i));
+  }
+
+  return dates;
+});
+
+const isToday = (date) => {
+  const today = new Date();
   return (
-    day === today.getDate() &&
-    currentMonth.value === today.getMonth() &&
-    currentYear.value === today.getFullYear()
+    date.getDate() === today.getDate() &&
+    date.getMonth() === today.getMonth() &&
+    date.getFullYear() === today.getFullYear()
   );
 };
 
-// 이전 달로 이동
-const prevMonth = () => {
-  if (currentMonth.value === 0) {
-    currentMonth.value = 11;
-    currentYear.value -= 1;
-  } else {
-    currentMonth.value -= 1;
-  }
+const previousMonth = () => {
+  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() - 1, 1);
 };
 
-// 다음 달로 이동
 const nextMonth = () => {
-  if (currentMonth.value === 11) {
-    currentMonth.value = 0;
-    currentYear.value += 1;
-  } else {
-    currentMonth.value += 1;
-  }
+  currentDate.value = new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() + 1, 1);
+};
+
+const previousBackground = () => {
+  currentBackgroundIndex.value = (currentBackgroundIndex.value - 1 + Object.keys(backgroundImages.value).length) % Object.keys(backgroundImages.value).length;
+};
+
+const nextBackground = () => {
+  currentBackgroundIndex.value = (currentBackgroundIndex.value + 1) % Object.keys(backgroundImages.value).length;
+};
+
+const selectDate = (date) => {
+  selectedDate.value = date;
+  console.log('Selected date:', date);
 };
 </script>
 
 <style scoped>
-.calendar {
-  width: 350px;
-  margin: auto;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.container {
+  display: flex;
+  justify-content: center; 
 }
+.image-change-buttons {
+  position: absolute;
+  right: 50px;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+.background-container {
+  position: relative; /* Set position to relative for absolute positioning of buttons */
+  width: 800px;
+  height: auto;
+  background-size: cover;
+  background-position: center top; 
+  background-repeat: no-repeat;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.calendar-wrapper {
+  background: rgba(255, 255, 255, 0.8);
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 800px;
+  height: auto;
+  box-sizing: border-box; /* Include padding in the width/height */
+  z-index: 1; /* Ensure it is above the background */
+}
+
 
 .calendar-header {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  padding: 10px;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #ddd;
 }
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 1px;
+  gap: 20px;
 }
 
-.calendar-day-header {
-  background-color: #f7f7f7;
-  padding: 8px;
+.day, .date {
   text-align: center;
-  font-weight: bold;
-  border-bottom: 1px solid #ddd;
+  padding: 5px;
 }
 
-.calendar-day {
-  padding: 10px;
-  text-align: center;
-  background-color: white;
-  min-height: 50px;
-}
-
-.calendar-day.current-day {
-  background-color: #f0c0f0;
-  font-weight: bold;
-  border-radius: 4px;
-}
-
-button {
-  background-color: #9957a7;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #9236A4;
+.today {
+  background-color: #d0e1ff;
+  border-radius: 50%;
 }
 </style>
