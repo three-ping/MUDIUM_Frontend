@@ -124,22 +124,16 @@ const selectDate = (date) => {
 .container {
   display: flex;
   justify-content: center; 
-  align-items: center;
-  flex-direction: column;
   width: 100%;
-  height: 100%;
 }
 .image-change-buttons {
-  align-items: right;
-  position: absolute;
-  top: 80%;
   border: none;
-  color: white;
   border-radius: 10px;
-  cursor: pointer;
+  width: auto;
+  gap: 30px;
 }
 .background-container {
-  position: relative; 
+  position: relative; /* Set position to relative for absolute positioning of buttons */
   width: auto;
   height: auto;
   background-size: cover;
@@ -156,9 +150,14 @@ const selectDate = (date) => {
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: auto;
+  height: auto;
+  box-sizing: border-box; /* Include padding in the width/height */
   z-index: 1; 
-  box-sizing: border-box;
+  transparent:
 }
+
+
 .calendar-header {
   display: flex;
   align-items: center;
