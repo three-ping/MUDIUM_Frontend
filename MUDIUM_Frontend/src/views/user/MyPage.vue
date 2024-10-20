@@ -1,6 +1,7 @@
 <template>
 	<div class="page-container">
 		<aside class="sidebar">
+
 			<nav>
 				<ul>
 					<li>프로필</li>
@@ -14,8 +15,9 @@
 		</aside>
 
 		<main class="main-content">
-			<div class="profile-header">
-				<img :src="userInfo.profileImage" alt="@/assets/images/profile_default.svg" class=" profile-image">
+			<div class="profile-section">
+				<img :src="userInfo.profileImage || '@/assets/images/profile_default.svg'" alt="Profile"
+					class="profile-image">
 				<div class="profile-info">
 					<h2>{{ userInfo.nickname || '뜨리핑님' }}</h2>
 					<p>{{ userInfo.email || 'threeping@gmail.com' }}</p>
@@ -26,9 +28,24 @@
 
 			<div class="calendar-section">
 				<h3>October 2020</h3>
-				<!-- You may want to use a calendar component here -->
-				<div class="calendar-placeholder">
-					<!-- Calendar component or placeholder -->
+				<div class="calendar">
+					<!-- You may want to use a proper calendar component here -->
+					<table>
+						<thead>
+							<tr>
+								<th>Mo</th>
+								<th>Tu</th>
+								<th>We</th>
+								<th>Th</th>
+								<th>Fr</th>
+								<th>Sa</th>
+								<th>Su</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- Add calendar days here -->
+						</tbody>
+					</table>
 				</div>
 			</div>
 		</main>
@@ -56,12 +73,19 @@ watch(() => userStore.userInfo, (newUserInfo) => {
 
 .sidebar {
 	width: 200px;
-	background-color: #f0f0f0;
+	/* background: linear-gradient(to bottom, #9b59b6, #3498db); */
+	color: var(--secondary-color);
 	padding: 20px;
 }
 
-.sidebar h2 {
-	margin-bottom: 20px;
+.logo-container {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.logo {
+	width: 120px;
+	height: auto;
 }
 
 .sidebar ul {
@@ -70,18 +94,23 @@ watch(() => userStore.userInfo, (newUserInfo) => {
 }
 
 .sidebar li {
-	margin-bottom: 10px;
+	margin-bottom: 15px;
+	cursor: pointer;
 }
 
 .main-content {
 	flex-grow: 1;
 	padding: 20px;
+	background-color: #f5f5f5;
 }
 
-.profile-header {
+.profile-section {
 	display: flex;
 	align-items: center;
-	margin-bottom: 30px;
+	background-color: white;
+	padding: 20px;
+	border-radius: 10px;
+	margin-bottom: 20px;
 }
 
 .profile-image {
@@ -102,6 +131,7 @@ watch(() => userStore.userInfo, (newUserInfo) => {
 
 .profile-info p {
 	margin: 5px 0;
+	color: #666;
 }
 
 .edit-profile-btn {
@@ -114,6 +144,12 @@ watch(() => userStore.userInfo, (newUserInfo) => {
 }
 
 .calendar-section {
-	/* Add styles for the calendar section */
+	background-color: white;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.calendar {
+	/* Add styles for the calendar */
 }
 </style>
