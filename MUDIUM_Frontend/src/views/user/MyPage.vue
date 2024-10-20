@@ -7,7 +7,6 @@
 			<Calendar v-if="selectedItem === 'profile'" />
 
 			<MyRebviews v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
-			<MyWorksTab v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
 			<BookmarksTab v-if="selectedItem === 'bookmarks'" :userInfo="userInfo" />
 			<BoardTab v-if="selectedItem === 'board'" :userInfo="userInfo" />
 			<TicketsTab v-if="selectedItem === 'tickets'" :userInfo="userInfo" />
