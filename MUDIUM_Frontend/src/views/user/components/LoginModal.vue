@@ -30,11 +30,11 @@
 import { ref, onMounted, onUnmounted } from 'vue';
 import Modal from '@/components/layout/Modal.vue';
 import axios from 'axios';
-
+import { useRouter } from 'vue-router';
 const props = defineProps({
 	isLoginModalVisible: Boolean,
 });
-
+const router = useRouter();
 const emit = defineEmits(['update:isLoggedIn', 'close', 'update:userInfo']);
 
 const email = ref('');
