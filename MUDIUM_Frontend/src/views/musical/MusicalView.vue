@@ -1,21 +1,11 @@
 <template>
   <div class="musical-container">
-    <input
-      type="text"
-      v-model="searchQuery"
-      placeholder="검색어를 입력하세요"
-      class="search-input"
-      @input="handleInput"
-    />
+    <input type="text" v-model="searchQuery" placeholder="검색어를 입력하세요" class="search-input" @input="handleInput" />
     <div v-if="searchResults.length > 0">
       <h1>검색 결과</h1>
       <div class="search-results-container">
-        <RouterLink
-          v-for="musical in searchResults"
-          :key="musical.musicalId"
-          :to="{ name: 'MusicalDetailView', params: { id: musical.musicalId.toString() } }"
-          class="search-musical-card"
-        >
+        <RouterLink v-for="musical in searchResults" :key="musical.musicalId"
+          :to="{ name: 'MusicalDetailView', params: { id: musical.musicalId.toString() } }" class="search-musical-card">
           <img :src="musical.poster" :alt="musical.title" class="musical-poster" />
           <div class="musical-title">{{ musical.title }}</div>
         </RouterLink>
@@ -37,7 +27,7 @@ const route = useRoute();
 const fetchSearchResults = async (query) => {
   try {
     const sanitizedQuery = query.trim();
-    const url = `http://localhost:8080/api/musical?title=${encodeURIComponent(sanitizedQuery)}&page=0&size=100`;
+    const url = `http://localhost:5173/api/musical?title=${encodeURIComponent(sanitizedQuery)}&page=0&size=100`;
 
     const response = await axios.get(url);
     if (response.data && response.data.data && Array.isArray(response.data.data.content)) {

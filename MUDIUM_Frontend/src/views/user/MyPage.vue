@@ -33,7 +33,7 @@
 
 		<main class="main-content">
 			<div class="profile-section card">
-				<img :src="userInfo.profileImage || '@/assets/images/profile_default.svg'" alt="Profile"
+				<img src="@/assets/images/profile_default.svg" alt="@/assets/images/profile_default.svg"
 					class="profile-image">
 				<div class="profile-info">
 					<h2>{{ userInfo.nickname || '뜨리핑님' }}</h2>
