@@ -1,131 +1,69 @@
 <template>
-	<div class="watched-container">
-		<h2>My Watched Musicals</h2>
-		<div v-if="loading" class="loading">Loading...</div>
-		<div v-else-if="error" class="error">{{ error }}</div>
-		<div v-else-if="watchedMusicals.length === 0" class="no-musicals">
-			You haven't watched any musicals yet.
-		</div>
-		<div v-else class="musical-list">
-			<div v-for="musical in watchedMusicals" :key="musical.musicalId" class="musical-item">
-				<h3>Musical ID: {{ musical.musicalId }}</h3>
-				<div class="rating" v-if="musical.scope">
-					Rating: {{ musical.scope }} / 5
-				</div>
-				<div class="review" v-if="musical.reviewContent">
-					<p>{{ musical.reviewContent }}</p>
-					<div class="review-meta">
-						<span>Posted on: {{ formatDate(musical.reviewCreatedAt) }}</span>
-						<span>Likes: {{ musical.reviewLikes }}</span>
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+		<div v-for="review in reviews" :key="review.reviewId" class="relative h-96 perspective-1000">
+			<div
+				class="absolute w-full h-full transition-transform duration-500 transform-style-preserve-3d hover:rotate-y-180">
+				<!-- Front side -->
+				<div class="absolute w-full h-full bg-white rounded-lg shadow-md backface-hidden">
+					<img :src="review.poster" :alt="review.musicalTitle" class="w-full h-48 object-cover rounded-t-lg">
+					<div class="p-4">
+						<h3 class="text-xl font-semibold mb-2">{{ review.musicalTitle }}</h3>
+						<p class="text-gray-600 mb-2">{{ review.reviewContent }}</p>
+						<div class="flex items-center justify-between">
+							<span class="text-sm text-gray-500">{{ formatDate(review.reviewCreatedAt) }}</span>
+							<span class="text-sm text-blue-500">{{ review.reviewLikes }} likes</span>
+						</div>
 					</div>
 				</div>
-				<div v-else class="no-review">
-					No review written yet.
+				<!-- Back side -->
+				<div class="absolute w-full h-full bg-gray-100 rounded-lg shadow-md backface-hidden rotate-y-180">
+					<div class="p-4">
+						<h3 class="text-xl font-semibold mb-4">Meta Information</h3>
+						<p><strong>Musical ID:</strong> {{ review.musicalId }}</p>
+						<p><strong>Rating:</strong> {{ review.musicalRating }}</p>
+						<p><strong>Production:</strong> {{ review.production || 'N/A' }}</p>
+						<p><strong>User:</strong> {{ review.userNickname }}</p>
+						<p><strong>Scope:</strong> {{ review.scope || 'N/A' }}</p>
+					</div>
 				</div>
 			</div>
 		</div>
-		<button @click="refetch" :disabled="loading">Refresh</button>
 	</div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
-import { useUserStore } from '@/stores/userStore'
-import axios from 'axios'
-
-const userStore = useUserStore()
-const props = defineProps({
-	userInfo: {
-		type: Object,
-		required: true,
-	}
-})
-const watchedMusicals = ref([])
-const loading = ref(true)
-const error = ref(null)
-
-const fetchWatchedMusicals = async () => {
-	loading.value = true
-	error.value = null
-	try {
-		const response = await axios.get(`/api/review/users/${props.userInfo.userId}`)
-		watchedMusicals.value = response.data.data || []
-	} catch (e) {
-		error.value = 'Failed to fetch watched musicals'
-		console.error(e)
-	} finally {
-		loading.value = false
+<script>
+export default {
+	name: 'MyReviews',
+	props: {
+		reviews: {
+			type: Array,
+			required: true
+		}
+	},
+	methods: {
+		formatDate(timestamp) {
+			if (!timestamp) return 'N/A';
+			const date = new Date(timestamp);
+			return date.toLocaleDateString();
+		}
 	}
 }
-
-onMounted(fetchWatchedMusicals)
-
-const formatDate = (timestamp) => {
-	if (!timestamp) return 'N/A'
-	return new Date(timestamp).toLocaleDateString()
-}
-
-const refetch = fetchWatchedMusicals
 </script>
 
 <style scoped>
-.watched-container {
-	max-width: 800px;
-	margin: 0 auto;
-	padding: 20px;
+.perspective-1000 {
+	perspective: 1000px;
 }
 
-.musical-list {
-	display: grid;
-	gap: 20px;
+.backface-hidden {
+	backface-visibility: hidden;
 }
 
-.musical-item {
-	border: 1px solid #ddd;
-	border-radius: 8px;
-	padding: 15px;
-	background-color: #f9f9f9;
+.rotate-y-180 {
+	transform: rotateY(180deg);
 }
 
-.rating {
-	font-weight: bold;
-	margin-bottom: 10px;
-}
-
-.review {
-	background-color: white;
-	border-radius: 4px;
-	padding: 10px;
-}
-
-.review-meta {
-	display: flex;
-	justify-content: space-between;
-	font-size: 0.8em;
-	color: #666;
-	margin-top: 10px;
-}
-
-.no-review,
-.no-musicals,
-.loading,
-.error {
-	color: #666;
-	font-style: italic;
-}
-
-button {
-	margin-top: 20px;
-	padding: 10px 20px;
-	background-color: #4CAF50;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-}
-
-button:disabled {
-	background-color: #cccccc;
-	cursor: not-allowed;
+.transform-style-preserve-3d {
+	transform-style: preserve-3d;
 }
 </style>
