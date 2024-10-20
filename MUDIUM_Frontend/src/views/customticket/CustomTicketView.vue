@@ -54,10 +54,10 @@ const overlay = ref(null); // overlay ref 추가
 const route = useRoute();
 
 const props = defineProps({
-  customTickets: {
-    type: Array,
-    required: true,
-  },
+  // customTickets: {
+  //   type: Array,
+  //   required: true,
+  // },
   userInfo: {
     type: Object,
     required: true,
@@ -66,20 +66,30 @@ const props = defineProps({
 
 onMounted(() => {
   // Null 체크 추가
-  if (props.userInfo && props.userInfo.userId) {
-    console.log('Received userId:', props.userInfo.userId);
+  // if (props.userInfo && props.userInfo.userId) {
+  //   console.log('Received userId:', props.userInfo.userId);
+  // } else {
+  //   console.error('userInfo or userId is not defined');
+  // }
+  let userId = props.userInfo.userId || props.userInfo.user_id;
+  
+  if (userId) {
+    console.log('Received userId:', userId);
   } else {
     console.error('userInfo or userId is not defined');
   }
-});
 
+});
+console.log('d', userStore);
 const createTicket = () => {
   router.push('/customticket');  // customticket 페이지로 이동
 };
 const fetchCustomTickets = () => {
   // const userId = 1;  // 로그인된 유저 ID
   // const userId = route.params.id;
-  const userId = props.userInfo.userId; // userInfo 안의 userId 가져오기
+  // const userId = props.userInfo.userId; // userInfo 안의 userId 가져오기
+  const userId = userStore.userInfo.userId || userStore.userInfo.user_id;
+
   console.log(userId);  
 
   console.log('Fetching tickets for userId:', userId);
