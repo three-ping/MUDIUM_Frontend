@@ -8,14 +8,12 @@
 			<p class="text-xl">{{ error }}</p>
 		</div>
 		<div v-else class="cards-grid">
-			<div v-for="review in reviews" :key="review.reviewId" class="card-container" @mouseenter="rotateCard"
-				@mouseleave="unrotateCard">
-				<div class="card">
-					<!-- Front side - Only poster -->
+			<div v-for="review in reviews" :key="review.reviewId" class="card-container">
+				<div class="card" :class="{ 'is-flipped': review.isFlipped }" @mouseenter="flipCard(review, true)"
+					@mouseleave="flipCard(review, false)">
 					<div class="card-side card-front">
 						<img :src="review.poster" :alt="review.musicalTitle" class="card-image">
 					</div>
-					<!-- Back side -->
 					<div class="card-side card-back">
 						<div class="p-4 overflow-y-auto h-full">
 							<h3 class="text-xl font-semibold mb-2">{{ review.musicalTitle }}</h3>
@@ -49,7 +47,7 @@ const fetchReviews = async (userId) => {
 	try {
 		const response = await axios.get(`/api/review/users/${userId}`);
 		if (response.data.success) {
-			reviews.value = response.data.data;
+			reviews.value = response.data.data.map(review => ({ ...review, isFlipped: false }));
 		} else {
 			throw new Error(response.data.error || 'Failed to fetch reviews');
 		}
@@ -66,12 +64,8 @@ const formatDate = (timestamp) => {
 	return date.toLocaleDateString();
 };
 
-const rotateCard = (event) => {
-	event.currentTarget.querySelector('.card').style.transform = 'rotateY(180deg)';
-};
-
-const unrotateCard = (event) => {
-	event.currentTarget.querySelector('.card').style.transform = 'rotateY(0deg)';
+const flipCard = (review, isFlipped) => {
+	review.isFlipped = isFlipped;
 };
 
 // Assuming we're getting the userId from a prop or a global state
@@ -80,7 +74,6 @@ const userId = 1; // Replace this with the actual way you're getting the userId
 onMounted(() => {
 	fetchReviews(userId);
 });
-
 </script>
 
 <style scoped>
@@ -103,8 +96,11 @@ onMounted(() => {
 	height: 100%;
 	transition: transform 0.6s;
 	transform-style: preserve-3d;
-	overflow: hidden;
-	border-radius: 10px;
+	cursor: pointer;
+}
+
+.card.is-flipped {
+	transform: rotateY(180deg);
 }
 
 .card-side {
@@ -114,11 +110,11 @@ onMounted(() => {
 	backface-visibility: hidden;
 	border-radius: 0.5rem;
 	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	overflow: hidden;
 }
 
 .card-front {
 	background-color: white;
-	overflow: hidden;
 }
 
 .card-back {
