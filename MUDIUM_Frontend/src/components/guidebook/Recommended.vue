@@ -4,14 +4,12 @@
           <tr>
             <th>뮤지컬</th>
             <th>설명</th>
-            <th>작성일자</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item, index) in recommendations" :key="index">
             <td>{{ item.musicalTitle }}</td>
             <td>{{ item.musicalDescription }}</td>
-            <td>{{ item.createdAt }}</td>
           </tr>
         </tbody>
       </table>
@@ -61,6 +59,7 @@
     margin-top: 1px;
     margin-left: auto;
     margin-right: auto;
+    margin-bottom: 50px;
     padding: 20px;
 }
   

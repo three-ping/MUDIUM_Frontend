@@ -28,7 +28,7 @@
 				<li>
 
 					<RouterLink to="/guidebook/guidemain"
-						:class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
+						:class="{ active: currentRoute.startsWith('/guidebook/guidemain') || currentRoute.startsWith('/guidebook/terms') || currentRoute.startsWith('/guidebook/etiquette') }">
 						<strong>가이드북</strong>
 					</RouterLink>
 				</li>
