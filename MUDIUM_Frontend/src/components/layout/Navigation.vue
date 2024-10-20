@@ -72,7 +72,7 @@ const currentRoute = ref(route.path);
 const searchQuery = ref('');
 const isProfileMenuOpen = ref(false);
 
-const emit = defineEmits(['openLoginModal', 'openSignupModal']);
+const emit = defineEmits(['openLoginModal', 'openSignupModal', 'logout']);
 
 const performSearch = () => {
 	if (!searchQuery.value.trim()) return;
