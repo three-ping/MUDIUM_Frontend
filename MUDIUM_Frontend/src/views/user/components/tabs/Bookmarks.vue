@@ -6,18 +6,21 @@
 		<div v-else-if="bookmarks.length === 0" class="no-bookmarks">
 			You haven't bookmarked any musicals yet.
 		</div>
-		<ul v-else class="bookmarks-list">
-			<li v-for="bookmark in bookmarks" :key="bookmark.musicalId" class="bookmark-item">
-				<img :src="bookmark.poster" :alt="bookmark.title" class="musical-poster">
-				<div class="musical-info">
-					<h2>{{ bookmark.title }}</h2>
-					<p><strong>Rating:</strong> {{ bookmark.rating }}</p>
-					<p><strong>Production:</strong> {{ bookmark.production }}</p>
-					<p><strong>View Count:</strong> {{ bookmark.viewCount }}</p>
-					<!-- <button @click="removeBookmark(bookmark.musicalId)">Remove Bookmark</button> -->
+		<div v-else class="bookmarks-grid">
+			<div v-for="bookmark in bookmarks" :key="bookmark.musicalId" class="bookmark-card">
+				<div class="card-inner">
+					<div class="card-front">
+						<img :src="bookmark.poster" :alt="bookmark.title" class="musical-poster">
+					</div>
+					<div class="card-back">
+						<h2>{{ bookmark.title }}</h2>
+						<p><strong>Rating:</strong> {{ bookmark.rating }}</p>
+						<p><strong>Production:</strong> {{ bookmark.production }}</p>
+						<p><strong>View Count:</strong> {{ bookmark.viewCount }}</p>
+					</div>
 				</div>
-			</li>
-		</ul>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -57,30 +60,8 @@ const fetchBookmarks = async () => {
 	}
 };
 
-const removeBookmark = async (musicalId) => {
-	if (!props.userInfo || !props.userInfo.userId) {
-		console.error('User information not available.');
-		return;
-	}
-
-	try {
-		await axios.delete('/api/bookmark', {
-			data: {
-				userId: props.userInfo.userId,
-				musicalId
-			}
-		});
-		// After successful deletion, refresh the bookmarks list
-		await fetchBookmarks();
-	} catch (err) {
-		console.error('Error removing bookmark:', err);
-		// You might want to show an error message to the user here
-	}
-};
-
 onMounted(fetchBookmarks);
 
-// Watch for changes in userInfo
 watch(() => props.userInfo, (newUserInfo) => {
 	if (newUserInfo && newUserInfo.id) {
 		fetchBookmarks();
@@ -90,7 +71,7 @@ watch(() => props.userInfo, (newUserInfo) => {
 
 <style scoped>
 .bookmarks-container {
-	max-width: 800px;
+	max-width: 1200px;
 	margin: 0 auto;
 	padding: 20px;
 }
@@ -102,39 +83,67 @@ watch(() => props.userInfo, (newUserInfo) => {
 	margin-top: 20px;
 }
 
-.bookmarks-list {
-	list-style-type: none;
-	padding: 0;
+.bookmarks-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 20px;
 }
 
-.bookmark-item {
+.bookmark-card {
+	perspective: 1000px;
+	height: 300px;
+}
+
+.card-inner {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	transition: transform 0.6s;
+	transform-style: preserve-3d;
+}
+
+.bookmark-card:hover .card-inner {
+	transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	backface-visibility: hidden;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-front {
+	background-color: #f1f1f1;
+}
+
+.card-back {
+	background-color: #e1e1e1;
+	transform: rotateY(180deg);
 	display: flex;
-	margin-bottom: 20px;
-	border: 1px solid #ddd;
+	flex-direction: column;
+	justify-content: center;
 	padding: 10px;
-	border-radius: 5px;
 }
 
 .musical-poster {
-	width: 100px;
-	height: auto;
-	margin-right: 20px;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 10px;
 }
 
-.musical-info {
-	flex-grow: 1;
+h2 {
+	font-size: 1.2em;
+	margin-bottom: 10px;
 }
 
-button {
-	background-color: #f44336;
-	color: white;
-	border: none;
-	padding: 10px 15px;
-	cursor: pointer;
-	border-radius: 5px;
-}
-
-button:hover {
-	background-color: #d32f2f;
+p {
+	font-size: 0.9em;
+	margin: 5px 0;
 }
 </style>
