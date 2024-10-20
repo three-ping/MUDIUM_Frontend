@@ -1,29 +1,41 @@
 <template>
-	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-		<div v-for="review in reviews" :key="review.reviewId" class="relative h-96 perspective-1000">
-			<div
-				class="absolute w-full h-full transition-transform duration-500 transform-style-preserve-3d hover:rotate-y-180">
-				<!-- Front side -->
-				<div class="absolute w-full h-full bg-white rounded-lg shadow-md backface-hidden">
-					<img :src="review.poster" :alt="review.musicalTitle" class="w-full h-48 object-cover rounded-t-lg">
-					<div class="p-4">
-						<h3 class="text-xl font-semibold mb-2">{{ review.musicalTitle }}</h3>
-						<p class="text-gray-600 mb-2">{{ review.reviewContent }}</p>
-						<div class="flex items-center justify-between">
-							<span class="text-sm text-gray-500">{{ formatDate(review.reviewCreatedAt) }}</span>
-							<span class="text-sm text-blue-500">{{ review.reviewLikes }} likes</span>
+	<div>
+		<div v-if="loading" class="text-center py-8">
+			<p class="text-xl">Loading reviews...</p>
+		</div>
+		<div v-else-if="error" class="text-center py-8 text-red-600">
+			<p class="text-xl">{{ error }}</p>
+		</div>
+		<div v-else class="cards-grid">
+			<div v-for="(review, index) in reviews" :key="review.reviewId" class="card-container"
+				@mouseenter="rotateCard" @mouseleave="unrotateCard">
+				<div class="card">
+					<!-- Front side -->
+					<div class="card-side card-front">
+						<img :src="review.poster" :alt="review.musicalTitle"
+							class="w-full h-48 object-cover rounded-t-lg">
+						<div class="p-4">
+							<h3 class="text-lg font-semibold truncate">{{ review.musicalTitle }}</h3>
+							<div class="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
+								{{ index + 1 }}
+							</div>
 						</div>
 					</div>
-				</div>
-				<!-- Back side -->
-				<div class="absolute w-full h-full bg-gray-100 rounded-lg shadow-md backface-hidden rotate-y-180">
-					<div class="p-4">
-						<h3 class="text-xl font-semibold mb-4">Meta Information</h3>
-						<p><strong>Musical ID:</strong> {{ review.musicalId }}</p>
-						<p><strong>Rating:</strong> {{ review.musicalRating }}</p>
-						<p><strong>Production:</strong> {{ review.production || 'N/A' }}</p>
-						<p><strong>User:</strong> {{ review.userNickname }}</p>
-						<p><strong>Scope:</strong> {{ review.scope || 'N/A' }}</p>
+					<!-- Back side -->
+					<div class="card-side card-back">
+						<div class="p-4 overflow-y-auto h-full">
+							<h3 class="text-xl font-semibold mb-2">{{ review.musicalTitle }}</h3>
+							<p><strong>Rating:</strong> {{ review.musicalRating }}</p>
+							<p><strong>Production:</strong> {{ review.production || 'N/A' }}</p>
+							<p><strong>User:</strong> {{ review.userNickname }}</p>
+							<p><strong>Scope:</strong> {{ review.scope || 'N/A' }}</p>
+							<p><strong>View Count:</strong> {{ review.viewCount }}</p>
+							<p v-if="review.reviewContent" class="mt-2"><strong>Review:</strong> {{ review.reviewContent
+								}}</p>
+							<p v-if="review.reviewLikes !== null" class="mt-2"><strong>Likes:</strong> {{
+								review.reviewLikes }}</p>
+							<p class="mt-2"><strong>Date:</strong> {{ formatDate(review.reviewCreatedAt) }}</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -31,39 +43,91 @@
 	</div>
 </template>
 
-<script>
-export default {
-	name: 'MyReviews',
-	props: {
-		reviews: {
-			type: Array,
-			required: true
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+
+const reviews = ref([]);
+const loading = ref(true);
+const error = ref(null);
+
+const fetchReviews = async (userId) => {
+	try {
+		const response = await axios.get(`/api/review/users/${userId}`);
+		if (response.data.success) {
+			reviews.value = response.data.data;
+		} else {
+			throw new Error(response.data.error || 'Failed to fetch reviews');
 		}
-	},
-	methods: {
-		formatDate(timestamp) {
-			if (!timestamp) return 'N/A';
-			const date = new Date(timestamp);
-			return date.toLocaleDateString();
-		}
+	} catch (err) {
+		error.value = err instanceof Error ? err.message : 'An unexpected error occurred';
+	} finally {
+		loading.value = false;
 	}
-}
+};
+
+const formatDate = (timestamp) => {
+	if (!timestamp) return 'N/A';
+	const date = new Date(timestamp);
+	return date.toLocaleDateString();
+};
+
+const rotateCard = (event) => {
+	event.currentTarget.querySelector('.card').style.transform = 'rotateY(180deg)';
+};
+
+const unrotateCard = (event) => {
+	event.currentTarget.querySelector('.card').style.transform = 'rotateY(0deg)';
+};
+
+// Assuming we're getting the userId from a prop or a global state
+const userId = 1; // Replace this with the actual way you're getting the userId
+
+onMounted(() => {
+	fetchReviews(userId);
+});
+
+
 </script>
 
 <style scoped>
-.perspective-1000 {
+.cards-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+	gap: 2rem;
+	padding: 2rem;
+}
+
+.card-container {
+	width: 30rem;
+	height: 60rem;
 	perspective: 1000px;
 }
 
-.backface-hidden {
-	backface-visibility: hidden;
-}
-
-.rotate-y-180 {
-	transform: rotateY(180deg);
-}
-
-.transform-style-preserve-3d {
+.card {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	transition: transform 0.6s;
 	transform-style: preserve-3d;
+}
+
+.card-side {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	backface-visibility: hidden;
+	border-radius: 0.5rem;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-front {
+	background-color: white;
+}
+
+.card-back {
+	background-color: #f3f4f6;
+	transform: rotateY(180deg);
 }
 </style>

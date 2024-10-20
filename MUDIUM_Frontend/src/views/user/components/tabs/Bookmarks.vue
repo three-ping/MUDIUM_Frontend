@@ -91,7 +91,7 @@ watch(() => props.userInfo, (newUserInfo) => {
 
 .bookmark-card {
 	perspective: 1000px;
-	height: 300px;
+	height: 60rem;
 }
 
 .card-inner {
