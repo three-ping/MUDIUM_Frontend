@@ -31,10 +31,12 @@ import { ref } from 'vue';
 const props = defineProps({
     reply: Object,
     userId: Number,
-    boardId: Number
+    boardId: Number,
+    access_token: String
 });
 
 const emit = defineEmits(['updateReply', 'deleteReply']);
+const access_token = props.access_token;
 
 const isEditing = ref(false);
 const editContent = ref(props.reply.content);
@@ -67,7 +69,10 @@ const submitEdit = async () => {
 
     const response = await fetch(`http://localhost:8080/api/board-reply/${props.reply.boardReplyId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    },
         body: JSON.stringify({
         content: editContent.value
         })
@@ -87,6 +92,10 @@ const deleteReply = async () => {
 
         const response = await fetch(`http://localhost:8080/api/board-reply/${props.reply.boardReplyId}`, {
         method: "DELETE",
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
         });
         emit('deleteReply', props.reply.boardReplyId);
     }
@@ -94,6 +103,9 @@ const deleteReply = async () => {
 </script>
 
 <style scoped>
+button { 
+    box-shadow: none;
+}
 .comment-reply {
     background-color: #f0f0f0;
     border-left: 2px solid #ccc;
@@ -120,5 +132,11 @@ textarea {
 .edit-buttons {
     display: flex;
     gap: 10px;
+}
+button {
+    box-shadow: none;
+}
+*{
+    font-size: 2rem;
 }
 </style>

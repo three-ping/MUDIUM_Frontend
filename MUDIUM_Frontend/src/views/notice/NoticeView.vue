@@ -57,8 +57,8 @@
   const pageItems = reactive([]);
   const searchType = ref('TITLE');
   const searchQuery = ref('');
-  const userRole = ref("ROLE_ADMIN");
-  // const userRole = ref("ROLE_MEMBER");
+  // const userRole = ref("ROLE_ADMIN");
+  const userRole = ref("ROLE_MEMBER");
   
   // 현재 페이지 번호를 저장하는 함수
   const saveCurrentPage = () => {
@@ -374,4 +374,10 @@
       margin-bottom: 15px; /* 대신 아래쪽 마진 추가 */
     }
   }
+  button {
+    box-shadow: none;
+}
+*{
+    font-size: 2rem;
+}
   </style>

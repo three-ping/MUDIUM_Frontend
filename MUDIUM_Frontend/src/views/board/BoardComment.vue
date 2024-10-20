@@ -46,6 +46,7 @@
                     <Reply 
                         :reply="reply" 
                         :userId="userId"
+                        :access_token="access_token"
                         @updateReply="handleReplyUpdate"
                         @deleteReply="handleReplyDelete"
                     />
@@ -75,7 +76,8 @@ import Paging from "@/components/board/pagination.vue";
 const props = defineProps({
     id: Number,
     userNickname: String,
-    userId: Number
+    userId: Number,
+    access_token: String
 });
 const isVisible = ref(false);
 const requestURL = `api/board-comment`;
@@ -88,10 +90,15 @@ const newComment = ref('');
 const comments = reactive([]);
 const pageSize = ref(5);
 const newReply = ref('');
+const access_token = props.access_token;
 
 const fetchComments = async () => {
     const response = await fetch(`http://localhost:8080/api/board-comment/${id.value}?page=${pageNumber.value}&size=${pageSize.value}`, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
     });
     const responseDTO = await response.json();
     const fetchedComments = responseDTO.data.content;
@@ -122,7 +129,10 @@ const submitComment = async () => {
     }
     await fetch(`http://localhost:8080/api/board-comment/${id.value}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    },
         body: JSON.stringify({
             "content": newComment.value,
             "userId": userId.value,
@@ -138,10 +148,12 @@ const submitReply = async (id) => {
     if(!newReply.value.trim()) {
         return;
     }
-    console.log(id);
     await fetch(`http://localhost:8080/api/board-reply/${id}`,{
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    },
         body: JSON.stringify({
             "content": newReply.value,
             "userId": userId.value,
@@ -167,7 +179,10 @@ const submitEdit = async (comment, index) => {
     }
     await fetch(`http://localhost:8080/api/board-comment/${comment.boardCommentId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    },
         body: JSON.stringify({
             "content": comment.editContent
         })
@@ -181,6 +196,10 @@ const deleteComment = async (commentId) => {
     if (confirm("댓글을 삭제하시겠습니까?")) {
         await fetch(`http://localhost:8080/api/board-comment/${commentId}`, {
             method: "DELETE",
+            headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
         });
         await fetchComments();
     }
@@ -188,7 +207,11 @@ const deleteComment = async (commentId) => {
 
 const fetchReplies = async (boardCommentId) => {
     const response = await fetch(`http://localhost:8080/api/board-reply/${boardCommentId}`,{
-    method: "GET"
+    method: "GET",
+    headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
     });
     const responseDTO = await response.json();
     return responseDTO.data;
@@ -241,6 +264,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
+button { 
+    box-shadow: none;
+}
 .board-detail-comment h2 {
     font-size: 18px;
     margin-bottom: 10px;
@@ -315,5 +341,8 @@ button {
     display: flex;
     flex-direction: column;
     align-items: end;
+}
+*{
+    font-size: 2rem;
 }
 </style>

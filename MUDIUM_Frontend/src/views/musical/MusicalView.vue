@@ -7,7 +7,6 @@
         <RouterLink v-for="musical in searchResults" :key="musical.musicalId"
           :to="{ name: 'MusicalDetailView', params: { id: musical.musicalId.toString() } }" class="search-musical-card">
           <img :src="musical.poster" :alt="musical.title" class="musical-poster" />
-          <!-- <div class="musical-title">{{ musical.title }}</div> -->
           <div class="musical-title">{{ musical.title }}</div>
         </RouterLink>
       </div>
@@ -86,7 +85,7 @@ fetchSearchResults('');
   white-space: nowrap;       
   overflow: hidden;         
   text-overflow: ellipsis;   
-  font-size: 0.8rem;         
+  font-size: 1.9rem;         
   color: white;             
   max-width: 70%;         
   text-align: center;       

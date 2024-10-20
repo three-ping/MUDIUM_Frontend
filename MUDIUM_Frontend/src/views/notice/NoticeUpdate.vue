@@ -187,6 +187,13 @@ onMounted(() => {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    resize: vertical;
+    resize: 
+    vertical;
+}
+button {
+    box-shadow: none;
+}
+*{
+    font-size: 2rem;
 }
 </style>
