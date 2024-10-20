@@ -33,10 +33,10 @@
 
 		<main class="main-content" id="profile-container">
 			<ProfileTab v-if="selectedItem === 'profile'" :userInfo="userInfo" />
-			<MyWorksTab v-if="selectedItem === 'myWorks'" />
-			<BookmarksTab v-if="selectedItem === 'bookmarks'" />
-			<BoardTab v-if="selectedItem === 'board'" />
-			<TicketsTab v-if="selectedItem === 'tickets'" />
+			<MyWorksTab v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
+			<BookmarksTab v-if="selectedItem === 'bookmarks'" :userInfo="userInfo" />
+			<BoardTab v-if="selectedItem === 'board'" :userInfo="userInfo" />
+			<TicketsTab v-if="selectedItem === 'tickets'" :userInfo="userInfo" />
 		</main>
 	</div>
 </template>
@@ -44,7 +44,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useUserStore } from '@/scripts/user/user';
-import ProfileTab from "./components/tabs/ProfileTab.vue";
+import ProfileTab from "./components/tabs/Profile.vue";
 import MyWorksTab from './components/tabs/Watched.vue';
 import BookmarksTab from './components/tabs/Bookmarks.vue';
 import BoardTab from './components/tabs/BoardTab.vue';
@@ -113,54 +113,5 @@ watch(() => userStore.userInfo, (newUserInfo) => {
 	flex-grow: 1;
 	padding: 20px;
 	/* background-color: #f5f5f5; */
-}
-
-.profile-section {
-	display: flex;
-	align-items: center;
-	background-color: white;
-	padding: 20px;
-	border-radius: 10px;
-	margin-bottom: 20px;
-}
-
-.profile-image {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	object-fit: cover;
-	margin-right: 20px;
-}
-
-.profile-info {
-	flex-grow: 1;
-}
-
-.profile-info h2 {
-	margin: 0 0 10px 0;
-}
-
-.profile-info p {
-	margin: 5px 0;
-	color: #666;
-}
-
-.warning {
-	color: var(--warning-color)
-}
-
-.edit-profile-btn {
-	background-color: var(--primary-color);
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 5px;
-	cursor: pointer;
-}
-
-.calendar-section {
-	background-color: white;
-	padding: 20px;
-	border-radius: 10px;
 }
 </style>
