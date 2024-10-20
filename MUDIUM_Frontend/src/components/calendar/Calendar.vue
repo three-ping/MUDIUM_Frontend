@@ -1,8 +1,5 @@
 <template>
 <div class="container">
-    <div class="image-change-buttons">
-      <button @click="nextBackground">이미지 변경</button>
-    </div>
   <div :style="{ backgroundImage: `url(${currentBackgroundImage})` }" class="background-container">
     <div class="calendar-wrapper">
       <div class="calendar-header">
@@ -30,6 +27,9 @@
       </div>
     </div>
   </div>
+    <div class="image-change-buttons">
+      <button @click="nextBackground">이미지 변경</button>
+    </div>
 </div>
 </template>
 
@@ -124,17 +124,23 @@ const selectDate = (date) => {
 .container {
   display: flex;
   justify-content: center; 
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 }
 .image-change-buttons {
+  align-items: right;
   position: absolute;
-  right: 50px;
+  top: 80%;
   border: none;
-  padding: 5px 10px;
+  color: white;
   border-radius: 10px;
+  cursor: pointer;
 }
 .background-container {
-  position: relative; /* Set position to relative for absolute positioning of buttons */
-  width: 800px;
+  position: relative; 
+  width: auto;
   height: auto;
   background-size: cover;
   background-position: center top; 
@@ -146,17 +152,13 @@ const selectDate = (date) => {
 }
 
 .calendar-wrapper {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.7);
   padding: 30px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 800px;
-  height: auto;
-  box-sizing: border-box; /* Include padding in the width/height */
-  z-index: 1; /* Ensure it is above the background */
+  z-index: 1; 
+  box-sizing: border-box;
 }
-
-
 .calendar-header {
   display: flex;
   align-items: center;
@@ -176,6 +178,6 @@ const selectDate = (date) => {
 
 .today {
   background-color: #d0e1ff;
-  border-radius: 50%;
+  border-radius: 60%;
 }
 </style>
