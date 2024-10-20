@@ -32,7 +32,7 @@
 		</aside>
 
 		<main class="main-content">
-			<div class="profile-section">
+			<div class="profile-section card">
 				<img :src="userInfo.profileImage || '@/assets/images/profile_default.svg'" alt="Profile"
 					class="profile-image">
 				<div class="profile-info">
@@ -43,7 +43,7 @@
 				<button class="edit-profile-btn">수정</button>
 			</div>
 
-			<div class="calendar-section">
+			<div class="calendar-section card">
 				<h3>October 2020</h3>
 				<div class="calendar">
 					<!-- You may want to use a proper calendar component here -->
@@ -67,6 +67,7 @@
 			</div>
 		</main>
 	</div>
+
 </template>
 
 <script setup>
