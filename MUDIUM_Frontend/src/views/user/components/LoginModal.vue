@@ -65,33 +65,6 @@ const loginNormalUser = async () => {
 };
 
 
-// const initiateKakaoLogin = () => {
-// 	const kakaoRedirectUri = "http://127.0.0.1:8080/api/users/oauth2/kakao"; // This should match exactly what's in your Kakao Developer Console
-// 	const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=454fe5e6a0e0c020cf155003e27761e2&redirect_uri=${encodeURIComponent(kakaoRedirectUri)}&response_type=code`;
-// 	window.location.href = kakaoLoginUrl;
-// };
-
-
-
-// const handleKakaoCallback = async (code) => {
-// 	try {
-// 		console.log("kakaoCallback");
-// 		const response = await axios.get('/api/users/oauth2/kakao', { params: { code } });
-// 		if (response.data.success) {
-// 			console.log('Kakao Login Success');
-// 			emit('update:isLoggedIn', true);
-// 			emit('update:userInfo', response.data.data);
-// 			closeLoginModal();
-// 		} else {
-// 			loginError.value = '카카오 로그인에 실패했습니다. 다시 시도해주세요.';
-// 		}
-// 	} catch (error) {
-// 		console.error('Kakao login error:', error);
-// 		loginError.value = '카카오 로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
-// 	}
-// };
-
-
 const closeLoginModal = () => {
 	emit('close');
 };
@@ -111,61 +84,36 @@ const openFindPassword = () => {
 	console.log('Open find password');
 };
 
-// const checkForKakaoCode = () => {
-// 	const urlParams = new URLSearchParams(window.location.search);
-// 	const code = urlParams.get('code');
-// 	if (code) {
-// 		handleKakaoCallback(code);
-// 		// Clean up the URL
-// 		window.history.replaceState({}, document.title, window.location.pathname);
-// 	}
-// };
-
-// onMounted(() => {
-// 	checkForKakaoCode();
-// 	window.addEventListener('popstate', checkForKakaoCode);
-// });
-
-// onUnmounted(() => {
-// 	window.removeEventListener('popstate', checkForKakaoCode);
-// });
-
-
 const initiateKakaoLogin = () => {
 	const kakaoRedirectUri = "http://127.0.0.1:8080/api/users/oauth2/kakao"; // This should exactly match what's in Kakao Developer Console
 	const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=454fe5e6a0e0c020cf155003e27761e2&redirect_uri=${encodeURIComponent(kakaoRedirectUri)}&response_type=code`;
 	window.location.href = kakaoLoginUrl;
 };
 
-const handleKakaoCallback = async (code) => {
-	try {
-		const response = await axios.get('/api/users/oauth2/kakao', { params: { code } });
-		if (response.data.success) {
-			console.log('Kakao Login Success');
-			emit('update:isLoggedIn', true);
-			emit('update:userInfo', response.data.data);
-			closeLoginModal();
-		} else {
-			loginError.value = '카카오 로그인에 실패했습니다. 다시 시도해주세요.';
-		}
-	} catch (error) {
-		console.error('Kakao login error:', error);
-		loginError.value = '카카오 로그인 중 오류가 발생했습니다. 나중에 다시 시도해주세요.';
-	}
-};
-
-const checkForKakaoCode = () => {
+const handleKakaoCallback = () => {
 	const urlParams = new URLSearchParams(window.location.search);
-	const code = urlParams.get('code');
-	if (code) {
-		handleKakaoCallback(code);
+	const userInfo = {
+		userId: decodeURIComponent(urlParams.get('userId') || ''),
+		userName: decodeURIComponent(urlParams.get('userName') || ''),
+		nickname: decodeURIComponent(urlParams.get('nickname') || ''),
+		email: decodeURIComponent(urlParams.get('email') || ''),
+		profileImage: decodeURIComponent(urlParams.get('profileImage') || ''),
+		signupPath: decodeURIComponent(urlParams.get('signupPath') || '')
+	};
+
+	if (userInfo.userId) {
+		console.log('Kakao Login Success');
+		emit('update:isLoggedIn', true);
+		emit('update:userInfo', userInfo);
+		closeLoginModal();
+
 		// Clean up the URL
-		window.history.replaceState({}, document.title, window.location.pathname);
+		router.replace({ query: {} });
 	}
 };
 
 onMounted(() => {
-	checkForKakaoCode();
+	handleKakaoCallback();
 });
 
 </script>

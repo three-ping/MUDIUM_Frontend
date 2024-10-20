@@ -51,6 +51,7 @@ const handleLoginSuccess = (isLoggedIn) => {
 };
 
 const updateUserInfo = (userInfo) => {
+  console.log("updateUserInfo")
   userStore.updateUserInfo(userInfo);
   // Save user info to localStorage
   localStorage.setItem('userInfo', JSON.stringify(userInfo));
