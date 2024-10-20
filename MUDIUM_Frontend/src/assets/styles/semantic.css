@@ -24,6 +24,7 @@ aside nav {
 }
 aside nav li {
   font-size: 2.5rem;
+  text-decoration: none;
 }
 aside nav li a {
   text-decoration: none;
