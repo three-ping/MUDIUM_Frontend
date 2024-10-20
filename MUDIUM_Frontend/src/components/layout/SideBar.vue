@@ -15,6 +15,10 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';  // Vue Router 사용
+
+// Vue Router 인스턴스 가져오기
+const router = useRouter();
 
 const navItems = [
 	{ name: 'profile', label: '프로필' },
@@ -29,7 +33,7 @@ const activeItem = ref('profile');
 
 const setActiveItem = (itemName) => {
 	activeItem.value = itemName;
-	// Here you can add logic to navigate to the corresponding page
+  	// Here you can add logic to navigate to the corresponding page
 	// For example: router.push({ name: itemName });
 };
 </script>
