@@ -16,6 +16,9 @@ nav {
   display: flex;
   align-items: center;
 }
+aside {
+  height: auto;
+}
 aside nav {
   display: flex;
   flex-direction: column;
@@ -29,6 +32,7 @@ aside nav li {
 aside nav li a {
   text-decoration: none;
   color: var(--text-color);
+  display: block;
 }
 
 .logo {
