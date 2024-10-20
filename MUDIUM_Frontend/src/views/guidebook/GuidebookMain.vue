@@ -3,17 +3,16 @@
     <IndexTab
       :tab="tab"
       :currentTab="currentTab"
-      @click="changeTab"
-      />
+      @click="changeTab"/>
 
     <section v-if="currentTab === 0">
-      <Recommended/>
+      <Recommended />
     </section>
     <section v-if="currentTab === 1">
-      <Terms/>
+      <Terms />
     </section>
     <section v-if="currentTab === 2">
-      <Etiquette/>
+      <Etiquette />
     </section>
 </template>
 
@@ -35,9 +34,10 @@ const changeTab = (key) => {
   currentTab.value = key;
 };
 </script>
+
 <style scoped>
 .title  {
   margin-top: 50px;
-margin-left: 250px;
+  margin-left: 250px;
 }
 </style>
