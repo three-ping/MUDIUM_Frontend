@@ -10,7 +10,7 @@
 			<div v-for="bookmark in bookmarks" :key="bookmark.musicalId" class="bookmark-card">
 				<div class="card-inner">
 					<div class="card-front">
-						<img :src="bookmark.poster" :alt="bookmark.title" class="musical-poster">
+						<img :src="bookmark.poster" :alt="bookmark.title" class="card-image">
 					</div>
 					<div class="card-back">
 						<h2>{{ bookmark.title }}</h2>
@@ -92,6 +92,7 @@ watch(() => props.userInfo, (newUserInfo) => {
 .bookmark-card {
 	perspective: 1000px;
 	height: 60rem;
+	width: 40rem;
 }
 
 .card-inner {
@@ -145,5 +146,12 @@ h2 {
 p {
 	font-size: 0.9em;
 	margin: 5px 0;
+}
+
+.card-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
 }
 </style>
