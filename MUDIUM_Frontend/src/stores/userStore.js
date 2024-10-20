@@ -17,6 +17,8 @@ export const useUserStore = defineStore("user", {
         isLoggedIn: false,
         // Reset other user properties as needed
       };
+      console.log("userStore: remove userInfo in local storage");
+      localStorage.removeItem("userInfo");
     },
     updateLoginStatus(isLoggedIn) {
       this.userInfo.isLoggedIn = isLoggedIn;

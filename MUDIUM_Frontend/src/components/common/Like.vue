@@ -86,15 +86,19 @@ onUnmounted( () => {
 </script>
 
 <style scoped>
+button { 
+    box-shadow: none;
+}
 .like-button-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100px;
+    width: 7vw;
+    height: 15vh;
     cursor: pointer;
     border: 2px solid #ccc;
     border-radius: 8px;
-    padding: 10px;
+    padding: 1vw;
     transition: all 0.3s ease;
     user-select: none;
 }
@@ -109,14 +113,16 @@ onUnmounted( () => {
 }
 
 .like-count {
-    font-size: 20px;
+    font-size: 1vw;
     margin-bottom: 5px;
 }
 
 .like-button {
+    width:100%;
+    height:100%;
     border: none;
     background-color: transparent;
-    font-size: 40px;
+    font-size: 2vw;
     cursor: pointer;
     transition: color 0.3s ease;
 }

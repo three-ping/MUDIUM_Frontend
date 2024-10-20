@@ -6,6 +6,11 @@
 
 </script>
 
-<style lang="scss" scoped>
-
+<style  scoped>
+button {
+    box-shadow: none;
+}
+*{
+    font-size: 2rem;
+}
 </style>

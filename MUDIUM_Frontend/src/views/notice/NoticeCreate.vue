@@ -116,4 +116,10 @@ const submitBoard = async () => {
     background-color: #D53EC6;
     color: white;
 }
+button {
+    box-shadow: none;
+}
+*{
+    font-size: 2rem;
+}
 </style>

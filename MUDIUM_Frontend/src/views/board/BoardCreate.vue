@@ -18,15 +18,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref,defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 import Modal from '@/components/common/Modal.vue'; 
 
+const props = defineProps({
+    userId: Number,
+    access_token: String
+})
 const router = useRouter();
 const title = ref('');
 const content = ref('');
-const userId = ref(1);
+const userId = Number(props.userId);
 const showModal = ref(false);
+const access_token = props.access_token;
 
 const goBack = () => {
     router.push('/board/view');
@@ -41,17 +46,20 @@ const submitBoard = async () => {
     const createBoard = async(title,content)=>{
     return await fetch(`http://localhost:8080/api/board`,{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    },
         body: JSON.stringify({
             "title":`${title.value}`,
             "content":`${content.value}`,
-            "userId":`${userId.value}`
+            "userId":`${userId}`
         })
     })
 };
     const response = await createBoard(title,content);
     const data = await response.json();
-    console.log(data.success);
+    console.log(data);
     if(data.success){
         router.push('/board/view');
     } else{
@@ -61,9 +69,13 @@ const submitBoard = async () => {
 </script>
 
 <style scoped>
+button { 
+    box-shadow: none;
+}
 .board-create {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
+    width: 100%;
+    height: 70%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -88,7 +100,7 @@ const submitBoard = async () => {
 
 .board-create-content textarea {
     width: 100%;
-    height: 300px;
+    height: 50vh;
     padding: 10px;
     font-size: 16px;
     border: 1px solid #ccc;
