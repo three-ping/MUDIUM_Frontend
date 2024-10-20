@@ -1,26 +1,49 @@
 <template>
-	<SideBar />
+	<div class="page-container">
+		<Sidebar v-model:selectedItem="selectedItem" />
 
-	<section>
-		<div class="container-fluid">
-			<img src="@/assets/images/profile_default.svg" alt="">
-			<div>
-				<h2>뜨리핑님</h2>
-				<p>threeping@gmail.com</p>
-			</div>
-		</div>
-		<div class="container-fluid"><button>프로필 수정</button></div>
-	</section>
+		<main class="main-content" id="profile-container">
+			<ProfileTab v-if="selectedItem === 'profile'" :userInfo="userInfo" />
+			<Calendar v-if="selectedItem === 'profile'" />
+
+			<MyRebviews v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
+			<BookmarksTab v-if="selectedItem === 'bookmarks'" :userInfo="userInfo" />
+			<BoardTab v-if="selectedItem === 'board'" :userInfo="userInfo" />
+			<TicketsTab v-if="selectedItem === 'tickets'" :userInfo="userInfo" />
+		</main>
+	</div>
 </template>
 
 <script setup>
-import SideBar from './components/SideBar.vue';
+import { ref, watch } from 'vue';
+import { useUserStore } from '@/scripts/user/user';
+import Sidebar from './components/Sidebar.vue';
+import ProfileTab from "./components/tabs/Profile.vue";
+import MyRebviews from './components/tabs/MyReviews.vue';
+import BookmarksTab from './components/tabs/Bookmarks.vue';
+import BoardTab from './components/tabs/BoardTab.vue';
+import TicketsTab from './components/tabs/Tickets.vue';
+import Calendar from '@/components/calendar/Calendar.vue';
+
+const userStore = useUserStore();
+const userInfo = ref(userStore.userInfo);
+
+// Add state for selected sidebar item
+const selectedItem = ref('profile');
+
+watch(() => userStore.userInfo, (newUserInfo) => {
+	userInfo.value = newUserInfo;
+	console.log('User info updated:', newUserInfo);
+});
 </script>
 
 <style scoped>
-div img {
-	width: 10rem;
-	height: 10rem;
-	border-radius: 5rem;
+.page-container {
+	display: flex;
+}
+
+.main-content {
+	flex-grow: 1;
+	padding: 20px;
 }
 </style>

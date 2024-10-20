@@ -1,69 +1,79 @@
 <template>
-    <div class="review-container">
-        <div class="review-header">
-            <img :src="review.userProfile" alt="User Profile Image" class="user-avatar" />
-            <div class="user-info">
-                <h3>
-                    <span>
-                        {{ review.userNickname }} <span v-if="review.isPremium" class="premium-badge">P</span>
-                    </span>
-                    <span class="dropdown-wrapper">
-                        <span @click="toggleDropdown" class="dropdown-icon">
-                            <img src="@/assets/images/threeDots.svg" alt="threeDots">
+    <div class="review-wrapper">
+        <div class="review-container">
+            <div class="review-header">
+                <img :src="review.userProfile" alt="User Profile Image" class="user-avatar" />
+                <div class="user-info">
+                    <h3>
+                        <span>
+                            {{ review.userNickname }} <span v-if="review.isPremium" class="premium-badge">P</span>
                         </span>
-                        <div v-if="dropdownVisible" class="dropdown-menu">
-                            <button @click="editReview" class="update">수정</button>
-                            <button @click="deleteReview" class="delete">삭제</button>
-                        </div>
-                    </span>
-                </h3>
-                <p>{{ formatDate(review.createdAt) }}</p>
-            </div>
-        </div>
-        <div class="movie-info">
-            <h2>{{ review.musicalTitle }}</h2>
-        </div>
-        <p class="review-content">{{ review.content }}</p>
-        <div class="review-stats">
-            <span>좋아요 {{ review.like }}</span>
-            <span>댓글 {{ review.comment }}</span>
-        </div>
-        <div class="review-actions">
-            <button @click="handleLike"><i class="icon-like"></i> 좋아요</button>
-            <button @click="handleComment"><i class="icon-comment"></i> 댓글</button>
-        </div>
-        <div v-if="showComments" class="comments-section">
-            <div v-for="comment in review.commentList" :key="comment.id" class="comment">
-                <img :src="comment.userAvatar" alt="Commenter Avatar" class="commenter-avatar" />
-                <div class="comment-content">
-                    <h4>{{ comment.userName }}</h4>
-                    <p>{{ comment.content }}</p>
-                    <span>좋아요 {{ comment.likes }}</span>
+                        <span class="dropdown-wrapper">
+                            <span @click="toggleDropdown" class="dropdown-icon">
+                                <img src="@/assets/images/threeDots.svg" alt="threeDots" />
+                            </span>
+                            <div v-if="dropdownVisible" class="dropdown-menu">
+                                <button @click="editReview" class="update">수정</button>
+                                <button @click="deleteReview" class="delete">삭제</button>
+                            </div>
+                        </span>
+                    </h3>
+                    <p>{{ formatDate(review.createdAt) }}</p>
                 </div>
             </div>
-        </div>
+            <div class="movie-info">
+                <h2>{{ review.musicalTitle }}</h2>
+            </div>
+            <br />
+            <p class="review-content">{{ review.content }}</p>
+            <br />
+            <div class="review-footer">
+                <div class="review-stats">
+                    <span class="likes">좋아요 {{ review.like }}</span>
+                    <span class="comments">댓글 {{ review.comment }}</span>
+                </div>
+                <br><br>
+                <div class="review-actions">
+                    <!-- <ReviewLike class="action-button" :likeCount="likeCount" :isLiked="isLiked" :reviewId="reviewId" :userId="userId" /> -->
+                    <button @click="handleLike" class="action-button">
+                        <img :src="likeIcon" alt="Like" class="action-icon" />
+                        좋아요
+                    </button>
+                    <button @click="handleComment" class="action-button">
+                        <img src="@/assets/images/comment.svg" alt="Comment" class="action-icon" />
+                        댓글
+                    </button>
+                </div>
+            </div>
+            <div v-if="showComments" class="comments-section">
+                <div v-for="comment in review.commentList" :key="comment.id" class="comment">
+                    <img :src="comment.userAvatar" alt="Commenter Avatar" class="commenter-avatar" />
+                    <div class="comment-content">
+                        <h4>{{ comment.userName }}</h4>
+                        <p>{{ comment.content }}</p>
+                        <span>좋아요 {{ comment.likes }}</span>
+                    </div>
+                </div>
+            </div>
 
-        <!-- 수정 모달 -->
-        <div v-if="showModal">
-            <ReviewModal
-                :isOpen="showModal"
-                :musicalTitle="review.musicalTitle"
-                :isEditing="true"
-                :onClose="closeModal"
-                :onSubmit="(review) => handleReviewSubmit(review)"
-                :initialReview="review.content"
-            />
-        </div>
+            <!-- 수정 모달 -->
+            <div v-if="showModal">
+                <ReviewModal
+                    :isOpen="showModal"
+                    :musicalTitle="review.musicalTitle"
+                    :isEditing="true"
+                    :onClose="closeModal"
+                    :onSubmit="(review) => handleReviewSubmit(review)"
+                    :initialReview="review.content"
+                />
+            </div>
 
-        <!-- 삭제 모달 -->
-        <div v-if="showDeleteModal">
-            <ReviewDeleteModal
-                :isOpen="showDeleteModal"
-                @close="closeModal"
-                @submit="handleDeleteReviewSubmit"
-            >
-                <p class="delete-confirmation">삭제하시겠습니까?</p>
-            </ReviewDeleteModal>
+            <!-- 삭제 모달 -->
+            <div v-if="showDeleteModal">
+                <ReviewDeleteModal :isOpen="showDeleteModal" @close="closeModal" @submit="handleDeleteReviewSubmit">
+                    <p class="delete-confirmation">삭제하시겠습니까?</p>
+                </ReviewDeleteModal>
+            </div>
         </div>
     </div>
 </template>
@@ -73,6 +83,9 @@ import { ref, onMounted, reactive, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ReviewModal from '../../components/review/ReviewModal.vue';
 import ReviewDeleteModal from '../../components/review/ReviewDeleteModal.vue';
+import ReviewLike from '@/components/review/ReviewLike.vue';
+import likeIconPath from '@/assets/images/like.svg';
+import likeFillIconPath from '@/assets/images/like-fill.svg';
 
 // const props = defineProps({
 //     reviewId: {
@@ -98,7 +111,11 @@ const showComments = ref(false);
 const dropdownVisible = ref(false); // 드롭다운!!
 const showModal = ref(false);
 const showDeleteModal = ref(false);
-const userId = ref(6);          // 이 부분은 동적으로 회원 받아야 돼!!!!!!!!!!!
+const userId = ref(6); // 이 부분은 동적으로 회원 받아야 돼!!!!!!!!!!!
+
+const likeCount = ref(review.like);
+const isLiked = ref(false);
+const likeIcon = ref(likeIconPath); // 초기 아이콘
 
 const toggleDropdown = () => {
     dropdownVisible.value = !dropdownVisible.value; // 드롭다운 토글!!
@@ -114,12 +131,16 @@ const handleClickOutside = (event) => {
 
 const fetchReview = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}`, { method: "GET" });
+        const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}`, {
+            method: 'GET',
+        });
         if (!response.ok) {
             throw new Error('리뷰를 불러오는 데 실패했습니다.');
         }
         const data = await response.json();
         Object.assign(review, data.data[0]);
+
+        checkLikeStatus();
     } catch (error) {
         console.error('리뷰를 불러오는 데 실패했습니다:', error);
     }
@@ -135,13 +156,13 @@ const editReview = () => {
 const closeModal = () => {
     showModal.value = false;
     showDeleteModal.value = false;
-}
+};
 
 // 수정된 리뷰 제출 처리
 const handleReviewSubmit = async (updatedReview) => {
     const reviewData = {
         userId: userId.value,
-        content: updatedReview
+        content: updatedReview,
     };
 
     try {
@@ -176,12 +197,15 @@ const deleteReview = () => {
 
 const handleDeleteReviewSubmit = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}?userId=${userId.value}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await fetch(
+            `http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}?userId=${userId.value}`,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
         if (!response.ok) {
             throw new Error('리뷰 삭제에 실패했습니다.');
         }
@@ -197,10 +221,6 @@ const handleDeleteReviewSubmit = async () => {
         console.error('리뷰 삭제 중 오류 발생:', error);
     }
 };
-
-
-
-
 
 const formatDate = (timestamp) => {
     const now = new Date();
@@ -229,17 +249,81 @@ const formatDate = (timestamp) => {
     }
 };
 
-const handleLike = () => {
-    // 좋아요 로직 구현
-    console.log('Like clicked');
+// // 페이지가 로드될 때 사용자의 좋아요 상태를 확인하는 함수
+// const checkIsLiked = async () => {
+//     try {
+//         const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, {
+//             method: "GET",
+//         });
+//         const responseDTO = await response.json();
+//         isLiked.value = responseDTO.data; // 사용자의 좋아요 상태 업데이트
+//     } catch (error) {
+//         console.error('좋아요 상태 확인 중 오류 발생:', error);
+//     }
+// };
+
+const checkLikeStatus = async () => {
+    try {
+        const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, { method: "GET" });
+        if (!response.ok) {
+            throw new Error('좋아요 상태를 확인하는 데 실패했습니다.');
+        }
+        const data = await response.json();
+        isLiked.value = data.data;
+        likeIcon.value = isLiked.value ? likeFillIconPath : likeIconPath;
+    } catch (error) {
+        console.error('좋아요 상태를 확인하는 데 실패했습니다:', error);
+    }
 };
 
-const handleComment = () => {
-    showComments.value = !showComments.value;
+const handleLike = async () => {
+    // 즉시 UI 업데이트
+    isLiked.value = !isLiked.value;
+    likeIcon.value = isLiked.value ? likeFillIconPath : likeIconPath;
+    review.like += isLiked.value ? 1 : -1;
+
+    try {
+        const url = `http://localhost:8080/api/review-like/${reviewId.value}`;
+        const method = isLiked.value ? 'POST' : 'DELETE';
+        const body = JSON.stringify(userId.value);
+
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: body,
+        });
+
+        if (!response.ok) {
+            throw new Error(isLiked.value ? '좋아요 추가 실패' : '좋아요 삭제 실패');
+        }
+
+        console.log(isLiked.value ? '좋아요 추가 성공' : '좋아요 삭제 성공');
+    } catch (error) {
+        console.error('좋아요 처리 중 오류 발생:', error);
+        // 오류 발생 시 UI 상태 되돌리기
+        isLiked.value = !isLiked.value;
+        likeIcon.value = isLiked.value ? likeFillIconPath : likeIconPath;
+        review.like += isLiked.value ? 1 : -1;
+    }
 };
+
+// const handleComment = () => {
+//     showComments.value = !showComments.value;
+// };
+
+// const checkIsLiked = async () => {
+//     const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, {
+//         method: "GET"
+//     });
+//     const responseDTO = await response.json();
+//     isLiked.value = responseDTO.data;
+// }
 
 onMounted(() => {
     fetchReview();
+    // checkIsLiked();
     document.addEventListener('click', handleClickOutside);
 });
 // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
@@ -249,11 +333,20 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.review-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+}
+
 .review-container {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    width: 80%;
+    max-width: 1000px;
     padding: 16px;
     margin-bottom: 20px;
+    /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
+    border-radius: 8px;
 }
 
 .review-header {
@@ -270,17 +363,17 @@ onUnmounted(() => {
 }
 
 .user-info {
-    flex-grow: 1; /* 사용자 정보가 가능한 공간을 차지하게 함 */
+    flex-grow: 1;
     display: flex;
-    flex-direction: column; /* 세로 방향으로 정렬 */
-    justify-content: space-between; /* 세로 공간을 균등하게 배치 */
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .user-info h3 {
     margin: 0;
     font-size: 16px;
     display: flex;
-    justify-content: space-between; /* 닉네임과 점 3개 아이콘 사이 공간 확보 */
+    justify-content: space-between;
 }
 
 .user-info p {
@@ -300,39 +393,67 @@ onUnmounted(() => {
 
 .movie-info h2 {
     margin: 0;
-    font-size: 18px;
-}
-
-.movie-info p {
-    margin: 4px 0;
-    font-size: 14px;
-    color: #666;
-}
-
-.rating {
-    font-size: 16px;
-}
-
-.star-filled {
-    color: #ffd700;
+    font-size: 20px;
 }
 
 .review-content {
     margin: 16px 0;
     font-size: 16px;
+    white-space: pre-wrap;
+}
+
+.review-footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 12px;
 }
 
 .review-stats {
     font-size: 14px;
     color: #666;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.review-stats .likes,
+.review-stats .comments {
+    display: inline-block;
+    min-width: 100px;
+}
+
+.review-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%; /* 부모 요소의 너비를 채움 */
+    margin: 0 auto; /* 중앙 정렬 */
+    gap: 100px;
+    margin-top: 8px;
+}
+
+.action-button {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 16px;
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.action-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
 }
 
 .review-actions button {
     background: none;
     border: none;
     cursor: pointer;
-    margin-right: 16px;
+    margin-left: 16px;
     font-size: 14px;
 }
 
@@ -370,13 +491,12 @@ onUnmounted(() => {
 }
 
 .delete-confirmation {
-    text-align: center; /* 가운데 정렬 */
-    font-size: 18px; /* 폰트 크기 조정 */
-    margin: 0; /* 기본 마진 제거 */
-    padding: 10px 0; /* 상하 패딩 추가 (필요시) */
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+    padding: 10px 0;
 }
 
-/* 드롭다운 스타일 */
 .dropdown-wrapper {
     position: relative;
     display: inline-block;
@@ -389,24 +509,27 @@ onUnmounted(() => {
 
 .dropdown-menu {
     position: absolute;
-    top: 100%; /* 아이콘 바로 아래에 위치 */
-    left: -60px; /* 왼쪽 정렬 */
+    top: 100%;
+    right: 0;
     background-color: white;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-    z-index: 10; /* 드롭다운 메뉴가 다른 요소 위에 나타나도록 */
-    min-width: 80px; /* 최소 너비 설정 */
+    z-index: 10;
+    min-width: 100px;
+    padding: 8px 0; /* 상하 패딩 추가 (버튼 간격 확보) */
 }
 
 .dropdown-menu button {
     display: block;
     width: 100%;
-    padding: 8px 16px;
+    padding: 12px 16px;
     border: none;
     background: none;
     text-align: center;
     cursor: pointer;
+    font-size: 16px;
+    font-weight: normal;
 }
 
 .dropdown-menu button.update {
@@ -418,6 +541,48 @@ onUnmounted(() => {
 }
 
 .dropdown-menu button:hover {
-    background-color: #f0f0f0; /* 호버 효과 */
+    background-color: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+    .review-container {
+        width: 95%;
+        padding: 12px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-info h3 {
+        font-size: 14px;
+    }
+
+    .user-info p {
+        font-size: 12px;
+    }
+
+    .movie-info h2 {
+        font-size: 16px;
+    }
+
+    .review-content {
+        font-size: 14px;
+    }
+
+    .review-footer {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .review-stats {
+        margin-bottom: 8px;
+    }
+
+    .review-actions button {
+        margin-left: 0;
+        margin-right: 16px;
+    }
 }
 </style>

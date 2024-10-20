@@ -78,15 +78,18 @@ onMounted(() => {
 	applyScheme();
 
 	// Listen for system preference changes
-	window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemPreferenceChange);
+	// window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', handleSystemPreferenceChange);
 });
 
 onBeforeUnmount(() => {
 	// Cleanup event listener when component is destroyed
-	window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleSystemPreferenceChange);
+	// window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', handleSystemPreferenceChange);
 });
 </script>
 
 <style scoped>
 /* Add your custom styles here */
+/* .dropdown {
+	opacity: 0.7;
+} */
 </style>
