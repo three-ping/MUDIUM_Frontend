@@ -56,7 +56,8 @@
     setup() {
       const router = useRouter();
       const userStore = useUserStore();
-      const userId = userStore.userInfo.userId;  // 로그인된 사용자의 ID
+      // const userId = userStore.userInfo.userId;  // 로그인된 사용자의 ID
+      const userId = userStore.userInfo.userId || userStore.userInfo.user_id;
       console.log(userId);
 
 
