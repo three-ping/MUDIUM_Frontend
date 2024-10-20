@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Boards</h1>
+		<h1>내 게시글</h1>
 	</div>
 </template>
 

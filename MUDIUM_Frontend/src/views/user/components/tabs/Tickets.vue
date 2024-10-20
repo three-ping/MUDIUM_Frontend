@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Tickets</h1>
+		<h1>내 티켓</h1>
 	</div>
 </template>
 

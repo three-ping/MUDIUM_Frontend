@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Bookmarks</h1>
+		<h1>북마크</h1>
 	</div>
 </template>
 

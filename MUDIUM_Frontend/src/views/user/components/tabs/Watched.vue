@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h1>Watched</h1>
+		<h1>내가 본 작품</h1>
 	</div>
 </template>
 
