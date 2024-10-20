@@ -1,6 +1,6 @@
 <template>
   <div class="root-container">
-    <Navigation @open-login-modal="openLoginModal" @open-signup-modal="openSignupModal" />
+    <Navigation @open-login-modal="openLoginModal" @open-signup-modal="openSignupModal" @logout="handleLogout" />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
       @update:isLoggedIn="handleLoginSuccess" @update:userInfo="updateUserInfo" />
     <SignupModal :isSignupModalVisible="isSignupModalVisible" @close="closeSignupModal"
@@ -49,6 +49,11 @@ const handleLoginSuccess = (isLoggedIn) => {
     closeLoginModal();
   }
 };
+const handleLogout = () => {
+  console.log("handle Logout");
+  userStore.updateLoginStatus(false);
+  userStore.clearUserInfo();
+}
 
 const updateUserInfo = (userInfo) => {
   console.log("updateUserInfo")

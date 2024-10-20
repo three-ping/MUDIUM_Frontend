@@ -1,21 +1,21 @@
 <template>
-<div class="container">
-    <div class="image-change-buttons">
-      <button @click="nextBackground">이미지 변경</button>
-    </div>
-  <div :style="{ backgroundImage: `url(${currentBackgroundImage})` }" class="background-container">
-    <div class="calendar-wrapper">
       <div class="calendar-header">
         <button @click="previousMonth" class="icon-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-left" viewBox="0 0 16 16">
           <path d="M10 12.796V3.204L4.519 8zm-.659.753-5.48-4.796a1 1 0 0 1 0-1.506l5.48-4.796A1 1 0 0 1 11 3.204v9.592a1 1 0 0 1-1.659.753"/>
         </svg>        </button>
         <h2>{{ currentMonth }} {{ currentYear }}</h2>
         <button @click="nextMonth" class="icon-button">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
           <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
         </svg>        </button>
+    <div class="image-change-buttons">
+      <button @click="nextBackground">이미지 변경</button>
+    </div>
       </div>
+<div class="container">
+  <div :style="{ backgroundImage: `url(${currentBackgroundImage})` }" class="background-container">
+    <div class="calendar-wrapper">
       <div class="calendar-grid">
         <div class="day" v-for="day in days" :key="day">{{ day }}</div>
         <div 
@@ -124,17 +124,17 @@ const selectDate = (date) => {
 .container {
   display: flex;
   justify-content: center; 
+  width: 100%;
 }
 .image-change-buttons {
-  position: absolute;
-  right: 50px;
   border: none;
-  padding: 5px 10px;
   border-radius: 10px;
+  width: auto;
+  gap: 30px;
 }
 .background-container {
   position: relative; /* Set position to relative for absolute positioning of buttons */
-  width: 800px;
+  width: auto;
   height: auto;
   background-size: cover;
   background-position: center top; 
@@ -146,27 +146,30 @@ const selectDate = (date) => {
 }
 
 .calendar-wrapper {
-  background: rgba(255, 255, 255, 0.8);
-  padding: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 40px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  width: 800px;
+  width: 100%;
   height: auto;
-  box-sizing: border-box; /* Include padding in the width/height */
-  z-index: 1; /* Ensure it is above the background */
+  box-sizing: border-box; 
+  z-index: 1; 
+  transparent:
 }
 
 
 .calendar-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 10px;
 }
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 20px;
+  font-size: 2rem;
 }
 
 .day, .date {
@@ -176,6 +179,6 @@ const selectDate = (date) => {
 
 .today {
   background-color: #d0e1ff;
-  border-radius: 50%;
+  border-radius: 60%;
 }
 </style>
