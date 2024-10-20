@@ -1,6 +1,8 @@
 <template>
   <div class="board-container">
     <div class="board-actions">
+      <button @click="createBoard" class="create-button">글 쓰기</button>
+
       <div class="search-bar">
         <select v-model="searchType">
           <option value="TITLE">제목</option>
@@ -11,7 +13,6 @@
         <button @click="search" class="search-button" :disabled="!searchQuery.trim()">검색</button>
         <button @click="fetchPageData" class="back-button">목록</button>
       </div>
-      <button @click="createBoard" class="create-button">글 쓰기</button>
     </div>
     <div class="board">
       <table class="board-table">
@@ -25,18 +26,20 @@
             <th>조회수</th>
           </tr>
         </thead>
-        <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
-          <td class="td-id">{{ pageItem.id }}</td>
-          <td class="td-title">
-            <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.id } }">
-              {{ pageItem.title }} [{{ pageItem.comments }}]
-            </router-link>
-          </td>
-          <td class="td-nickname">{{ pageItem.nickname }}</td>
-          <td class="td-createdAt">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
-          <td class="td-like">{{ pageItem.boardLike }}</td>
-          <td class="td-viewCount">{{ pageItem.viewCount }}</td>
-        </tr>
+        <tbody>
+          <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
+            <td class="td-id" data-label="번호">{{ pageItem.id }}</td>
+            <td class="td-title" data-label="제목">
+              <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.id } }">
+                {{ pageItem.title }} [{{ pageItem.comments }}]
+              </router-link>
+            </td>
+            <td class="td-nickname" data-label="작성자">{{ pageItem.nickname }}</td>
+            <td class="td-createdAt" data-label="작성일">{{ convertToKoreanTime(pageItem.createdAt) }}</td>
+            <td class="td-like" data-label="좋아요">{{ pageItem.boardLike }}</td>
+            <td class="td-viewCount" data-label="조회수">{{ pageItem.viewCount }}</td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <Paging :requestURL="requestURL" :pageNumber="pageNumber" :totalPageNumber="totalPageNumber"
@@ -58,8 +61,6 @@ const pageItems = reactive([]);
 const searchType = ref('TITLE');
 const searchQuery = ref('');
 
-
-
 const fetchPageData = async () => {
   const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
     method: "GET"
@@ -78,7 +79,6 @@ const queryPageData = async () => {
   pageItems.length = 0;
   pageItems.push(...responseDTO.data.content);
   totalPageNumber.value = responseDTO.data.totalPages;
-
 };
 
 const updatePageNumber = (newPageNumber) => {
@@ -100,17 +100,14 @@ const createBoard = () => {
 
 function convertToKoreanTime(timestamp) {
   const date = new Date(timestamp);
-
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
   const seconds = String(date.getSeconds()).padStart(2, '0');
-
   return `${year}.${month}.${day} ${hours}:${minutes}:${seconds}`;
 }
-
 
 onMounted(() => {
   setTimeout(() => {
@@ -136,14 +133,13 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
-
 
 .search-bar {
   display: flex;
   gap: 10px;
-  width: 60vw;
+  width: 80%;
 }
 
 .search-bar select,
@@ -154,20 +150,10 @@ onMounted(() => {
 }
 
 .search-box {
-  width: 50%;
+  flex-grow: 1;
 }
 
-.search-button,
-.create-button,
-.back-button {
-  width: 8%;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  color: white;
-  font-weight: bold;
-}
+
 
 .back-button {
   background-color: #6EABE1;
@@ -177,12 +163,15 @@ onMounted(() => {
   background-color: #9A70CC;
 }
 
+
 .create-button {
   background-color: #D53EC6;
+  align-self: flex-end;
 }
 
 .board {
   width: 100%;
+  overflow-x: auto;
 }
 
 .board-table {
@@ -219,34 +208,6 @@ onMounted(() => {
   background-color: #f9f9f9;
 }
 
-.td-id {
-  width: 10%;
-  text-align: center;
-}
-
-.td-title {
-  width: 43%;
-}
-
-.td-nickname {
-  width: 15%;
-}
-
-.td-createdAt {
-  width: 15%;
-  text-align: center;
-}
-
-.td-like {
-  width: 10%;
-  text-align-last: center;
-}
-
-.td-viewCount {
-  width: 10%;
-  text-align-last: center;
-}
-
 .td-title a {
   color: #333;
   text-decoration: none;
@@ -254,5 +215,79 @@ onMounted(() => {
 
 .td-title a:hover {
   text-decoration: underline;
+}
+
+@media screen and (max-width: 768px) {
+
+  .board-table,
+  .board-table tbody,
+  .board-table tr,
+  .board-table td {
+    display: block;
+  }
+
+  .board-table thead {
+    display: none;
+  }
+
+  .board-table tr {
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .board-table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .board-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .td-title {
+    text-align: left !important;
+    padding-left: 15px !important;
+  }
+
+  .td-title::before {
+    display: none;
+  }
+
+  .board-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .search-bar select,
+  .search-bar input,
+  .search-button,
+  .back-button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .create-button {
+    width: 100%;
+  }
+
+  .back-button {
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
 }
 </style>

@@ -3,7 +3,7 @@
         <div class="board-detail-header">
             <h1 class="board-detail-title">{{ title }}</h1>
             <div class="board-detail-buttons">
-                <template v-if="userId == author_id">
+                <template v-if="userRole == `ROLE_ADMIN`">
                     <button class="board-button-delete" @click="showDeleteModal = true">삭제</button>
                     <button class="board-button-update" @click="editPost">수정</button>
                 </template>
@@ -13,30 +13,21 @@
 
         <div class="board-detail-subheader">
             <div class="board-detail-author-created">
-                <span class="board-detail-author">작성자: {{ author }}</span>
                 <span class="board-detail-created">작성시간: {{ convertToKoreanTime(createdAt) }}</span>
             </div>
-        </div>
-
-        <template v-if="updatedAt !== null">
-            <div class="board-detail-updated-template">
+            <template v-if="updatedAt !== null">
                 <span class="board-detail-updated">수정시간: {{ convertToKoreanTime(updatedAt) }}</span>
-            </div>
-        </template>
-
-        <div class="board-detail-subheader">
-            <div class="board-detail-viewCount">
-                <span class="board-detail-viewCount">조회수: {{ viewCount }}</span>
-            </div>
+            </template>
         </div>
+
+
+
 
         <div class="board-detail-content">
             <div class="board-detail-content-read">
                 <p>{{ content }}</p>
             </div>
-            <Like class="board-like" :likeCount="likeCount" :isLiked="isLiked" :boardId="id" :userId="userId" />
         </div>
-        <BoardComment :id="id" :userNickname="userNickname" :userId="userId"></BoardComment>
     </div>
 
     <Modal v-model:isVisible="showDeleteModal" @confirm="deletePost">
@@ -47,12 +38,12 @@
 <script setup>
 import { ref,reactive, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Like from "@/components/common/Like.vue";
 import Modal from "@/components/common/Modal.vue";
-import BoardComment from './BoardComment.vue';
 const route = useRoute();
 const router = useRouter();
 const id = ref(Number(route.params.id));
+const userRole = "ROLE_ADMIN";
+// const userRole = "ROLE_MEMBER";
 
 const title = ref('');
 const author = ref('');
@@ -61,26 +52,26 @@ const createdAt = ref(0);
 const updatedAt = ref(0);
 const likeCount = ref(0);
 const isLiked = ref(false);
-const userId = ref(1);
+const userId = ref(3);
 const userNickname = ref("shushu_ping");
 const showDeleteModal = ref(false);
 const viewCount = ref(0);
 const author_id = ref(0);
 
 const editPost = () => {
-    router.push(`/board/edit/${id.value}`);
+    router.push(`/notice/edit/${id.value}`);
 };
 
 const deletePost = async () => {
-    await fetch(`http://localhost:8080/api/board/${id.value}/${userId.value}`, {
+    await fetch(`http://localhost:8080/api/notice/${id.value}/${userId.value}`, {
         method: 'DELETE'
     }
     );
-    router.push('/board');  
+    router.push('/notice');  
 };
 
 const fetchDetailBoard = async() => {
-    const response = await fetch(`http://localhost:8080/api/board/${id.value}`, {
+    const response = await fetch(`http://localhost:8080/api/notice/${id.value}`, {
         method: "GET"
     });
     const responseDTO = await response.json();
@@ -113,7 +104,7 @@ const incrementViewCount = async () => {
 
 
 const backToBoard = () => {
-    router.push('/board'); 
+    router.push('/notice'); 
 
 }
 
@@ -157,7 +148,7 @@ padding: 20px;
 }
 
 .board-detail-header {
-border-bottom: 2px solid #D53EC6;
+border-bottom: 2px solid #279977;
 padding-bottom: 10px;
 margin-bottom: 10px;
 display: flex;
@@ -282,6 +273,11 @@ box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   color: white;
   font-weight: bold;
   min-width: 80px;
+}
+
+.board-detail-subheader {
+    display: flex;
+    justify-content: space-between;
 }
 
 

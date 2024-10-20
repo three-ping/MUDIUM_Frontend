@@ -5,7 +5,13 @@ import boardRoutes from "./board";
 // import LoginRoutes from "./login";
 import MusicalRoutes from "./musical";
 // import HomeView from '/HomeView.vue';
+import NoticeRoutes from "./notice";
 import reviewRoutes from "./review";
+import customticketRoutes from "./customticket";
+
+// import signupRoutes from "./signup";
+import guidebookRoutes from "./guidebook";
+import App from '@/App.vue';
 import secretReviewRoutes from "./secret-review";
 import userRoutes from "./user";
 
@@ -14,12 +20,15 @@ const routes = [
     path: "/",
     redirect: "/musicalInfo",
   },
+  ...guidebookRoutes,
   ...boardRoutes,
   // ...LoginRoutes,
   ...MusicalRoutes,
+  ...NoticeRoutes,
   ...reviewRoutes,
   ...secretReviewRoutes,
   ...userRoutes,
+  ...customticketRoutes
 ];
 
 const router = createRouter({

@@ -24,11 +24,11 @@
 						자유 게시판
 					</RouterLink>
 				</li>
-				<li>
-					<RouterLink to="/etiquette" :class="{ active: currentRoute.startsWith('/etiquette') }">
-						가이드북
-					</RouterLink>
-				</li>
+				<RouterLink to="/guidebook/guidemain"
+					:class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
+					<strong>가이드북</strong>
+				</RouterLink>
+
 				<li>
 					<RouterLink to="/notice" :class="{ active: currentRoute.startsWith('/notice') }">
 						공지사항
