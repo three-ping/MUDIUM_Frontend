@@ -11,27 +11,31 @@
 				<li>
 					<RouterLink to="/musicalInfo"
 						:class="{ active: currentRoute.startsWith('/musicalInfo') || currentRoute === '/' }">
-						뮤지컬
+						<strong>뮤지컬</strong>
 					</RouterLink>
 				</li>
 				<li>
 					<RouterLink to="/musicalBoard" :class="{ active: currentRoute.startsWith('/musicalBoard') }">
-						작품 게시판
+						<strong>작품 게시판</strong>
 					</RouterLink>
 				</li>
 				<li>
 					<RouterLink to="/board" :class="{ active: currentRoute.startsWith('/board') }">
-						자유 게시판
+						<strong>자유 게시판</strong>
 					</RouterLink>
 				</li>
-				<RouterLink to="/guidebook/guidemain"
-					:class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
-					<strong>가이드북</strong>
-				</RouterLink>
+
+				<li>
+
+					<RouterLink to="/guidebook/guidemain"
+						:class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
+						<strong>가이드북</strong>
+					</RouterLink>
+				</li>
 
 				<li>
 					<RouterLink to="/notice" :class="{ active: currentRoute.startsWith('/notice') }">
-						공지사항
+						<strong>공지사항</strong>
 					</RouterLink>
 				</li>
 			</ul>
