@@ -5,7 +5,7 @@
 		<div class="container-fluid">
 			<img src="@/assets/images/profile_default.svg" alt="">
 			<div>
-				<h2>뜨리핑님</h2>
+				<p>{{ userInfo.user_identifier }}</p>
 				<p>threeping@gmail.com</p>
 			</div>
 		</div>
@@ -15,6 +15,15 @@
 
 <script setup>
 import SideBar from './components/SideBar.vue';
+import { useUserStore } from '@/scripts/user/user';
+import { watch } from 'vue';
+const userStore = useUserStore();
+const userInfo = userStore.userInfo;
+
+watch(() => userStore.userInfo, (newUserInfo) => {
+	userInfo.value = newUserInfo;
+	console.log('User info updated:', newUserInfo);
+});
 </script>
 
 <style scoped>

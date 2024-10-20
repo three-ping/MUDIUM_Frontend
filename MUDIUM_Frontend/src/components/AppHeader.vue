@@ -24,11 +24,11 @@
               자유 게시판
           </RouterLink>
           <RouterLink 
-              to="/etiquette" 
-              class="banner-link"
-              :class="{ active: currentRoute.startsWith('/etiquette') }">
-              가이드북
-          </RouterLink>
+                to="/guidebook/guidemain" 
+                class="banner-link"
+                :class="{ active: currentRoute.startsWith('/guidebook/guidemain')}">
+                가이드북
+            </RouterLink>
           <RouterLink 
               to="/notice" 
               class="banner-link"
@@ -43,6 +43,7 @@
             @keyup.enter="performSearch"
           />
         </div>
+
 
           <div v-if="isLoggedIn" class="user-info">
               <RouterLink to="/calender">
