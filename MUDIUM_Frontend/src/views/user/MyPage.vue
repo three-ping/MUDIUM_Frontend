@@ -1,9 +1,9 @@
 <template>
 	<div class="page-container">
 		<aside class="sidebar">
-			<h2>프로필</h2>
 			<nav>
 				<ul>
+					<li>프로필</li>
 					<li>내가 본 작품</li>
 					<li>북마크</li>
 					<li>게시판</li>
@@ -15,8 +15,7 @@
 
 		<main class="main-content">
 			<div class="profile-header">
-				<img :src="userInfo.profileImage || require('@/assets/images/profile_default.svg')" alt="Profile"
-					class="profile-image">
+				<img :src="userInfo.profileImage" alt="@/assets/images/profile_default.svg" class=" profile-image">
 				<div class="profile-info">
 					<h2>{{ userInfo.nickname || '뜨리핑님' }}</h2>
 					<p>{{ userInfo.email || 'threeping@gmail.com' }}</p>
