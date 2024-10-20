@@ -97,6 +97,7 @@ onMounted(() => {
 	transition: transform 0.6s;
 	transform-style: preserve-3d;
 	cursor: pointer;
+	border-radius: 10px;
 }
 
 .card.is-flipped {
