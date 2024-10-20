@@ -2,10 +2,11 @@
   <div class="root-container">
     <Navigation @open-login-modal="openLoginModal" @open-signup-modal="openSignupModal" />
     <LoginModal :isLoginModalVisible="isLoginModalVisible" @close="closeLoginModal"
-      @switch-to-signup="switchToSignupModal" />
+      @update:isLoggedIn="handleLoginSuccess" @update:userInfo="updateUserInfo" />
     <SignupModal :isSignupModalVisible="isSignupModalVisible" @close="closeSignupModal"
-      @switch-to-login="switchToLoginModal" />
+      @switch-to-login="switchToLogin" />
     <router-view />
+    <Modal />
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import { useUserStore } from './stores/userStore';
 import Navigation from '@/components/layout/Navigation.vue';
 import LoginModal from '@/views/user/components/LoginModal.vue';
 import SignupModal from '@/views/user/components/SignupModal.vue';
+import Modal from './components/layout/Modal.vue';
 
 const isLoginModalVisible = ref(false);
 const isSignupModalVisible = ref(false);
@@ -36,14 +38,20 @@ const closeSignupModal = () => {
   isSignupModalVisible.value = false;
 };
 
-const switchToLoginModal = () => {
+const switchToLogin = () => {
   closeSignupModal();
   openLoginModal();
 };
 
-const switchToSignupModal = () => {
-  closeLoginModal();
-  openSignupModal();
+const handleLoginSuccess = (isLoggedIn) => {
+  if (isLoggedIn) {
+    userStore.updateLoginStatus(true);
+    closeLoginModal();
+  }
+};
+
+const updateUserInfo = (userInfo) => {
+  userStore.updateUserInfo(userInfo);
 };
 </script>
 
