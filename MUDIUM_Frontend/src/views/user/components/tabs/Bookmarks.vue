@@ -1,6 +1,6 @@
 <template>
 	<div class="bookmarks-container">
-		<h1>My Bookmarked Musicals</h1>
+		<h1>내 북마크된 뮤지컬</h1>
 		<div v-if="loading" class="loading">Loading bookmarks...</div>
 		<div v-else-if="error" class="error">{{ error }}</div>
 		<div v-else-if="bookmarks.length === 0" class="no-bookmarks">
@@ -14,7 +14,7 @@
 					<p><strong>Rating:</strong> {{ bookmark.rating }}</p>
 					<p><strong>Production:</strong> {{ bookmark.production }}</p>
 					<p><strong>View Count:</strong> {{ bookmark.viewCount }}</p>
-					<button @click="removeBookmark(bookmark.userId, bookmark.musicalId)">Remove Bookmark</button>
+					<!-- <button @click="removeBookmark(bookmark.musicalId)">Remove Bookmark</button> -->
 				</div>
 			</li>
 		</ul>
@@ -22,20 +22,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useUserStore } from '@/scripts/user/user';
 import axios from 'axios';
 
+const props = defineProps({
+	userInfo: {
+		type: Object,
+		required: true
+	}
+});
+
+const userStore = useUserStore();
 const bookmarks = ref([]);
 const loading = ref(true);
 const error = ref(null);
 
-// Assume we have a way to get the current user's ID
-const userId = 1; // Replace this with actual user ID retrieval logic
-
 const fetchBookmarks = async () => {
+	if (!props.userInfo || !props.userInfo.userId) {
+		error.value = 'User information not available.';
+		loading.value = false;
+		return;
+	}
+
 	try {
 		loading.value = true;
-		const response = await axios.get(`/api/bookmark/users/${userId}`);
+		const response = await axios.get(`/api/bookmark/users/${props.userInfo.userId}`);
 		bookmarks.value = response.data.data;
 	} catch (err) {
 		error.value = 'Failed to fetch bookmarks. Please try again later.';
@@ -45,9 +57,19 @@ const fetchBookmarks = async () => {
 	}
 };
 
-const removeBookmark = async (userId, musicalId) => {
+const removeBookmark = async (musicalId) => {
+	if (!props.userInfo || !props.userInfo.userId) {
+		console.error('User information not available.');
+		return;
+	}
+
 	try {
-		await axios.delete('/api/bookmark', { data: { userId, musicalId } });
+		await axios.delete('/api/bookmark', {
+			data: {
+				userId: props.userInfo.userId,
+				musicalId
+			}
+		});
 		// After successful deletion, refresh the bookmarks list
 		await fetchBookmarks();
 	} catch (err) {
@@ -57,6 +79,13 @@ const removeBookmark = async (userId, musicalId) => {
 };
 
 onMounted(fetchBookmarks);
+
+// Watch for changes in userInfo
+watch(() => props.userInfo, (newUserInfo) => {
+	if (newUserInfo && newUserInfo.id) {
+		fetchBookmarks();
+	}
+}, { deep: true });
 </script>
 
 <style scoped>
