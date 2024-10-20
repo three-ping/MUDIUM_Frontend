@@ -4,7 +4,7 @@
 			<nav>
 				<ul>
 					<li>
-						<a href="/mypage" :class="{ 'selected': selectedItem === 'profile' }"
+						<a href="#" :class="{ 'selected': selectedItem === 'profile' }"
 							@click="setSelectedItem('profile')">프로필</a>
 					</li>
 					<li>
@@ -31,64 +31,41 @@
 			</nav>
 		</aside>
 
-		<main class="main-content">
-			<div class="profile-section card">
-				<img src="@/assets/images/profile_default.svg" alt="@/assets/images/profile_default.svg"
-					class="profile-image">
-				<div class="profile-info">
-					<h2>{{ userInfo.nickname || '뜨리핑님' }}</h2>
-					<p>{{ userInfo.email || 'threeping@gmail.com' }}</p>
-					<p>{{ userInfo.membershipStatus || '일반회원' }}</p>
-				</div>
-				<button class="edit-profile-btn">수정</button>
-			</div>
-
-			<div class="calendar-section card">
-				<h3>October 2020</h3>
-				<div class="calendar">
-					<!-- You may want to use a proper calendar component here -->
-					<table>
-						<thead>
-							<tr>
-								<th>Mo</th>
-								<th>Tu</th>
-								<th>We</th>
-								<th>Th</th>
-								<th>Fr</th>
-								<th>Sa</th>
-								<th>Su</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- Add calendar days here -->
-						</tbody>
-					</table>
-				</div>
-			</div>
+		<main class="main-content" id="profile-container">
+			<ProfileTab v-if="selectedItem === 'profile'" :userInfo="userInfo" />
+			<MyWorksTab v-if="selectedItem === 'myWorks'" />
+			<BookmarksTab v-if="selectedItem === 'bookmarks'" />
+			<BoardTab v-if="selectedItem === 'board'" />
+			<TicketsTab v-if="selectedItem === 'tickets'" />
 		</main>
 	</div>
-
 </template>
 
 <script setup>
 import { ref, watch } from 'vue';
 import { useUserStore } from '@/scripts/user/user';
+import ProfileTab from "./components/tabs/ProfileTab.vue";
+import MyWorksTab from './components/tabs/Watched.vue';
+import BookmarksTab from './components/tabs/Bookmarks.vue';
+import BoardTab from './components/tabs/BoardTab.vue';
+import TicketsTab from './components/tabs/Tickets.vue';
 
 const userStore = useUserStore();
 const userInfo = ref(userStore.userInfo);
+
+// Add state for selected sidebar item
+const selectedItem = ref('profile');
+
+// Function to set the selected item
+const setSelectedItem = (item) => {
+	selectedItem.value = item;
+};
 
 watch(() => userStore.userInfo, (newUserInfo) => {
 	userInfo.value = newUserInfo;
 	console.log('User info updated:', newUserInfo);
 });
-// Function to set the selected item
-const setSelectedItem = (item) => {
-	selectedItem.value = item;
-};
-// Add state for selected sidebar item
-const selectedItem = ref('profile');
 </script>
-
 <style scoped>
 .page-container {
 	display: flex;
@@ -125,6 +102,7 @@ const selectedItem = ref('profile');
 
 .sidebar a.selected {
 	font-weight: bold;
+	color: black;
 }
 
 .sidebar a:hover {
@@ -184,9 +162,5 @@ const selectedItem = ref('profile');
 	background-color: white;
 	padding: 20px;
 	border-radius: 10px;
-}
-
-.calendar {
-	/* Add styles for the calendar */
 }
 </style>
