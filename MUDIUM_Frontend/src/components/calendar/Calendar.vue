@@ -49,8 +49,13 @@ const backgroundImages = [
 const currentBackgroundIndex = ref(0);
 
 // 계산된 배경 이미지 URL
-const backgroundImageUrl = computed(() => backgroundImages[currentBackgroundIndex.value]);
+const apiBaseUrl = 'http://localhost:8080/calendar-theme/image';
 
+const backgroundImageUrl = computed(() => {
+  const url = `${apiBaseUrl}?imageUrl=${encodeURIComponent(backgroundImages[currentBackgroundIndex.value])}`;
+  console.log('Current background image URL:', url);
+  return url;
+});
 
 // 현재 월과 연도
 const currentMonth = computed(() => currentDate.value.toLocaleString('default', { month: 'long' }));
