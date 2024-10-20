@@ -4,6 +4,8 @@
 
 		<main class="main-content" id="profile-container">
 			<ProfileTab v-if="selectedItem === 'profile'" :userInfo="userInfo" />
+			<Calendar v-if="selectedItem === 'profile'" />
+
 			<MyRebviews v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
 			<BookmarksTab v-if="selectedItem === 'bookmarks'" :userInfo="userInfo" />
 			<BoardTab v-if="selectedItem === 'board'" :userInfo="userInfo" />
@@ -21,6 +23,7 @@ import MyRebviews from './components/tabs/MyReviews.vue';
 import BookmarksTab from './components/tabs/Bookmarks.vue';
 import BoardTab from './components/tabs/BoardTab.vue';
 import TicketsTab from './components/tabs/Tickets.vue';
+import Calendar from '@/components/calendar/Calendar.vue';
 
 const userStore = useUserStore();
 const userInfo = ref(userStore.userInfo);
