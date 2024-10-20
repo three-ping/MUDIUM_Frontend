@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useUserStore } from './stores/userStore';
 import Navigation from '@/components/layout/Navigation.vue';
 import LoginModal from '@/views/user/components/LoginModal.vue';
@@ -52,7 +52,19 @@ const handleLoginSuccess = (isLoggedIn) => {
 
 const updateUserInfo = (userInfo) => {
   userStore.updateUserInfo(userInfo);
+  // Save user info to localStorage
+  localStorage.setItem('userInfo', JSON.stringify(userInfo));
 };
+
+// Load user info from localStorage on component mount
+onMounted(() => {
+  const storedUserInfo = localStorage.getItem('userInfo');
+  if (storedUserInfo) {
+    const userInfo = JSON.parse(storedUserInfo);
+    userStore.updateUserInfo(userInfo);
+    userStore.updateLoginStatus(true);
+  }
+});
 </script>
 
 <style>
