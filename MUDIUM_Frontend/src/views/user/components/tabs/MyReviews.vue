@@ -7,19 +7,12 @@
 			<p class="text-xl">{{ error }}</p>
 		</div>
 		<div v-else class="cards-grid">
-			<div v-for="(review, index) in reviews" :key="review.reviewId" class="card-container"
-				@mouseenter="rotateCard" @mouseleave="unrotateCard">
+			<div v-for="review in reviews" :key="review.reviewId" class="card-container" @mouseenter="rotateCard"
+				@mouseleave="unrotateCard">
 				<div class="card">
-					<!-- Front side -->
+					<!-- Front side - Only poster -->
 					<div class="card-side card-front">
-						<img :src="review.poster" :alt="review.musicalTitle"
-							class="w-full h-48 object-cover rounded-t-lg">
-						<div class="p-4">
-							<h3 class="text-lg font-semibold truncate">{{ review.musicalTitle }}</h3>
-							<div class="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded">
-								{{ index + 1 }}
-							</div>
-						</div>
+						<img :src="review.poster" :alt="review.musicalTitle" class="card-image">
 					</div>
 					<!-- Back side -->
 					<div class="card-side card-back">
@@ -46,7 +39,6 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-
 
 const reviews = ref([]);
 const loading = ref(true);
@@ -88,19 +80,18 @@ onMounted(() => {
 	fetchReviews(userId);
 });
 
-
 </script>
 
 <style scoped>
 .cards-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+	grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
 	gap: 2rem;
 	padding: 2rem;
 }
 
 .card-container {
-	width: 30rem;
+	width: 40rem;
 	height: 60rem;
 	perspective: 1000px;
 }
@@ -124,10 +115,18 @@ onMounted(() => {
 
 .card-front {
 	background-color: white;
+	overflow: hidden;
 }
 
 .card-back {
 	background-color: #f3f4f6;
 	transform: rotateY(180deg);
+}
+
+.card-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
 }
 </style>
