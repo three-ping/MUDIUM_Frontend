@@ -9,8 +9,8 @@
                 <slot></slot> <!-- 외부에서 주입된 내용 -->
             </div>
             <div class="modal-footer">
-                <button class="common-button-radi7" @click="closeModal">No</button>
-                <button class="common-button-radi7-pink" @click="yesModal">Yes</button>
+                <button @click="closeModal" class="cancel-button">취소</button>
+                <button @click="yesModal" class="delete-button">삭제</button>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@ const props = defineProps({
     isOpen: Boolean,
 });
 
-const emit = defineEmits(['close','submit']);
+const emit = defineEmits(['close', 'submit']);
 
 const closeModal = () => {
     emit('close');
@@ -43,45 +43,115 @@ const yesModal = () => {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 5;
+    z-index: 1000;
 }
 
 .modal-content {
-    background-color: #ffffff; /* 두 번째 모달 배경색으로 변경 */
-    padding: 20px;
-    border-radius: 8px;
-    width: 80%;
-    max-width: 500px; /* 최대 너비 설정 */
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
     position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    position: relative;
 }
 
 .logo {
-    display: inline-block;
+    max-width: 180px;
+    height: auto;
     margin: 0 auto;
 }
 
 .close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
     background: none;
     border: none;
-    font-size: 24px;
+    font-size: 28px;
     cursor: pointer;
-    color: black;
+    color: #888;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.close-button:hover {
+    color: #333;
 }
 
 .modal-body {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    text-align: center;
 }
 
 .modal-footer {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px;
+}
+
+.cancel-button {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cancel-button:hover {
+    background-color: #e0e0e0;
+}
+
+.delete-button {
+    background-color: #9a70cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #8a60bc;
+}
+
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    .cancel-button, .delete-button {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .close-button {
+        font-size: 24px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .logo {
+        max-width: 140px;
+    }
 }
 </style>
