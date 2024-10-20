@@ -27,7 +27,7 @@ const route = useRoute();
 const fetchSearchResults = async (query) => {
   try {
     const sanitizedQuery = query.trim();
-    const url = `http://localhost:5173/api/musical?title=${encodeURIComponent(sanitizedQuery)}&page=0&size=100`;
+    const url = `http://localhost:8080/api/musical?title=${encodeURIComponent(sanitizedQuery)}&page=0&size=200`;
 
     const response = await axios.get(url);
     if (response.data && response.data.data && Array.isArray(response.data.data.content)) {
@@ -58,6 +58,7 @@ fetchSearchResults('');
   width: 95%;
   padding: 10px;
   margin-bottom: 20px;
+  margin-left: 3%;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -65,6 +66,9 @@ fetchSearchResults('');
 
 .search-results-container {
   display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개 */
+  gap: 5px; /* 간격 조정 */
+  width: 95%;
   grid-template-columns: repeat(5, 1fr);
   width: 100%;
   padding: 20px 0;
@@ -99,6 +103,16 @@ fetchSearchResults('');
   height: 100%;
   border-radius: 8px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.musical-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-x: hidden; /* 수평 스크롤 숨김 */
+  overflow-y: auto; /* 수직 스크롤 자동 */
+  max-height: calc(100vh - 헤더_높이); /* 헤더 높이에 맞게 조정 */
+  padding: 20px;
   object-fit: cover;  
   
 }

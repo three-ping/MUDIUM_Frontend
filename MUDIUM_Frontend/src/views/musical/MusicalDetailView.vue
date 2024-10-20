@@ -16,7 +16,8 @@
         <p v-else class="average-scope">평균 별점: 정보 없음</p>
         <div class="star-rating">
           <StarRating 
-            :rating="averageScope ? averageScope.scope : 0"
+            :rating="scope ? scope.scope : 0"
+            :musical-id="musical.musicalId"
             @set-rating="setRating"
           />
         </div>
@@ -58,8 +59,9 @@ const musical = ref({});
 const averageScope = ref({});
 const performanceList = ref([]);
 const reviews = ref([]);
+const scope = ref({});
 const setRating = (newRating) => {
-  rating.value = newRating;
+  scope.value.scope = newRating;
 };
 
 const fetchPerformanceList = async (id) => {
@@ -69,6 +71,18 @@ const fetchPerformanceList = async (id) => {
     performanceList.value = data.data;
   } catch (error) {
     console.error('Error fetching performance list:', error);
+  }
+};
+
+const fetchMyScope = async (id) => {
+  const userId = 6;
+  try {
+    const response = await fetch(`http://localhost:8080/api/scope/${userId}/${id}`);
+    const data = await response.json();
+    scope.value = data.data;
+    console.log(scope.value);
+  } catch (error) {
+    console.error('Error fetching scope:', error);
   }
 };
 
@@ -124,6 +138,7 @@ const fetchMusicalDetail = async () => {
     await fetchAverageScope(musical.value.musicalId);
     await fetchPerformanceList(musical.value.musicalId);
     await fetchReviews(musical.value.musicalId);
+    await fetchMyScope(musical.value.musicalId);
   } catch (error) {
     console.error('Error fetching musical detail:', error);
   }
@@ -201,6 +216,7 @@ onMounted(() => {
 }
 
 .review-list li {
+  list-style: none;
   margin-bottom: 10px;
   font-size: 1rem;
 }
