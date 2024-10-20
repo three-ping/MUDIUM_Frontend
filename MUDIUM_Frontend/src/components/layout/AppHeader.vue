@@ -16,8 +16,8 @@
                 <RouterLink to="/board" class="banner-link" :class="{ active: currentRoute.startsWith('/board') }">
                     자유 게시판
                 </RouterLink>
-                <RouterLink to="/etiquette" class="banner-link"
-                    :class="{ active: currentRoute.startsWith('/etiquette') }">
+                <RouterLink to="/guidebook/guidemain" class="banner-link"
+                    :class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
                     가이드북
                 </RouterLink>
                 <RouterLink to="/notice" class="banner-link" :class="{ active: currentRoute.startsWith('/notice') }">
