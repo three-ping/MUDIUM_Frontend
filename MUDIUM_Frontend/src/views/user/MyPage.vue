@@ -1,31 +1,32 @@
 <template>
-	<div class="mypage-container">
-		<SideBar />
+	<div class="page-container">
+		<Sidebar v-model:selectedItem="selectedItem" />
 
-		<section class="profile-section">
-			<div class="profile-info">
-				<img src="@/assets/images/profile_default.svg" alt="Profile Image" class="profile-img">
-				<div class="profile-details">
-					<h2 class="profile-name">뜨리핑님</h2>
-					<p class="profile-email">threeping@gmail.com</p>
-					<p class="profile-status">일반회원</p>
-				</div>
-				<button class="edit-button">수정</button>
-			</div>
-
-				<Calendar />
-		</section>
+		<main class="main-content" id="profile-container">
+			<ProfileTab v-if="selectedItem === 'profile'" :userInfo="userInfo" />
+			<MyWorksTab v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
+			<BookmarksTab v-if="selectedItem === 'bookmarks'" :userInfo="userInfo" />
+			<BoardTab v-if="selectedItem === 'board'" :userInfo="userInfo" />
+			<TicketsTab v-if="selectedItem === 'tickets'" :userInfo="userInfo" />
+		</main>
 	</div>
 </template>
 
 <script setup>
-import SideBar from './components/SideBar.vue';
+import { ref, watch } from 'vue';
 import { useUserStore } from '@/scripts/user/user';
-import { watch } from 'vue';
-import Calendar from '@/components/calendar/Calendar.vue';
+import Sidebar from './components/Sidebar.vue';
+import ProfileTab from "./components/tabs/Profile.vue";
+import MyWorksTab from './components/tabs/Watched.vue';
+import BookmarksTab from './components/tabs/Bookmarks.vue';
+import BoardTab from './components/tabs/BoardTab.vue';
+import TicketsTab from './components/tabs/Tickets.vue';
 
 const userStore = useUserStore();
-const userInfo = userStore.userInfo;
+const userInfo = ref(userStore.userInfo);
+
+// Add state for selected sidebar item
+const selectedItem = ref('profile');
 
 watch(() => userStore.userInfo, (newUserInfo) => {
 	userInfo.value = newUserInfo;
@@ -34,66 +35,12 @@ watch(() => userStore.userInfo, (newUserInfo) => {
 </script>
 
 <style scoped>
-.mypage-container {
+.page-container {
 	display: flex;
 }
 
-.profile-section {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	width: 100%;
+.main-content {
+	flex-grow: 1;
 	padding: 20px;
-	background: #f8f9fa;
-	border-left: 1px solid #e5e5e5;
-}
-
-.profile-info {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	padding: 20px;
-	border-radius: 10px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-	width: 90%;
-	max-width: 600px;
-	margin-bottom: 20px;
-}
-
-.profile-img {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	margin-bottom: 15px;
-}
-
-.profile-details {
-	text-align: center;
-}
-
-.profile-name {
-	font-size: 1.5rem;
-	font-weight: bold;
-	margin-bottom: 5px;
-}
-
-.profile-email,
-.profile-status {
-	color: #6c757d;
-	margin: 0;
-}
-
-.edit-button {
-	background-color: #7b2cbf;
-	color: #fff;
-	padding: 8px 16px;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	margin-top: 15px;
-}
-
-.edit-button:hover {
-	background-color: #6823b1;
 }
 </style>

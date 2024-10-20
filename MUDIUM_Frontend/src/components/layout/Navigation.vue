@@ -1,15 +1,13 @@
 <template>
 	<header class="container-fluid fixed-header">
 		<nav>
-			<ul>
-				<li>
-					<RouterLink to="/">
-						<img src="@/assets/images/Mudium.svg" alt="Mudium" width="150rem">
-					</RouterLink>
-				</li>
-			</ul>
+			<div class="nav-left">
+				<RouterLink to="/">
+					<img src="@/assets/images/Mudium.svg" alt="Mudium" class="logo">
+				</RouterLink>
+			</div>
 
-			<ul>
+			<ul class="nav-links">
 				<li>
 					<RouterLink to="/musicalInfo"
 						:class="{ active: currentRoute.startsWith('/musicalInfo') || currentRoute === '/' }">
@@ -26,9 +24,14 @@
 						<strong>자유 게시판</strong>
 					</RouterLink>
 				</li>
-				<RouterLink to="/guidebook/guidemain" :class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
-					<strong>가이드북</strong>
-				</RouterLink>
+
+				<li>
+
+					<RouterLink to="/guidebook/guidemain"
+						:class="{ active: currentRoute.startsWith('/guidebook/guidemain') }">
+						<strong>가이드북</strong>
+					</RouterLink>
+				</li>
 
 				<li>
 					<RouterLink to="/notice" :class="{ active: currentRoute.startsWith('/notice') }">
@@ -36,115 +39,124 @@
 					</RouterLink>
 				</li>
 			</ul>
-			<ul>
-				<li><input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
-				</li>
-				<li v-if="!userInfo.isLoggedIn">
-					<details class="dropdown">
-						<summary>계정</summary>
-						<ul dir="rtl">
-							<li>
-								<button class="contrast" @click="$emit('openLoginModal')">로그인</button>
-							</li>
-							<li>
-								<button class="contrast">회원가입</button>
-							</li>
-						</ul>
-					</details>
-				</li>
-				<li v-else>
-					<details class="dropdown">
-						<summary><img src="" alt="@/assets/images/profile_default.svg" height="50%"></summary>
-						<ul dir="rtl">
-							<li>
-								<button class="contrast" @click="navigateToMyPage">마이페이지</button>
-							</li>
-							<li>
-								<button class="contrast" @click="logout">로그아웃</button>
-							</li>
-						</ul>
-					</details>
-				</li>
-
-			</ul>
+			<div class="nav-right">
+				<input type="search" v-model="searchQuery" placeholder="검색어를 입력하세요" @keyup.enter="performSearch">
+				<div v-if="!userStore.userInfo.isLoggedIn" class="auth-links">
+					<a href="#" @click.prevent="openLoginModal">로그인</a>
+					<span class="auth-separator">|</span>
+					<a href="#" @click.prevent="openSignupModal">회원가입</a>
+				</div>
+				<div v-else class="profile-container dropdown">
+					<img src="@/assets/images/profile_default.svg" alt="Profile" class="profile-img"
+						@click="toggleProfileMenu">
+					<ul class="dropdown-menu profile-menu" v-if="isProfileMenuOpen">
+						<li><a href="#" @click.prevent="navigateToMyPage">마이페이지</a></li>
+						<li><a href="#" @click.prevent="logout">로그아웃</a></li>
+					</ul>
+				</div>
+			</div>
 
 		</nav>
 	</header>
-	<hr>
 </template>
 
 <script setup>
-import LoginModal from '@/views/user/components/LoginModal.vue';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { defineProps } from 'vue';
-
-const emit = defineEmits(['userInfo', 'logout']);
-
-// 현재 경로를 추적하기 위한 변수
-const loginStatus = ref(false);
-
-const updateLoginStatus = (status, userInfo = null) => {
-	loginStatus.value = status;
-	isLoggedIn.value = status;
-
-	if (status) {
-		console.log('User logged in successfully');
-		// Emit user information
-		emit('userInfo', userInfo);
-		// Navigate to the homepage
-		router.push('/');
-	} else {
-		console.log('User logged out');
-		// You can add logout-specific actions here if needed
-	}
-};
+import { useUserStore } from '@/stores/userStore';
 
 const route = useRoute();
 const router = useRouter();
+const userStore = useUserStore();
 const currentRoute = ref(route.path);
-
-let isLoginModalVisible = ref(false);
-const isLoggedIn = ref(false);
-const hasSearched = ref(false);
 const searchQuery = ref('');
-const props = defineProps({
-	userInfo: Object // Accept userInfo as a prop
-});
+const isProfileMenuOpen = ref(false);
 
-// Use userInfo.isLoggedIn wherever needed in your template or script
+const emit = defineEmits(['openLoginModal', 'openSignupModal']);
+
 const performSearch = () => {
-	if (!searchQuery.value.trim()) return; // 검색어가 없으면 실행하지 않음
+	if (!searchQuery.value.trim()) return;
 	router.push({
-		path: '/musicalInfo',  // Search results will be shown here
+		path: '/musicalInfo',
 		query: { title: searchQuery.value }
 	});
 };
-// 경로가 변경될 때마다 currentRoute 업데이트
+
 watch(route, (newRoute) => {
 	currentRoute.value = newRoute.path;
 });
 
 const openLoginModal = () => {
-	isLoginModalVisible.value = true;
+	emit('openLoginModal');
+};
 
-}
+const openSignupModal = () => {
+	emit('openSignupModal');
+};
 
 const navigateToMyPage = () => {
+	console.log('navigate to mypage')
 	router.push('/mypage');
+	isProfileMenuOpen.value = false;
 };
 
 const logout = () => {
-	console.log("Navigation - logout")
-	// router.push('/');
-	// Perform logout logic here (e.g., clear tokens, reset state)
-	emit('logout')
-	emit('userInfo', { isLoggedIn: false })
-	router.push({ path: '/musicalInfo', query: {} }); // Navigate to musicalInfo without user_id
+	userStore.clearUserInfo();
+	router.push({ path: '/musicalInfo', query: {} });
+	isProfileMenuOpen.value = false;
+};
 
+const toggleProfileMenu = () => {
+	isProfileMenuOpen.value = !isProfileMenuOpen.value;
 };
 </script>
-
 <style scoped>
-/* Style for the fixed header */
+.nav-links {
+	display: flex;
+	list-style-type: none;
+}
+
+.nav-links li {
+	position: relative;
+	margin-right: 20px;
+}
+
+.dropdown-menu {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	background-color: white;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	border-radius: 4px;
+	padding: 10px 0;
+	z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+	display: block;
+}
+
+.dropdown-menu li {
+	margin: 0;
+	padding: 5px 15px;
+	white-space: nowrap;
+}
+
+.dropdown-menu a {
+	color: #333;
+	text-decoration: none;
+}
+
+.dropdown-menu a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.profile-menu {
+	right: 0;
+	left: auto;
+}
+
+/* ... (rest of the existing styles) */
 </style>

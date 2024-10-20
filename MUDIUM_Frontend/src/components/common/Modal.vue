@@ -1,23 +1,23 @@
 <template>
     <div class="modal-overlay" v-if="isVisible">
-    <div class="modal-content">
-        <button class="close-button" @click="closeModal"></button>
-        <div class="modal-message">
-        <slot>정말 삭제하시겠습니까?</slot>
+        <div class="modal-content">
+            <button class="close-button" @click="closeModal"></button>
+            <div class="modal-message">
+                <slot>정말 삭제하시겠습니까?</slot>
+            </div>
+            <div class="buttons">
+                <button class="common-button" @click="closeModal">취소</button>
+                <button class="common-button-purple" @click="confirmModal">확인</button>
+            </div>
         </div>
-        <div class="buttons">
-        <button class="common-button" @click="closeModal">취소</button>
-        <button class="common-button-purple" @click="confirmModal">확인</button>
-        </div>
-    </div>
     </div>
 </template>
 
 <script setup>
 const props = defineProps({
     isVisible: {
-    type: Boolean,
-    default: false
+        type: Boolean,
+        default: false
     }
 });
 
@@ -50,10 +50,10 @@ const confirmModal = () => {
 .modal-content {
     position: relative;
     background: white;
-    padding: 30px;
-    border-radius: 10px;
+    padding: 3rem;
+    border-radius: 1rem;
     width: 300px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
 }
 
 .close-button {
@@ -82,7 +82,7 @@ const confirmModal = () => {
 }
 
 .close-button::before {
-    transform: rotate(45deg);   
+    transform: rotate(45deg);
 }
 
 .close-button::after {
@@ -90,33 +90,34 @@ const confirmModal = () => {
 }
 
 .modal-message {
-margin: 20px 0;
-text-align: center;
-font-size: 16px;
+    margin: 20px 0;
+    text-align: center;
+    font-size: 16px;
 }
 
 .buttons {
-display: flex;
-justify-content: center;
-gap: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
 }
 
 .common-button,
 .common-button-purple {
-padding: 10px 20px;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-font-size: 14px;
-width: 100px;  /* 버튼 크기 일치 */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100px;
+    /* 버튼 크기 일치 */
 }
 
 .common-button {
-background-color: #f0f0f0;
+    background-color: #f0f0f0;
 }
 
 .common-button-purple {
-background-color: #8e44ad;
-color: white;
+    background-color: #8e44ad;
+    color: white;
 }
 </style>

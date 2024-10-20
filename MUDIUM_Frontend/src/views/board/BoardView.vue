@@ -25,7 +25,7 @@
             <th>좋아요</th>
             <th>조회수</th>
           </tr>
-        </thead>   
+        </thead>
         <tbody>
           <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
             <td class="td-id" data-label="번호">{{ pageItem.id }}</td>
@@ -41,11 +41,8 @@
           </tr>
         </tbody>
       </table>
-    </div> 
-    <Paging 
-      :requestURL="requestURL" 
-      :pageNumber="pageNumber" 
-      :totalPageNumber="totalPageNumber" 
+    </div>
+    <Paging :requestURL="requestURL" :pageNumber="pageNumber" :totalPageNumber="totalPageNumber"
       @updatePageNumber="updatePageNumber" />
   </div>
 </template>
@@ -92,7 +89,7 @@ const updatePageNumber = (newPageNumber) => {
 const search = async () => {
   pageNumber.value = 1;
   await queryPageData();
-  if(pageItems.length == 0) {
+  if (pageItems.length == 0) {
     router.push("view/no-args");
   }
 };
@@ -115,7 +112,7 @@ function convertToKoreanTime(timestamp) {
 onMounted(() => {
   setTimeout(() => {
     fetchPageData();
-  }, 100); 
+  }, 100);
 });
 </script>
 
@@ -136,13 +133,13 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  margin-bottom: 30px; 
+  margin-bottom: 30px;
 }
 
 .search-bar {
   display: flex;
   gap: 10px;
-  width: 80%; 
+  width: 80%;
 }
 
 .search-bar select,
@@ -221,7 +218,11 @@ onMounted(() => {
 }
 
 @media screen and (max-width: 768px) {
-  .board-table, .board-table tbody, .board-table tr, .board-table td {
+
+  .board-table,
+  .board-table tbody,
+  .board-table tr,
+  .board-table td {
     display: block;
   }
 
@@ -261,6 +262,7 @@ onMounted(() => {
   .td-title::before {
     display: none;
   }
+
   .board-actions {
     flex-direction: column;
     align-items: stretch;
@@ -284,8 +286,8 @@ onMounted(() => {
   }
 
   .back-button {
-    margin-right: 0; 
-    margin-bottom: 15px; 
+    margin-right: 0;
+    margin-bottom: 15px;
   }
 }
 </style>
