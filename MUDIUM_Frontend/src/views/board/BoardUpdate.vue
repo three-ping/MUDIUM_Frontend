@@ -26,24 +26,34 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
+const props = defineProps({
+    nickname: String,
+    userId: Number,
+    access_token: String
+})
 const route = useRoute();
 const router = useRouter();
 const id = ref(route.params.id);
+const access_token = props.access_token;
 
 const title = ref('');
-const author = ref('');
+const author = ref(props.nickname);
 const content = ref('');
 const createdAt = ref(0);
 const updatedAt = ref(null);
-const userId = ref(1);
+const userId = Number(props.userId);
 
 const fetchDetailBoard = async() => {
     try {
     const response = await fetch(`http://localhost:8080/api/board/${id.value}`, {
-        method: "GET"
+        method: "GET",
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
     });
     const responseDTO = await response.json();
     title.value = responseDTO.data.title;
@@ -61,12 +71,13 @@ const updateBoard = async () => {
     const response = await fetch(`http://localhost:8080/api/board/${id.value}`, {
         method: 'PUT',
         headers: {
-        'Content-Type': 'application/json',
-        },
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    },
         body: JSON.stringify({
         title: title.value,
         content: content.value,
-        userId: userId.value
+        userId: userId
         }),
     });
 
@@ -106,9 +117,12 @@ onMounted(() => {
 </script>
 
 <style scoped>
+button { 
+    box-shadow: none;
+}
 .board-detail {
-    font-family: Arial, sans-serif;
-    max-width: 800px;
+    width: 100%;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }

@@ -18,11 +18,11 @@ export default [
                 name: 'NoticeCreate',
                 component: () => import('@/views/notice/NoticeCreate.vue')    
             },
-            // {
-            //     path: 'view/no-args',  
-            //     name: 'BoardNoArgs',
-            //     component: () => import('@/views/board/BoardNoArgs.vue')    
-            // },
+            {
+                path: 'view/no-args',  
+                name: 'BoardNoArgs',
+                component: () => import('@/views/notice/NoticeNoArgs.vue')    
+            },
             {
                 path: 'edit/:id',  
                 name: 'NoticeUpdate',
