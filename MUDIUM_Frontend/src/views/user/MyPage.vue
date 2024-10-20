@@ -4,12 +4,12 @@
 
 			<nav>
 				<ul>
-					<li>프로필</li>
-					<li>내가 본 작품</li>
-					<li>북마크</li>
-					<li>게시판</li>
-					<li>티켓</li>
-					<li>로그아웃</li>
+					<li> <a href="/mypage">프로필</a></li>
+					<li><a href="#">내가 본 작품</a></li>
+					<li><a href="#">북마크</a></li>
+					<li><a href="#">게시판</a></li>
+					<li><a href="#">티켓</a></li>
+					<li><a href="#" class="warning">로그아웃</a></li>
 				</ul>
 			</nav>
 		</aside>
@@ -134,8 +134,12 @@ watch(() => userStore.userInfo, (newUserInfo) => {
 	color: #666;
 }
 
+.warning {
+	color: var(--warning-color)
+}
+
 .edit-profile-btn {
-	background-color: #8e44ad;
+	background-color: var(--primary-color);
 	color: white;
 	border: none;
 	padding: 10px 20px;
