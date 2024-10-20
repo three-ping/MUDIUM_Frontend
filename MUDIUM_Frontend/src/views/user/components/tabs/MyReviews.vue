@@ -1,5 +1,6 @@
 <template>
 	<div>
+		<h1>내 리뷰</h1>
 		<div v-if="loading" class="text-center py-8">
 			<p class="text-xl">Loading reviews...</p>
 		</div>
@@ -102,6 +103,8 @@ onMounted(() => {
 	height: 100%;
 	transition: transform 0.6s;
 	transform-style: preserve-3d;
+	overflow: hidden;
+	border-radius: 10px;
 }
 
 .card-side {
