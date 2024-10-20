@@ -138,6 +138,7 @@
   text-shadow: 
     3px 3px 0px #c3a617, 
     6px 6px 15px rgba(0, 0, 0, 0.7);
+
 }
 </style>
   

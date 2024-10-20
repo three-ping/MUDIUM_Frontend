@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>My Custom Tickets</h2>
+    <button @click="createTicket" class="create-btn">티켓 만들기</button>
     <div class="ticket-list">
       <div 
         v-for="(ticket, index) in customTickets" 
@@ -26,7 +27,7 @@
               <div class="card-actions"> 
                 <div class="top-right-buttons">
                 <!-- 수정 버튼 클릭시 editTicket 함수 호출 -->
-                  <button class="edit-btn" @click.stop="editTicket(ticket.userId, ticket.customTicketId)">수정</button>
+                  <!-- <button class="edit-btn" @click.stop="editTicket(ticket.userId, ticket.customTicketId)">수정</button> -->
                 <!-- 삭제 버튼 클릭시 deleteTicket 함수 호출 -->
                   <button class="delete-btn" @click.stop="deleteTicket(ticket.userId, ticket.customTicketId)">삭제</button>
                 </div>
@@ -41,17 +42,48 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 
+const userStore = useUserStore(); 
+const router = useRouter();
 const customTickets = ref([]);
 const isFlipped = ref([]); // 티켓마다 flip 상태를 관리하는 배열
 const container = ref(null); // container ref 추가
 const overlay = ref(null); // overlay ref 추가
 const route = useRoute();
 
+const props = defineProps({
+  customTickets: {
+    type: Array,
+    required: true,
+  },
+  userInfo: {
+    type: Object,
+    required: true,
+  }
+});
+
+onMounted(() => {
+  // Null 체크 추가
+  if (props.userInfo && props.userInfo.userId) {
+    console.log('Received userId:', props.userInfo.userId);
+  } else {
+    console.error('userInfo or userId is not defined');
+  }
+});
+
+const createTicket = () => {
+  router.push('/customticket');  // customticket 페이지로 이동
+};
 const fetchCustomTickets = () => {
   // const userId = 1;  // 로그인된 유저 ID
-  const userId = route.params.id;
+  // const userId = route.params.id;
+  const userId = props.userInfo.userId; // userInfo 안의 userId 가져오기
+  console.log(userId);  
+
+  console.log('Fetching tickets for userId:', userId);
+
   fetch(`http://localhost:8080/api/customticket/${userId}`)
     .then(response => response.json())
     .then(data => {
@@ -179,10 +211,15 @@ onMounted(() => {
   gap: 20px;
 }
 
+.create-btn {
+  margin-top: 3%;
+  margin-bottom: 3%;
+}
+
 .ticket-card {
   /* width: 220px; */
   /* border-radius: 8px; */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
   text-align: center;
   perspective: 1000px;
   cursor: pointer;
@@ -223,6 +260,7 @@ onMounted(() => {
 .back-content p {
   color: black;
   opacity: 0.7;
+  font-size: 1vm;
 }
 
 .card-image {
