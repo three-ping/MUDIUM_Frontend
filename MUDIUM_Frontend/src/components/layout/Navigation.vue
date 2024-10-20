@@ -95,6 +95,7 @@ const openSignupModal = () => {
 };
 
 const navigateToMyPage = () => {
+	console.log('navigate to mypage')
 	router.push('/mypage');
 	isProfileMenuOpen.value = false;
 };

@@ -1,5 +1,4 @@
 import LoginModal from "@/views/user/components/LoginModal.vue";
-
 export default [
   {
     path: "/mypage",
