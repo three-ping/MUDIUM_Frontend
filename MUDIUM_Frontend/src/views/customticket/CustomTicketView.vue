@@ -66,6 +66,7 @@ const props = defineProps({
 
 onMounted(() => {
   // Null 체크 추가
+
   // if (props.userInfo && props.userInfo.userId) {
   //   console.log('Received userId:', props.userInfo.userId);
   // } else {
@@ -81,6 +82,7 @@ onMounted(() => {
 
 });
 console.log('d', userStore);
+
 const createTicket = () => {
   router.push('/customticket');  // customticket 페이지로 이동
 };
