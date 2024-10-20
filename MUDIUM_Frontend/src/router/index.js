@@ -11,7 +11,7 @@ import MusicalRoutes from "./musical";
 const routes = [
   {
     path: '/',
-    redirect: '/musicalInfo'
+    redirect: '/mudium'
   },
   ...boardRoutes,
   // ...LoginRoutes,
