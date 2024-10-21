@@ -14,7 +14,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:8080",
+        target: "http://springboot-app:7777",
         changeOrigin: true,
         rewrite: path => {
           const newPath = path;

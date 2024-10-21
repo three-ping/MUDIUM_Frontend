@@ -17,7 +17,7 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useUserStore } from '@/scripts/user/user';
-import Sidebar from './components/Sidebar.vue';
+import Sidebar from './components/SideBar.vue';
 import ProfileTab from "./components/tabs/Profile.vue";
 import MyRebviews from './components/tabs/MyReviews.vue';
 import BookmarksTab from './components/tabs/Bookmarks.vue';
