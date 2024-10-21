@@ -20,6 +20,7 @@ import { useRoute } from 'vue-router';
 import axios from 'axios';
 import { debounce } from 'lodash';
 
+
 const searchResults = ref([]);
 const searchQuery = ref('');
 const route = useRoute();

@@ -4,28 +4,28 @@
       v-for="idx in 5"
       :key="idx"
       class="star-div"
-      @click="handleStarClick(idx)"
     >
-      <span v-if="idx <= Math.floor(currentScore) + 0.5 && idx > Math.floor(currentScore)">
+      <span v-if="currentScore >= idx - 0.5 && currentScore < idx">
         <span class="half-star">&#9733;</span>
-        <span class="half-star-cover">&#9733;</span>
+        <span class="half-star-cover">&#9734;</span>
       </span>
-      <span v-else-if="idx <= currentScore">
+      <span v-else-if="currentScore >= idx">
         &#9733; <!-- 꽉 찬 별 -->
       </span>
       <span v-else>
         &#9734; <!-- 빈 별 -->
       </span>
-
       <!-- 왼쪽 반 클릭 이벤트 -->
       <div
         class="left"
+        @click="handleStarClick(idx - 0.5)"
         @mouseover="handleLeftHalfEnter(idx)"
         @mouseleave="handleStarLeave"
       ></div>
       <!-- 오른쪽 반 클릭 이벤트 -->
       <div
         class="right"
+        @click="handleStarClick(idx)"
         @mouseover="handleRightHalfEnter(idx)"
         @mouseleave="handleStarLeave"
       ></div>
@@ -42,6 +42,10 @@ const props = defineProps({
   rating: {
     type: Number,
     default: 0
+  },
+  userId: {
+    type: Number,
+    default: null
   }
 });
 
@@ -63,21 +67,32 @@ const handleRightHalfEnter = (idx) => {
   currentScore.value = idx;
 };
 
-const handleStarClick = async (idx) => {
-  scoreFixed.value = idx;
-  currentScore.value = idx;
-  emit('setRating', idx);
+const handleStarClick = async (score) => {
+  scoreFixed.value = score;
+  currentScore.value = score;
+  emit('setRating', score);
 
-  console.log("Selected Rating: ", idx);
+  console.log("Selected Rating: ", score);
+  console.log("musicalId: ", props.musicalId);
 
   try {
-    const userId = 6; // 실제 사용자 ID로 변경
-    const response = await axios.post(`http://localhost:8080/api/scope/create/${userId}/${props.musicalId}`, {
-      scope: idx
-    });
+    const userId = props.userId;
+    console.log("userId: ", userId);
+    console.log("별점: ", score);
+    
+    const response = await axios.post(
+      `http://localhost:8080/api/scope/create/${userId}/${props.musicalId}`,
+      { scope: score },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
     console.log('별점 저장 성공:', response.data);
   } catch (error) {
-    console.error('별점 저장 오류:', error);
+    console.error('별점 저장 오류:', error.response ? error.response.data : error.message);
   }
 };
 
@@ -87,7 +102,6 @@ const handleStarLeave = () => {
 </script>
 
 <style>
-/* 별점 전체 컨테이너 */
 .row-box {
   display: flex;
   gap: 5px;
@@ -110,15 +124,6 @@ const handleStarLeave = () => {
   left: 0;
   width: 50%;
   overflow: hidden;
-  color: gold;
-}
-
-.half-star-cover {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  color: #ccc; /* 빈 별 색상 */
 }
 
 .left {
