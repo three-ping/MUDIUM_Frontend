@@ -1,77 +1,107 @@
 <template>
-    <div class="row-box">
+  <div class="row-box">
+    <div
+      v-for="idx in 5"
+      :key="idx"
+      class="star-div"
+    >
+      <span v-if="currentScore >= idx - 0.5 && currentScore < idx">
+        <span class="half-star">&#9733;</span>
+        <span class="half-star-cover">&#9734;</span>
+      </span>
+      <span v-else-if="currentScore >= idx">
+        &#9733; <!-- 꽉 찬 별 -->
+      </span>
+      <span v-else>
+        &#9734; <!-- 빈 별 -->
+      </span>
+      <!-- 왼쪽 반 클릭 이벤트 -->
       <div
-        v-for="(star, idx) in 5"
-        :key="idx"
-        class="star-div"
-        @click="handleStarClick"
-      >
-        <!-- 반개 별점 표시 -->
-        <span v-if="score - Math.floor(score) === 0.5 && Math.floor(score) === idx">
-          <!-- 반개 채운 별 -->
-          <span class="half-star">&#9733;</span>
-          <!-- 반개 빈 별 -->
-          <span class="half-star-cover">&#9734;</span>
-        </span>
-        <span v-else-if="idx + 1 > score">
-          &#9734; <!-- 빈 별 -->
-        </span>
-        <span v-else>
-          &#9733; <!-- 꽉 찬 별 -->
-        </span>
-  
-        <!-- 왼쪽 반 클릭 이벤트 -->
-        <div
-          class="left"
-          @mouseover="handleLeftHalfEnter(idx)"
-          @mouseleave="handleStarLeave"
-        ></div>
-        <!-- 오른쪽 반 클릭 이벤트 -->
-        <div
-          class="right"
-          @mouseover="handleRightHalfEnter(idx)"
-          @mouseleave="handleStarLeave"
-        ></div>
-      </div>
+        class="left"
+        @click="handleStarClick(idx - 0.5)"
+        @mouseover="handleLeftHalfEnter(idx)"
+        @mouseleave="handleStarLeave"
+      ></div>
+      <!-- 오른쪽 반 클릭 이벤트 -->
+      <div
+        class="right"
+        @click="handleStarClick(idx)"
+        @mouseover="handleRightHalfEnter(idx)"
+        @mouseleave="handleStarLeave"
+      ></div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, watch } from 'vue';
-  
-  const initialRating = 0; // 초기 별점 설정
-  const score = ref(initialRating); // 현재 마우스로 hover된 별점
-  const scoreFixed = ref(initialRating); // 고정된 별점 (클릭 후)
-  
-  // 왼쪽 반 별 hover 시 반개 별점 처리
-  const handleLeftHalfEnter = (idx) => {
-    score.value = idx + 0.5;
-  };
-  
-  // 오른쪽 반 별 hover 시 전체 별점 처리
-  const handleRightHalfEnter = (idx) => {
-    score.value = idx + 1;
-  };
-  
-  const handleStarClick = () => {
-    scoreFixed.value = score.value;
-    console.log("Selected Rating: ", score.value); 
-  };
-  
-  const handleStarLeave = () => {
-    if (score.value !== scoreFixed.value) {
-      score.value = scoreFixed.value;
-    }
-  };
-  
-  watch(() => initialRating, (newRating) => {
-    score.value = newRating;
-    scoreFixed.value = newRating;
-  });
-  </script>
-  
+  </div>
+</template>
+
+<script setup>
+import { ref, watch, defineProps, defineEmits } from 'vue';
+import axios from 'axios';
+
+const props = defineProps({
+  musicalId: Number,
+  rating: {
+    type: Number,
+    default: 0
+  },
+  userId: {
+    type: Number,
+    default: null
+  }
+});
+
+const emit = defineEmits(['setRating']);
+
+const currentScore = ref(props.rating);
+const scoreFixed = ref(props.rating);
+
+watch(() => props.rating, (newRating) => {
+  currentScore.value = newRating;
+  scoreFixed.value = newRating;
+});
+
+const handleLeftHalfEnter = (idx) => {
+  currentScore.value = idx - 0.5;
+};
+
+const handleRightHalfEnter = (idx) => {
+  currentScore.value = idx;
+};
+
+const handleStarClick = async (score) => {
+  scoreFixed.value = score;
+  currentScore.value = score;
+  emit('setRating', score);
+
+  console.log("Selected Rating: ", score);
+  console.log("musicalId: ", props.musicalId);
+
+  try {
+    const userId = props.userId;
+    console.log("userId: ", userId);
+    console.log("별점: ", score);
+    
+    const response = await axios.post(
+      `http://localhost:8080/api/scope/create/${userId}/${props.musicalId}`,
+      { scope: score },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+    
+    console.log('별점 저장 성공:', response.data);
+  } catch (error) {
+    console.error('별점 저장 오류:', error.response ? error.response.data : error.message);
+  }
+};
+
+const handleStarLeave = () => {
+  currentScore.value = scoreFixed.value;
+};
+</script>
+
 <style>
- /* 별점 전체 컨테이너 */
 .row-box {
   display: flex;
   gap: 5px;
@@ -141,4 +171,3 @@
 
 }
 </style>
-  
