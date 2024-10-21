@@ -19,7 +19,7 @@
             :rating="scope ? scope.scope : 0"
             :musical-id="musical.musicalId"
             v-if="userStore.userInfo.isLoggedIn"
-            :userId="userStore.userInfo.user_id"
+            :userId="userId"
             @set-rating="setRating"
           />
           <StarRating 
@@ -70,7 +70,7 @@ const performanceList = ref([]);
 const reviews = ref([]);
 const scope = ref({});
 const userStore = useUserStore();
-
+const userId = userStore.userInfo.user_id || parseInt(userStore.userInfo.userId);
 
 const setRating = (newRating) => {
   scope.value.scope = newRating;
@@ -78,7 +78,6 @@ const setRating = (newRating) => {
 
 const fetchPerformanceList = async (id) => {
   try {
-   
     const response = await fetch(`http://localhost:8080/api/performance/${id}`);
     const data = await response.json();
     performanceList.value = data.data;
@@ -88,7 +87,6 @@ const fetchPerformanceList = async (id) => {
 };
 
 const fetchMyScope = async (id) => {
-  const userId = userStore.userInfo.user_id;
   console.log("userId: ", userId);
   try {
     const response = await fetch(`http://localhost:8080/api/scope/${userId}/${id}`);
