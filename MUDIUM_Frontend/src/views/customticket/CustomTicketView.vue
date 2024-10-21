@@ -272,7 +272,7 @@ onMounted(() => {
 .back-content p {
   color: black;
   opacity: 0.7;
-  font-size: 1vm;
+  font-size: 2.5rem;
 }
 
 .card-image {
