@@ -4,7 +4,7 @@
             <!-- 리뷰 헤더 -->
             <div class="review-header">
                 <!-- 뮤지컬 사진과 이름이 나오는 부분 -->
-                <img :src="secretReview.userProfile" alt="User Profile Image" class="user-avatar" />
+                <img :src="secretReview.musicalProfile" alt="Musical Profile Image" class="user-avatar" />
                 <div class="user-info">
                     <h3>
                         <span>
@@ -60,6 +60,9 @@ import { ref, onMounted, reactive, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import ReviewModal from '../../components/review/ReviewModal.vue';
 import ReviewDeleteModal from '../../components/review/ReviewDeleteModal.vue';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 
 // 라우터 훅
 const route = useRoute();
@@ -70,9 +73,10 @@ const secretReview = reactive({
     secretReviewId: null,
     userNickname: '',
     content: '',
-    createdAt: null,
+    createdAt: '',
     like: 0,
     musicalTitle: '',
+    musicalProfile: '',
     userProfile: '',
 });
 
@@ -85,7 +89,8 @@ const showComments = ref(false);
 const dropdownVisible = ref(false);
 const showModal = ref(false);
 const showDeleteModal = ref(false);
-const userId = ref(6); // 이 부분은 동적으로 회원 받아야 함
+const userId = userStore.userInfo.user_id;
+const access_token = userStore.userInfo.access_token;
 
 // 드롭다운 토글
 const toggleDropdown = () => {
@@ -103,7 +108,15 @@ const handleClickOutside = (event) => {
 // 리뷰 데이터 가져오기
 const fetchReview = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}?userId=${userId.value}`);
+        const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}?userId=${userId}`,
+            {
+                method: 'GET',
+            headers: {
+                    'Authorization': `${access_token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
         if (!response.ok) throw new Error('리뷰를 불러오는 데 실패했습니다.');
         const data = await response.json();
         Object.assign(secretReview, data.data[0]);
@@ -127,7 +140,7 @@ const closeModal = () => {
 // 수정된 리뷰 제출 처리
 const handleReviewSubmit = async (updatedReview) => {
     const reviewData = {
-        userId: userId.value,
+        userId: userId,
         content: updatedReview,
     };
 
@@ -135,6 +148,7 @@ const handleReviewSubmit = async (updatedReview) => {
         const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}`, {
             method: 'PUT',
             headers: {
+                'Authorization': `${access_token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(reviewData),
@@ -159,9 +173,10 @@ const deleteReview = () => {
 // 리뷰 삭제 처리
 const handleDeleteReviewSubmit = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}?userId=${userId.value}`, {
+        const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}?userId=${userId}`, {
             method: 'DELETE',
             headers: {
+                'Authorization': `${access_token}`,
                 'Content-Type': 'application/json',
             },
         });
@@ -243,7 +258,7 @@ onUnmounted(() => {
 .user-avatar {
     width: 48px;
     height: 48px;
-    border-radius: 50%;
+    /* border-radius: 50%; */
     margin-right: 12px;
 }
 
@@ -296,6 +311,7 @@ onUnmounted(() => {
     z-index: 10;
     min-width: 100px;
     padding: 8px 0; /* 상하 패딩 추가 (버튼 간격 확보) */
+    box-shadow: none;
 }
 
 .dropdown-menu button {
@@ -308,6 +324,7 @@ onUnmounted(() => {
     cursor: pointer;
     font-size: 16px;
     font-weight: normal;
+    box-shadow: none;
 }
 
 .dropdown-menu button.update {
@@ -320,6 +337,14 @@ onUnmounted(() => {
 
 .dropdown-menu button:hover {
     background-color: #f0f0f0; /* 호버 효과 */
+}
+
+* {
+        font-size: 2rem;
+    }
+
+button {
+    box-shadow: none;
 }
 
 /* 반응형 디자인 */

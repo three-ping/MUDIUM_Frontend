@@ -51,7 +51,9 @@ const postLike = async (reviewId,userId) => {
     await fetch(`http://localhost:8080/api/review-like/${reviewId}`,
         {
             method:"POST",
-            headers:{"Content-Type":"application/json"},
+            headers:{
+                'Authorization': `${access_token}`,
+                "Content-Type":"application/json"},
             body: `${userId}`
         }
     )
@@ -61,7 +63,9 @@ const deleteLike = async (reviewId,userId) => {
     await fetch(`http://localhost:8080/api/review-like/${reviewId}`,
         {
             method:"DELETE",
-            headers:{"Content-Type":"application/json"},
+            headers:{
+                'Authorization': `${access_token}`,
+                "Content-Type":"application/json"},
         body: `${userId}`
         }
     )
