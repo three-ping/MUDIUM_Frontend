@@ -233,12 +233,12 @@ onMounted(() => {
 
 .performance-list {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 8%;
   margin-left: 20px;
 }
 
 .performance-list h3 {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   margin-bottom: 15px;
 }
 
@@ -263,6 +263,7 @@ onMounted(() => {
 }
 
 .performance-item p {
-  font-size: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 </style>
