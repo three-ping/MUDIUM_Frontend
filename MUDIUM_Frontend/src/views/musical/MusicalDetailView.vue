@@ -75,8 +75,6 @@ import ReviewModal from '@/components/review/ReviewModal.vue';
 import { useUserStore } from '@/stores/userStore';
 
 const userStore = useUserStore();
-import ReviewCard from '@/components/review/ReviewCard.vue';
-import { useUserStore } from '@/stores/userStore';
 
 const route = useRoute();
 const router = useRouter();
@@ -86,7 +84,6 @@ const averageScope = ref({});
 const performanceList = ref([]);
 const reviews = ref([]);
 const isModalOpen = ref(false);
-const userId = userStore.userInfo.user_id;
 const access_token = userStore.userInfo.access_token;
 
 const goToReviewPage = () => {
@@ -127,7 +124,6 @@ const handleSubmit = async (review) => {
 };
 
 const scope = ref({});
-const userStore = useUserStore();
 const userId = userStore.userInfo.user_id || parseInt(userStore.userInfo.userId);
 
 const setRating = (newRating) => {
@@ -217,10 +213,7 @@ const fetchMusicalDetail = async () => {
     await fetchPerformanceList(musical.value.musicalId);
     await fetchReviews(musical.value.musicalId);
     await fetchMyScope(musical.value.musicalId);
-  } catch (error) {
-    console.error('Error fetching musical detail:', error);
-  }
-};
+  };
 
 onMounted(() => {
     fetchMusicalDetail();
