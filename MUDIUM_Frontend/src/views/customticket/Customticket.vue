@@ -1,19 +1,17 @@
    <template>
-    <div>
-
-  
+    <div class="ticket-container">  
       <!-- 이미지 파일 업로드 -->
-      <div>
+      <div class="file-upload">
         <input type="file" @change="handleImageUpload" />
       </div>
 
       <div class="controls">
         <label>
-          홀로그램 색상 1:
+          홀로그램 색상 1
           <input type="color" v-model="hologramColor1" @input="applyHologramStyle" />
         </label>
         <label>
-          홀로그램 색상 2:
+          홀로그램 색상 2
           <input type="color" v-model="hologramColor2" @input="applyHologramStyle" />
         </label>
       </div>
@@ -49,13 +47,19 @@
   
   <script>
   import { ref, onMounted } from 'vue';
-  import { useRoute } from 'vue-router';
+  import { useRouter } from 'vue-router';
+
+  import { useUserStore } from '@/stores/userStore';  // 사용자 정보를 저장한 Pinia store
+
 
   export default {
     setup() {
+      const router = useRouter();
+      const userStore = useUserStore();
+      // const userId = userStore.userInfo.userId;  // 로그인된 사용자의 ID
+      const userId = userStore.userInfo.userId || userStore.userInfo.user_id;
+      console.log(userId);
 
-      // const route = useRoute();
-      // const userId = route.params.userId; 
 
       const container = ref(null);
       const overlay = ref(null);
@@ -158,8 +162,7 @@
           hologramColor1: hologramColor1.value,
           hologramColor2: hologramColor2.value,
           comment: backMessage.value,
-          userId: 1 
-          // userId: userId
+          userId: userId
         };
   
         console.log('저장할 티켓 데이터:', ticketData);
@@ -181,6 +184,7 @@
       // 성공적으로 저장되었다는 알림
       alert('티켓이 성공적으로 저장되었습니다.');
 
+
       // 홀로그램 색상과 파일 업로드 초기화
       hologramColor1.value = '';  // 홀로그램 색상 1 초기화
       hologramColor2.value = '';  // 홀로그램 색상 2 초기화
@@ -188,6 +192,9 @@
 
       // 백 메시지 초기화
       backMessage.value = '';
+
+      // selectedItem.value = 'tickets';
+      router.push('/mypage');
 
       // 파일 선택창과 홀로그램만 보이게 다시 설정
       // 필요한 로직이 여기에 추가될 수 있음 (예: UI를 다시 리셋하는 로직)
@@ -228,11 +235,42 @@
   </script>
   
   <style>
+  .ticket-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    width: 100%;
+    height: 100vh;
+    margin-top: 2%;
+
+  }
+
+  .file-upload input{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-left: 20%;
+}
   .container {
     width: 220px;
     height: 310px;
     transition: all 0.1s;
     position: relative;
+    /* text-align: center; */
+  }
+
+  .controls {
+    width: 30%;
+    margin-top: 3%;
+    font-size: 2rem;
+    margin-bottom: 3%;
+  }
+
+  .controls input {
+    width: 100%;
+    margin-bottom: 5%;
   }
   
   .overlay {
@@ -246,8 +284,8 @@
   }
   
   .card {
-    width: 220px;
-    height: 310px;
+    width: 220px; 
+    height: 310px; 
     background-size: cover;
   }
   
@@ -289,17 +327,31 @@
   }
   
   .comments-section {
-    margin-top: 20px;
+    margin-top: 30px;
+  width: 100%; /* Make sure the comment section is responsive */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  }
+
+  .comments-section h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1%;
   }
   
   textarea {
-    width: 100%;
+    width: 30%;
     height: 80px;
     margin-bottom: 10px;
   }
   
   button {
-    padding: 10px 15px;
+    padding: 12px 18px;
+  font-size: 1rem;
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  cursor: pointer;
   }
   </style>
   

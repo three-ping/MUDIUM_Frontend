@@ -36,7 +36,7 @@
             </div>
             <Like class="board-like" :likeCount="likeCount" :isLiked="isLiked" :boardId="id" :userId="userId" />
         </div>
-        <BoardComment :id="id" :userNickname="userNickname" :userId="userId"></BoardComment>
+        <BoardComment :access_token="access_token" :id="id" :userNickname="userNickname" :userId="userId"></BoardComment>
     </div>
 
     <Modal v-model:isVisible="showDeleteModal" @confirm="deletePost">
@@ -45,15 +45,23 @@
 </template>
 
 <script setup>
-import { ref,reactive, onMounted } from 'vue';
+import { ref,reactive, onMounted,defineProps } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import Like from "@/components/common/Like.vue";
 import Modal from "@/components/common/Modal.vue";
 import BoardComment from './BoardComment.vue';
+
+
 const route = useRoute();
 const router = useRouter();
 const id = ref(Number(route.params.id));
+const props = defineProps({
+    userId: Number,
+    nickname: String,
+    access_token:String
+});
 
+const userId = Number(props.userId);
 const title = ref('');
 const author = ref('');
 const content = ref('로딩중');
@@ -61,19 +69,23 @@ const createdAt = ref(0);
 const updatedAt = ref(0);
 const likeCount = ref(0);
 const isLiked = ref(false);
-const userId = ref(1);
-const userNickname = ref("shushu_ping");
+const userNickname = props.nickname;
 const showDeleteModal = ref(false);
 const viewCount = ref(0);
 const author_id = ref(0);
+const access_token = props.access_token;
 
 const editPost = () => {
     router.push(`/board/edit/${id.value}`);
 };
 
 const deletePost = async () => {
-    await fetch(`http://localhost:8080/api/board/${id.value}/${userId.value}`, {
-        method: 'DELETE'
+    await fetch(`http://localhost:8080/api/board/${id.value}/${userId}`, {
+        method: 'DELETE',
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
     }
     );
     router.push('/board');  
@@ -81,7 +93,11 @@ const deletePost = async () => {
 
 const fetchDetailBoard = async() => {
     const response = await fetch(`http://localhost:8080/api/board/${id.value}`, {
-        method: "GET"
+        method: "GET",
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
     });
     const responseDTO = await response.json();
     title.value = responseDTO.data.title;
@@ -103,7 +119,11 @@ const incrementViewCount = async () => {
         localStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
 
         await fetch(`http://localhost:8080/api/board/${id.value}/count`, {
-            method: 'PUT'
+            method: 'PUT',
+            headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
         });
 
         viewCount.value++;
@@ -135,7 +155,11 @@ return date.toLocaleString('ko-KR', options);
 
 const checkIsLiked = async () => {
     const response = await fetch(`http://localhost:8080/api/board-like/${id.value}/${userId.value}`, {
-        method: "GET"
+        method: "GET",
+        headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
     });
     const responseDTO = await response.json();
     isLiked.value = responseDTO.data;
@@ -149,10 +173,14 @@ onMounted(() => {
 </script>
 
 <style scoped>
+button { 
+    box-shadow: none;
+}
 .board-detail {
 font-family: Arial, sans-serif;
-max-width: 800px;
-margin: 0 auto;
+max-width: 1200px;
+width: 80%;
+margin: 5vh auto;
 padding: 20px;
 }
 
@@ -282,6 +310,9 @@ box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   color: white;
   font-weight: bold;
   min-width: 80px;
+}
+* {
+    font-size: 2rem;
 }
 
 

@@ -16,7 +16,16 @@
         <p v-else class="average-scope">평균 별점: 정보 없음</p>
         <div class="star-rating">
           <StarRating 
-            :rating="averageScope ? averageScope.scope : 0"
+            :rating="scope ? scope.scope : 0"
+            :musical-id="musical.musicalId"
+            v-if="userStore.userInfo.isLoggedIn"
+            :userId="userId"
+            @set-rating="setRating"
+          />
+          <StarRating 
+            :rating="scope ? scope.scope : 0"
+            :musicalId="musical.musicalId"
+            v-else
             @set-rating="setRating"
           />
         </div>
@@ -50,16 +59,21 @@
 import { ref, onMounted, defineProps } from 'vue';
 import { useRoute } from 'vue-router';
 import StarRating from '@/components/scope/StarRating.vue';
-import ReviewCard from '@/components/review/ReviewCard.vue'; // 새로운 컴포넌트 임포트
+import ReviewCard from '@/components/review/ReviewCard.vue';
+import { useUserStore } from '@/stores/userStore';
 
 const route = useRoute();
-const props = defineProps({ id: String });// 초기 별점
+const props = defineProps({ id: String });
 const musical = ref({});
 const averageScope = ref({});
 const performanceList = ref([]);
 const reviews = ref([]);
+const scope = ref({});
+const userStore = useUserStore();
+const userId = userStore.userInfo.user_id || parseInt(userStore.userInfo.userId);
+
 const setRating = (newRating) => {
-  rating.value = newRating;
+  scope.value.scope = newRating;
 };
 
 const fetchPerformanceList = async (id) => {
@@ -72,6 +86,18 @@ const fetchPerformanceList = async (id) => {
   }
 };
 
+const fetchMyScope = async (id) => {
+  console.log("userId: ", userId);
+  try {
+    const response = await fetch(`http://localhost:8080/api/scope/${userId}/${id}`);
+    const data = await response.json();
+    scope.value = data.data;
+    console.log("MyScope: ", scope.value);
+  } catch (error) {
+    console.error('Error fetching scope:', error);
+  }
+};
+
 const fetchReviews = async (id) => {
   try {
     const response = await fetch(`http://localhost:8080/api/review/${id}`);
@@ -80,7 +106,7 @@ const fetchReviews = async (id) => {
     console.log(reviews.value);
   } catch (error) {
     console.error('Error fetching reviews:', error);
-  } // 이 부분 추가
+  }
 };
 
 const fetchAverageScope = async (id) => {
@@ -88,7 +114,6 @@ const fetchAverageScope = async (id) => {
     const response = await fetch(`http://localhost:8080/api/scope/${id}`);
     const data = await response.json();
 
-    // 응답 데이터 구조가 다름
     if (data.success && data.data) {
       console.log('찾은 별점:', data.data.scope);
       averageScope.value = {
@@ -103,7 +128,6 @@ const fetchAverageScope = async (id) => {
     console.error('평균 별점 가져오기 오류:', error);
   }
 };
-
 
 const fetchMusicalDetail = async () => {
   const id = route.params.id;
@@ -124,6 +148,7 @@ const fetchMusicalDetail = async () => {
     await fetchAverageScope(musical.value.musicalId);
     await fetchPerformanceList(musical.value.musicalId);
     await fetchReviews(musical.value.musicalId);
+    await fetchMyScope(musical.value.musicalId);
   } catch (error) {
     console.error('Error fetching musical detail:', error);
   }
@@ -201,18 +226,19 @@ onMounted(() => {
 }
 
 .review-list li {
+  list-style: none;
   margin-bottom: 10px;
   font-size: 1rem;
 }
 
 .performance-list {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 8%;
   margin-left: 20px;
 }
 
 .performance-list h3 {
-  font-size: 1.5rem;
+  font-size: 2.5rem;
   margin-bottom: 15px;
 }
 
@@ -237,6 +263,7 @@ onMounted(() => {
 }
 
 .performance-item p {
-  font-size: 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 </style>

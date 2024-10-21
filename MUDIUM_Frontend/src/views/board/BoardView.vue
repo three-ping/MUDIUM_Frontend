@@ -27,10 +27,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="pageItem in pageItems" :key="pageItem.id" class="board-tr">
-            <td class="td-id" data-label="번호">{{ pageItem.id }}</td>
+          <tr v-for="pageItem in pageItems" :key="pageItem.boardId" class="board-tr">
+            <td class="td-id" data-label="번호">{{ pageItem.boardId }}</td>
             <td class="td-title" data-label="제목">
-              <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.id } }">
+              <router-link :to="{ name: 'BoardDetailView', params: { id: pageItem.boardId } }">
                 {{ pageItem.title }} [{{ pageItem.comments }}]
               </router-link>
             </td>
@@ -50,7 +50,7 @@
 <script setup>
 import Paging from '@/components/board/pagination.vue';
 import Detail from '@/views/board/BoardDetailView.vue';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, defineProps } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -60,10 +60,19 @@ const totalPageNumber = ref(0);
 const pageItems = reactive([]);
 const searchType = ref('TITLE');
 const searchQuery = ref('');
+const props = defineProps({
+  access_token: String
+});
+const access_token = props.access_token;
+
 
 const fetchPageData = async () => {
   const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
-    method: "GET"
+    method: "GET",
+    headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
   });
   const responseDTO = await response.json();
   pageItems.length = 0;
@@ -73,7 +82,11 @@ const fetchPageData = async () => {
 
 const queryPageData = async () => {
   const response = await fetch(`http://localhost:8080/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}`, {
-    method: "GET"
+    method: "GET",
+    headers: {
+        'Authorization': `Bearer ${access_token}`, 
+        'Content-Type': 'application/json'  
+    }
   });
   const responseDTO = await response.json();
   pageItems.length = 0;
@@ -114,18 +127,21 @@ onMounted(() => {
     fetchPageData();
   }, 100);
 });
+
 </script>
 
 <style scoped>
+button { 
+    box-shadow: none;
+}
 .board-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 100%;
   max-width: 1200px;
-  margin: 20px auto;
+  margin: 5vh auto;
   padding: 0 20px;
-  font-family: Arial, sans-serif;
 }
 
 .board-actions {
@@ -290,4 +306,8 @@ onMounted(() => {
     margin-bottom: 15px;
   }
 }
+* {
+    font-size: 2rem;
+}
+
 </style>

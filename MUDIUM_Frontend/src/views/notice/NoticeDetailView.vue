@@ -38,12 +38,19 @@
 <script setup>
 import { ref,reactive, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
 import Modal from "@/components/common/Modal.vue";
+
+const userStore = useUserStore();
+const userInfo = userStore.userInfo;
+
+const access_token = userInfo.access_token;
+
 const route = useRoute();
 const router = useRouter();
 const id = ref(Number(route.params.id));
-const userRole = "ROLE_ADMIN";
-// const userRole = "ROLE_MEMBER";
+// const userRole = "ROLE_ADMIN";
+const userRole = "ROLE_MEMBER";
 
 const title = ref('');
 const author = ref('');
@@ -64,7 +71,10 @@ const editPost = () => {
 
 const deletePost = async () => {
     await fetch(`http://localhost:8080/api/notice/${id.value}/${userId.value}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+            "Authorization" : `Bearer ${access_token}`
+        }
     }
     );
     router.push('/notice');  
@@ -72,7 +82,10 @@ const deletePost = async () => {
 
 const fetchDetailBoard = async() => {
     const response = await fetch(`http://localhost:8080/api/notice/${id.value}`, {
-        method: "GET"
+        method: "GET",
+        headers: {
+            "Authorization" : `Bearer ${access_token}`
+        }
     });
     const responseDTO = await response.json();
     title.value = responseDTO.data.title;
@@ -94,7 +107,10 @@ const incrementViewCount = async () => {
         localStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
 
         await fetch(`http://localhost:8080/api/board/${id.value}/count`, {
-            method: 'PUT'
+            method: 'PUT',
+            headers: {
+            "Authorization" : `Bearer ${access_token}`
+        }
         });
 
         viewCount.value++;
@@ -126,7 +142,10 @@ return date.toLocaleString('ko-KR', options);
 
 const checkIsLiked = async () => {
     const response = await fetch(`http://localhost:8080/api/board-like/${id.value}/${userId.value}`, {
-        method: "GET"
+        method: "GET",
+        headers: {
+            "Authorization" : `Bearer ${access_token}`
+        }
     });
     const responseDTO = await response.json();
     isLiked.value = responseDTO.data;
@@ -141,8 +160,8 @@ onMounted(() => {
 
 <style scoped>
 .board-detail {
-font-family: Arial, sans-serif;
-max-width: 800px;
+    width: 80%;
+max-width: 1200px;
 margin: 0 auto;
 padding: 20px;
 }
@@ -278,6 +297,12 @@ box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 .board-detail-subheader {
     display: flex;
     justify-content: space-between;
+}
+button {
+    box-shadow: none;
+}
+*{
+    font-size: 2rem;
 }
 
 

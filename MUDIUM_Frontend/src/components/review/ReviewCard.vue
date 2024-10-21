@@ -1,12 +1,20 @@
 <template>
   <div class="review-card">
     <div class="review-header">
-      <span class="user-name">{{ nickName || '익명' }}</span>
-      <span v-if="scope !== null" class="small-star">★ {{ scope }}</span>
+      <span class="nickname">{{ nickName }}</span>
+      <div class="star-rating">
+        <span
+          v-for="star in 5"
+          :key="star"
+          class="star"
+        >
+          <span v-if="star <= scope">★</span>
+          <span v-else-if="star - 0.5 <= scope">★</span>
+          <span v-else>☆</span>
+        </span>
+      </div>
     </div>
-    <div class="review-content">
-      <p>{{ content || '내용 없음' }}</p>
-    </div>
+    <p class="review-content">{{ content }}</p>
   </div>
 </template>
 
@@ -14,51 +22,56 @@
 import { defineProps } from 'vue';
 
 const props = defineProps({
-  nickName: {
-    type: String,
-    default: '익명'
-  },
-  content: {
-    type: String,
-    default: '내용 없음'
-  },
-  scope: {
-    type: Number,
-    default: null
-  }
+  content: String,
+  scope: Number,
+  nickName: String
 });
 </script>
 
 <style scoped>
 .review-card {
-  background-color: #e0e0e0;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 10px;
-  position: relative;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  border: 2px dashed #ccc; /* 티켓 모양을 위한 테두리 */
-  display: flex;
-  flex-direction: column;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .review-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
 }
 
-.user-name {
+.nickname {
   font-weight: bold;
 }
 
-.small-star {
-  font-size: 0.8rem;
+.star-rating {
+  display: flex;
+  font-size: 0.8rem; /* 작은 별 크기 */
+}
+
+
+.star.filled {
   color: gold;
 }
 
+.star.half {
+  color: gold;
+  position: relative;
+}
+
+.star.half::before {
+  content: attr(data-split);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+}
+
 .review-content {
-  text-align: center;
+  margin-top: 5px;
+  font-size: 0.9rem;
 }
 </style>

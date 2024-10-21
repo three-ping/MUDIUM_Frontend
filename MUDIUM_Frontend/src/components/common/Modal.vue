@@ -109,7 +109,6 @@ const confirmModal = () => {
     cursor: pointer;
     font-size: 14px;
     width: 100px;
-    /* 버튼 크기 일치 */
 }
 
 .common-button {
@@ -119,5 +118,8 @@ const confirmModal = () => {
 .common-button-purple {
     background-color: #8e44ad;
     color: white;
+}
+button {
+    box-shadow: none;
 }
 </style>

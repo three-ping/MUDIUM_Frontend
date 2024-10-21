@@ -7,10 +7,7 @@
             <tr class="board-tr">
             <th>번호</th>
             <th>제목</th>
-            <th>작성자</th>
             <th>작성일</th>
-            <th>좋아요</th>
-            <th>조회수</th>
             </tr>
         </thead>
         </table>
@@ -28,7 +25,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const goBackToBoard = () => {
-    router.push('/board');
+    router.push('/notice');
 };
 </script>
 
@@ -41,7 +38,6 @@ const goBackToBoard = () => {
     max-width: 1200px;
     margin: 20px auto;
     padding: 0 20px;
-    font-family: Arial, sans-serif;
 }
 
 .board-actions {
@@ -109,7 +105,7 @@ const goBackToBoard = () => {
 }
 
 .board-table-header {
-    background-color: #D53EC6;
+    background-color: #279977;
 }
 
 .board-table th {

@@ -78,7 +78,7 @@
     justify-content: center;
     align-items: center;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 1.7rem;
   }
   
   .musical-card img {
@@ -89,7 +89,7 @@
   }
   
   .musical-title {
-    font-size: 1rem;
+    font-size: 1.9rem;
     text-align: center;
     white-space: nowrap;
     overflow: hidden;
