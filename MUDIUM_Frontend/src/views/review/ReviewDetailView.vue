@@ -6,9 +6,9 @@
                 <div class="user-info">
                     <h3>
                         <span>
-                            {{ review.userNickname }} <span v-if="review.isPremium" class="premium-badge">P</span>
+                            {{ review.nickName }} <span v-if="review.isPremium" class="premium-badge">P</span>
                         </span>
-                        <span class="dropdown-wrapper">
+                        <span v-if="review.userId === userId" class="dropdown-wrapper">
                             <span @click="toggleDropdown" class="dropdown-icon">
                                 <img src="@/assets/images/threeDots.svg" alt="threeDots" />
                             </span>
@@ -30,7 +30,7 @@
             <div class="review-footer">
                 <div class="review-stats">
                     <span class="likes">좋아요 {{ review.like }}</span>
-                    <span class="comments">댓글 {{ review.comment }}</span>
+                    <span class="comments">댓글 {{ review.comments }}</span>
                 </div>
                 <br><br>
                 <div class="review-actions">
@@ -86,24 +86,22 @@ import ReviewDeleteModal from '../../components/review/ReviewDeleteModal.vue';
 import ReviewLike from '@/components/review/ReviewLike.vue';
 import likeIconPath from '@/assets/images/like.svg';
 import likeFillIconPath from '@/assets/images/like-fill.svg';
+import { useUserStore } from '@/stores/userStore';
 
-// const props = defineProps({
-//     reviewId: {
-//         type: Number,
-//         required: true,
-//     },
-// });
+const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
 const review = reactive({
     reviewId: null,
-    userNickname: '',
+    nickName: '',
     content: '',
-    createdAt: null,
-    like: 0,
+    createdAt: '',
+    updatedAt: '',
+    like: '',
     musicalTitle: '',
-    userProfile: '',
+    userProfile: '/src/assets/images/profile_default.svg',
+    userId: '',
 });
 const musicalId = ref(route.params.musicalId);
 const reviewId = ref(route.params.reviewId);
@@ -111,7 +109,8 @@ const showComments = ref(false);
 const dropdownVisible = ref(false); // 드롭다운!!
 const showModal = ref(false);
 const showDeleteModal = ref(false);
-const userId = ref(6); // 이 부분은 동적으로 회원 받아야 돼!!!!!!!!!!!
+const userId = userStore.userInfo.user_id;
+const access_token = userStore.userInfo.access_token;
 
 const likeCount = ref(review.like);
 const isLiked = ref(false);
@@ -133,6 +132,10 @@ const fetchReview = async () => {
     try {
         const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}`, {
             method: 'GET',
+            headers: {
+                    'Authorization': `${access_token}`,
+                    'Content-Type': 'application/json',
+                },
         });
         if (!response.ok) {
             throw new Error('리뷰를 불러오는 데 실패했습니다.');
@@ -161,7 +164,7 @@ const closeModal = () => {
 // 수정된 리뷰 제출 처리
 const handleReviewSubmit = async (updatedReview) => {
     const reviewData = {
-        userId: userId.value,
+        userId: userId,
         content: updatedReview,
     };
 
@@ -169,6 +172,7 @@ const handleReviewSubmit = async (updatedReview) => {
         const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}`, {
             method: 'PUT',
             headers: {
+                'Authorization': `${access_token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(reviewData), // 업데이트된 내용 전송
@@ -198,10 +202,11 @@ const deleteReview = () => {
 const handleDeleteReviewSubmit = async () => {
     try {
         const response = await fetch(
-            `http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}?userId=${userId.value}`,
+            `http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}?userId=${userId}`,
             {
                 method: 'DELETE',
                 headers: {
+                    'Authorization': `${access_token}`,
                     'Content-Type': 'application/json',
                 },
             }
@@ -249,22 +254,15 @@ const formatDate = (timestamp) => {
     }
 };
 
-// // 페이지가 로드될 때 사용자의 좋아요 상태를 확인하는 함수
-// const checkIsLiked = async () => {
-//     try {
-//         const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, {
-//             method: "GET",
-//         });
-//         const responseDTO = await response.json();
-//         isLiked.value = responseDTO.data; // 사용자의 좋아요 상태 업데이트
-//     } catch (error) {
-//         console.error('좋아요 상태 확인 중 오류 발생:', error);
-//     }
-// };
-
 const checkLikeStatus = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, { method: "GET" });
+        const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId}`, { 
+            method: "GET",
+            headers: {
+                    'Authorization': `${access_token}`,
+                    'Content-Type': 'application/json',
+                },
+        });
         if (!response.ok) {
             throw new Error('좋아요 상태를 확인하는 데 실패했습니다.');
         }
@@ -285,11 +283,12 @@ const handleLike = async () => {
     try {
         const url = `http://localhost:8080/api/review-like/${reviewId.value}`;
         const method = isLiked.value ? 'POST' : 'DELETE';
-        const body = JSON.stringify(userId.value);
+        const body = JSON.stringify(userId);
 
         const response = await fetch(url, {
             method: method,
             headers: {
+                'Authorization': `${access_token}`,
                 'Content-Type': 'application/json',
             },
             body: body,
@@ -309,17 +308,9 @@ const handleLike = async () => {
     }
 };
 
-// const handleComment = () => {
-//     showComments.value = !showComments.value;
-// };
-
-// const checkIsLiked = async () => {
-//     const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, {
-//         method: "GET"
-//     });
-//     const responseDTO = await response.json();
-//     isLiked.value = responseDTO.data;
-// }
+console.log(review);
+console.log(review.userId);
+console.log(userId);
 
 onMounted(() => {
     fetchReview();
@@ -441,6 +432,7 @@ onUnmounted(() => {
     color: #666;
     font-size: 14px;
     cursor: pointer;
+    box-shadow: none;
 }
 
 .action-icon {
@@ -518,6 +510,7 @@ onUnmounted(() => {
     z-index: 10;
     min-width: 100px;
     padding: 8px 0; /* 상하 패딩 추가 (버튼 간격 확보) */
+    box-shadow: none;
 }
 
 .dropdown-menu button {
@@ -530,6 +523,7 @@ onUnmounted(() => {
     cursor: pointer;
     font-size: 16px;
     font-weight: normal;
+    box-shadow: none;
 }
 
 .dropdown-menu button.update {
@@ -542,6 +536,14 @@ onUnmounted(() => {
 
 .dropdown-menu button:hover {
     background-color: #f0f0f0;
+}
+
+* {
+        font-size: 2rem;
+    }
+
+button {
+    box-shadow: none;
 }
 
 @media (max-width: 768px) {

@@ -6,7 +6,7 @@
 			<ProfileTab v-if="selectedItem === 'profile'" :userInfo="userInfo" />
 			<Calendar v-if="selectedItem === 'profile'" />
 
-			<MyRebviews v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
+			<MyReviews v-if="selectedItem === 'myWorks'" :userInfo="userInfo" />
 			<BookmarksTab v-if="selectedItem === 'bookmarks'" :userInfo="userInfo" />
 			<BoardTab v-if="selectedItem === 'board'" :userInfo="userInfo" />
 			<TicketsTab v-if="selectedItem === 'tickets'" :userInfo="userInfo" />
@@ -17,9 +17,9 @@
 <script setup>
 import { ref, watch } from 'vue';
 import { useUserStore } from '@/scripts/user/user';
-import Sidebar from './components/Sidebar.vue';
+import Sidebar from './components/SideBar.vue';
 import ProfileTab from "./components/tabs/Profile.vue";
-import MyRebviews from './components/tabs/MyReviews.vue';
+import MyReviews from './components/tabs/MyReviews.vue';
 import BookmarksTab from './components/tabs/Bookmarks.vue';
 import BoardTab from './components/tabs/BoardTab.vue';
 import TicketsTab from './components/tabs/Tickets.vue';

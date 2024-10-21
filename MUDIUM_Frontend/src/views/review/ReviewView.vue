@@ -12,25 +12,31 @@
                     </select>
                 </div>
                 <button @click="openModal" class="review-button">리뷰 작성</button>
-                <ReviewModal :isOpen="isModalOpen" :musicalTitle="musicalTitle" :onClose="closeModal"
-                    :onSubmit="(review) => handleSubmit(review)" />
+                <ReviewModal
+                    :isOpen="isModalOpen"
+                    :musicalTitle="musicalTitle"
+                    :onClose="closeModal"
+                    :onSubmit="(review) => handleSubmit(review)"
+                />
             </div>
             <div class="review-list" v-infinite-scroll="loadMore">
                 <div v-for="review in displayedReviews" :key="review.id" class="review-item">
                     <div class="review-header">
                         <div class="user-info">
                             <img :src="review.userProfile" alt="User avatar" class="avatar" />
-                            <span class="user-nickname">{{ review.userNickname }}</span>
+                            <span class="user-nickname">{{ review.nickName }}</span>
                         </div>
                         <span class="rating">{{ review.rating }}</span>
                     </div>
                     <p class="review-content">
-                        <router-link :to="{ name: 'ReviewDetailView', params: { reviewId: review.reviewId } }"
-                            class="text-link">
+                        <router-link
+                            :to="{ name: 'ReviewDetailView', params: { reviewId: review.reviewId } }"
+                            class="text-link"
+                        >
                             {{ review.content }}
                         </router-link>
                     </p>
-                    <br>
+                    <br />
                     <div class="review-footer">
                         <div class="reaction-container">
                             <span class="likes">
@@ -39,7 +45,7 @@
                             </span>
                             <span class="comments">
                                 <img src="@/assets/images/comment.svg" alt="댓글" class="review-icon" />
-                                <span class="count">{{ review.comment }}</span>
+                                <span class="count">{{ review.comments }}</span>
                             </span>
                         </div>
                     </div>
@@ -54,6 +60,9 @@ import { ref, onMounted, computed } from 'vue';
 import { useInfiniteScroll } from '@vueuse/core';
 import { useRoute } from 'vue-router';
 import ReviewModal from '@/components/review/ReviewModal.vue';
+import { useUserStore } from '@/stores/userStore';
+
+const userStore = useUserStore();
 
 const isModalOpen = ref(false);
 const reviews = ref([]);
@@ -65,7 +74,8 @@ const isLoading = ref(false);
 const route = useRoute();
 const musicalId = ref(route.params.musicalId);
 const musicalTitle = ref('');
-const userId = ref(6); // Consider making this dynamic
+const userId = userStore.userInfo.user_id;
+const access_token = userStore.userInfo.access_token;
 
 const openModal = () => {
     isModalOpen.value = true;
@@ -80,9 +90,10 @@ const handleSubmit = async (review) => {
         const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}`, {
             method: 'POST',
             headers: {
+                Authorization: `${access_token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ userId: userId.value, content: review }),
+            body: JSON.stringify({ userId: userId, content: review }),
         });
 
         if (!response.ok) {
@@ -115,7 +126,14 @@ const fetchReviews = async () => {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/review/${musicalId.value}?page=${page.value}&perPage=${perPage}&sort=${sortOption.value}`
+            `http://localhost:8080/api/review/${musicalId.value}?page=${page.value}&perPage=${perPage}&sort=${sortOption.value}`,
+            {
+                method: 'GET',
+                headers: {
+                    Authorization: `${access_token}`,
+                    'Content-Type': 'application/json',
+                },
+            }
         );
         if (!response.ok) {
             throw new Error('Failed to fetch reviews');
@@ -164,11 +182,14 @@ const truncateContent = (content) => {
 };
 
 const displayedReviews = computed(() =>
-    reviews.value.map(review => ({
+    reviews.value.map((review) => ({
         ...review,
+        userProfile: review.userProfile || '/src/assets/images/profile_default.svg',
         content: truncateContent(review.content),
     }))
 );
+
+console.log(displayedReviews);
 
 onMounted(() => {
     fetchReviews();
@@ -299,6 +320,14 @@ useInfiniteScroll(document, loadMore, { distance: 10 });
 
 .text-link:hover {
     text-decoration: none;
+}
+
+* {
+        font-size: 2rem !important;
+    }
+
+button {
+    box-shadow: none;
 }
 
 @media (max-width: 768px) {
