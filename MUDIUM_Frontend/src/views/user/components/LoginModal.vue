@@ -85,7 +85,7 @@ const openFindPassword = () => {
 };
 
 const initiateKakaoLogin = () => {
-	const kakaoRedirectUri = "http://127.0.0.1:8080/api/users/oauth2/kakao"; // This should exactly match what's in Kakao Developer Console
+	const kakaoRedirectUri = "http://localhost:80/boot/api/users/oauth2/kakao"; // This should exactly match what's in Kakao Developer Console
 	const kakaoLoginUrl = `https://kauth.kakao.com/oauth/authorize?client_id=454fe5e6a0e0c020cf155003e27761e2&redirect_uri=${encodeURIComponent(kakaoRedirectUri)}&response_type=code`;
 	window.location.href = kakaoLoginUrl;
 };

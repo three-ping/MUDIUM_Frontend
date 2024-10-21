@@ -108,7 +108,7 @@ const closeSignupModal = () => emit('close');
 const sendVerification = async () => {
 	try {
 		emailError.value = '';
-		const response = await axios.post('/api/users/send-verification', null, { params: { email: email.value } });
+		const response = await axios.post('/boot/api/users/send-verification', null, { params: { email: email.value } });
 		if (response.data.success) {
 			isEmailSent.value = true;
 			alert('이메일 인증 코드가 전송되었습니다.');
