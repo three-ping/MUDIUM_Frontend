@@ -1,17 +1,17 @@
    <template>
-    <div>  
+    <div class="ticket-container">  
       <!-- 이미지 파일 업로드 -->
-      <div>
+      <div class="file-upload">
         <input type="file" @change="handleImageUpload" />
       </div>
 
       <div class="controls">
         <label>
-          홀로그램 색상 1:
+          홀로그램 색상 1
           <input type="color" v-model="hologramColor1" @input="applyHologramStyle" />
         </label>
         <label>
-          홀로그램 색상 2:
+          홀로그램 색상 2
           <input type="color" v-model="hologramColor2" @input="applyHologramStyle" />
         </label>
       </div>
@@ -235,11 +235,42 @@
   </script>
   
   <style>
+  .ticket-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* justify-content: center; */
+    width: 100%;
+    height: 100vh;
+    margin-top: 2%;
+
+  }
+
+  .file-upload input{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-left: 20%;
+}
   .container {
     width: 220px;
     height: 310px;
     transition: all 0.1s;
     position: relative;
+    /* text-align: center; */
+  }
+
+  .controls {
+    width: 30%;
+    margin-top: 3%;
+    font-size: 2rem;
+    margin-bottom: 3%;
+  }
+
+  .controls input {
+    width: 100%;
+    margin-bottom: 5%;
   }
   
   .overlay {
@@ -253,8 +284,8 @@
   }
   
   .card {
-    width: 220px;
-    height: 310px;
+    width: 220px; 
+    height: 310px; 
     background-size: cover;
   }
   
@@ -296,17 +327,31 @@
   }
   
   .comments-section {
-    margin-top: 20px;
+    margin-top: 30px;
+  width: 100%; /* Make sure the comment section is responsive */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  }
+
+  .comments-section h3 {
+    font-size: 1.6rem;
+    margin-bottom: 1%;
   }
   
   textarea {
-    width: 100%;
+    width: 30%;
     height: 80px;
     margin-bottom: 10px;
   }
   
   button {
-    padding: 10px 15px;
+    padding: 12px 18px;
+  font-size: 1rem;
+  background-color: #6a0dad;
+  color: white;
+  border: none;
+  cursor: pointer;
   }
   </style>
   
