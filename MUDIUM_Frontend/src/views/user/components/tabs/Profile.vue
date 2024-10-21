@@ -12,28 +12,7 @@
 		<button class="edit-profile-btn">수정</button>
 	</div>
 
-	<div class="calendar-section card">
-		<h3>October 2020</h3>
-		<div class="calendar">
-			<!-- You may want to use a proper calendar component here -->
-			<table>
-				<thead>
-					<tr>
-						<th>Mo</th>
-						<th>Tu</th>
-						<th>We</th>
-						<th>Th</th>
-						<th>Fr</th>
-						<th>Sa</th>
-						<th>Su</th>
-					</tr>
-				</thead>
-				<tbody>
-					<!-- Add calendar days here -->
-				</tbody>
-			</table>
-		</div>
-	</div>
+	
 </template>
 
 <script setup>
