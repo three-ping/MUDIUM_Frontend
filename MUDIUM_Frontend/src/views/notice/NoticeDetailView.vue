@@ -70,7 +70,7 @@ const editPost = () => {
 };
 
 const deletePost = async () => {
-    await fetch(`http://localhost:8080/api/notice/${id.value}/${userId.value}`, {
+    await fetch(`/boot/api/notice/${id.value}/${userId.value}`, {
         method: 'DELETE',
         headers: {
             "Authorization" : `Bearer ${access_token}`
@@ -81,7 +81,7 @@ const deletePost = async () => {
 };
 
 const fetchDetailBoard = async() => {
-    const response = await fetch(`http://localhost:8080/api/notice/${id.value}`, {
+    const response = await fetch(`/boot/api/notice/${id.value}`, {
         method: "GET",
         headers: {
             "Authorization" : `Bearer ${access_token}`
@@ -106,7 +106,7 @@ const incrementViewCount = async () => {
         viewedPosts[id.value] = true;
         localStorage.setItem('viewedPosts', JSON.stringify(viewedPosts));
 
-        await fetch(`http://localhost:8080/api/board/${id.value}/count`, {
+        await fetch(`/boot/api/board/${id.value}/count`, {
             method: 'PUT',
             headers: {
             "Authorization" : `Bearer ${access_token}`
@@ -141,7 +141,7 @@ return date.toLocaleString('ko-KR', options);
 }
 
 const checkIsLiked = async () => {
-    const response = await fetch(`http://localhost:8080/api/board-like/${id.value}/${userId.value}`, {
+    const response = await fetch(`/boot/api/board-like/${id.value}/${userId.value}`, {
         method: "GET",
         headers: {
             "Authorization" : `Bearer ${access_token}`

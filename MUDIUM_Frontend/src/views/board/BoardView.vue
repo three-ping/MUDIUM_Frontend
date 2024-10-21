@@ -67,7 +67,7 @@ const access_token = props.access_token;
 
 
 const fetchPageData = async () => {
-  const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
+  const response = await fetch(`/boot/${requestURL}?page=${pageNumber.value}`, {
     method: "GET",
     headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -81,7 +81,7 @@ const fetchPageData = async () => {
 };
 
 const queryPageData = async () => {
-  const response = await fetch(`http://localhost:8080/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}`, {
+  const response = await fetch(`/boot/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}`, {
     method: "GET",
     headers: {
         'Authorization': `Bearer ${access_token}`, 

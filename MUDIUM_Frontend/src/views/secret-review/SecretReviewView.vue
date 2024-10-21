@@ -60,7 +60,7 @@ const handleSubmit = async (review) => {
     };
 
     try {
-        const response = await fetch(`http://localhost:8080/api/secretreview/${musicalId.value}`, {
+        const response = await fetch(`/boot/api/secretreview/${musicalId.value}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -104,7 +104,7 @@ const fetchReviews = async () => {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/secretreview?page=${page.value}&perPage=${perPage}&userId=${userId.value}`,
+            `/boot/api/secretreview?page=${page.value}&perPage=${perPage}&userId=${userId.value}`,
             { method: 'GET' }
         );
         if (!response.ok) {

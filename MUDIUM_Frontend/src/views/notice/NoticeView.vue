@@ -72,7 +72,7 @@
   };
   
   const fetchPageData = async () => {
-    const response = await fetch(`http://localhost:8080/${requestURL}?page=${pageNumber.value}`, {
+    const response = await fetch(`/boot/${requestURL}?page=${pageNumber.value}`, {
       method: "GET"
     });
     const responseDTO = await response.json();
@@ -83,7 +83,7 @@
   };
   
   const queryPageData = async () => {
-    const response = await fetch(`http://localhost:8080/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}&page=${pageNumber.value}`, {
+    const response = await fetch(`/boot/${requestURL}?searchType=${searchType.value}&searchQuery=${searchQuery.value}&page=${pageNumber.value}`, {
       method: "GET"
     });
     const responseDTO = await response.json();

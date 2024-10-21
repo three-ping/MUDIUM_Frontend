@@ -93,7 +93,7 @@ const newReply = ref('');
 const access_token = props.access_token;
 
 const fetchComments = async () => {
-    const response = await fetch(`http://localhost:8080/api/board-comment/${id.value}?page=${pageNumber.value}&size=${pageSize.value}`, {
+    const response = await fetch(`/boot/api/board-comment/${id.value}?page=${pageNumber.value}&size=${pageSize.value}`, {
         method: 'GET',
         headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -127,7 +127,7 @@ const submitComment = async () => {
     if (!newComment.value.trim()) {
         return;
     }
-    await fetch(`http://localhost:8080/api/board-comment/${id.value}`, {
+    await fetch(`/boot/api/board-comment/${id.value}`, {
         method: "POST",
         headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -148,7 +148,7 @@ const submitReply = async (id) => {
     if(!newReply.value.trim()) {
         return;
     }
-    await fetch(`http://localhost:8080/api/board-reply/${id}`,{
+    await fetch(`/boot/api/board-reply/${id}`,{
         method: "POST",
         headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -177,7 +177,7 @@ const submitEdit = async (comment, index) => {
     if (!comment.editContent.trim()) {
         return;
     }
-    await fetch(`http://localhost:8080/api/board-comment/${comment.boardCommentId}`, {
+    await fetch(`/boot/api/board-comment/${comment.boardCommentId}`, {
         method: "PUT",
         headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -194,7 +194,7 @@ const submitEdit = async (comment, index) => {
 
 const deleteComment = async (commentId) => {
     if (confirm("댓글을 삭제하시겠습니까?")) {
-        await fetch(`http://localhost:8080/api/board-comment/${commentId}`, {
+        await fetch(`/boot/api/board-comment/${commentId}`, {
             method: "DELETE",
             headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -206,7 +206,7 @@ const deleteComment = async (commentId) => {
 };
 
 const fetchReplies = async (boardCommentId) => {
-    const response = await fetch(`http://localhost:8080/api/board-reply/${boardCommentId}`,{
+    const response = await fetch(`/boot/api/board-reply/${boardCommentId}`,{
     method: "GET",
     headers: {
         'Authorization': `Bearer ${access_token}`, 

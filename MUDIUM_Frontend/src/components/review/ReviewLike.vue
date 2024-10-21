@@ -48,7 +48,7 @@ watch(() => props.isLiked, (newValue) => {
 
 
 const postLike = async (reviewId,userId) => {
-    await fetch(`http://localhost:8080/api/review-like/${reviewId}`,
+    await fetch(`/boot/api/review-like/${reviewId}`,
         {
             method:"POST",
             headers:{"Content-Type":"application/json"},
@@ -58,7 +58,7 @@ const postLike = async (reviewId,userId) => {
 };
 
 const deleteLike = async (reviewId,userId) => {
-    await fetch(`http://localhost:8080/api/review-like/${reviewId}`,
+    await fetch(`/boot/api/review-like/${reviewId}`,
         {
             method:"DELETE",
             headers:{"Content-Type":"application/json"},

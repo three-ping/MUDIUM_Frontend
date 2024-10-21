@@ -52,7 +52,7 @@ const currentBackgroundImage = computed(() => {
 
 const fetchImages = async () => {
   try {
-    const response = await fetch('http://localhost:8080/calendar-theme/images');
+    const response = await fetch('/boot/calendar-theme/images');
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }

@@ -25,7 +25,7 @@
     error.value = null;
     try {
       const userId = getCurrentUserId();
-      const response = await fetch(`http://localhost:8080/api/bookmark/${userId}`); 
+      const response = await fetch(`/boot/api/bookmark/${userId}`); 
       if(!response.ok) {
         throw new Error('데이터 불러오기 실패!');
       }

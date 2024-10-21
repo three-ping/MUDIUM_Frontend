@@ -20,7 +20,7 @@
   
   const fetchMusicals = async () => {
     try {
-      const response = await fetch('http://localhost:8011/api/performance/rank/month');
+      const response = await fetch('/boot/api/performance/rank/month');
       const data = await response.json();
       if (data.success && Array.isArray(data.data)) {
         musicals.value = data.data;

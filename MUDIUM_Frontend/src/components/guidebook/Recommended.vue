@@ -30,7 +30,7 @@
     error.value = null;
   
     try {
-      const response = await fetch('http://localhost:8080/api/recommended-musical');
+      const response = await fetch('/boot/api/recommended-musical');
   
       if (!response.ok) {
         throw new Error('Failed to fetch recommendations');

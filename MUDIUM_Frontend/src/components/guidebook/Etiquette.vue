@@ -30,7 +30,7 @@ const fetchTerms = async () => {
   error.value = null;
 
   try {
-    const response = await fetch('http://localhost:8080/api/etiquette');
+    const response = await fetch('/boot/api/etiquette');
 
     if (!response.ok) {
       throw new Error('Failed to fetch terms');

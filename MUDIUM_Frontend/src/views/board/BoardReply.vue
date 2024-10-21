@@ -67,7 +67,7 @@ const cancelEdit = () => {
 const submitEdit = async () => {
     if (!editContent.value.trim()) return;
 
-    const response = await fetch(`http://localhost:8080/api/board-reply/${props.reply.boardReplyId}`, {
+    const response = await fetch(`/boot/api/board-reply/${props.reply.boardReplyId}`, {
         method: "PUT",
         headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -90,7 +90,7 @@ const submitEdit = async () => {
 const deleteReply = async () => {
     if (confirm("대댓글을 삭제하시겠습니까?")) {
 
-        const response = await fetch(`http://localhost:8080/api/board-reply/${props.reply.boardReplyId}`, {
+        const response = await fetch(`/boot/api/board-reply/${props.reply.boardReplyId}`, {
         method: "DELETE",
         headers: {
         'Authorization': `Bearer ${access_token}`, 

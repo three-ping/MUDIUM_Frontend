@@ -31,7 +31,7 @@ const fetchTerms = async () => {
   error.value = null;
 
   try {
-    const response = await fetch('http://localhost:8080/api/terms');
+    const response = await fetch('/boot/api/terms');
 
     if (!response.ok) {
       throw new Error('Failed to fetch terms');

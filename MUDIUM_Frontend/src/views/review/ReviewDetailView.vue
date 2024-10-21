@@ -131,7 +131,7 @@ const handleClickOutside = (event) => {
 
 const fetchReview = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}`, {
+        const response = await fetch(`/boot/api/review/${musicalId.value}/${reviewId.value}`, {
             method: 'GET',
         });
         if (!response.ok) {
@@ -166,7 +166,7 @@ const handleReviewSubmit = async (updatedReview) => {
     };
 
     try {
-        const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}`, {
+        const response = await fetch(`/boot/api/review/${musicalId.value}/${reviewId.value}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -198,7 +198,7 @@ const deleteReview = () => {
 const handleDeleteReviewSubmit = async () => {
     try {
         const response = await fetch(
-            `http://localhost:8080/api/review/${musicalId.value}/${reviewId.value}?userId=${userId.value}`,
+            `/boot/api/review/${musicalId.value}/${reviewId.value}?userId=${userId.value}`,
             {
                 method: 'DELETE',
                 headers: {
@@ -252,7 +252,7 @@ const formatDate = (timestamp) => {
 // // 페이지가 로드될 때 사용자의 좋아요 상태를 확인하는 함수
 // const checkIsLiked = async () => {
 //     try {
-//         const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, {
+//         const response = await fetch(`/boot/api/review-like/${reviewId.value}/${userId.value}`, {
 //             method: "GET",
 //         });
 //         const responseDTO = await response.json();
@@ -264,7 +264,7 @@ const formatDate = (timestamp) => {
 
 const checkLikeStatus = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, { method: "GET" });
+        const response = await fetch(`/boot/api/review-like/${reviewId.value}/${userId.value}`, { method: "GET" });
         if (!response.ok) {
             throw new Error('좋아요 상태를 확인하는 데 실패했습니다.');
         }
@@ -283,7 +283,7 @@ const handleLike = async () => {
     review.like += isLiked.value ? 1 : -1;
 
     try {
-        const url = `http://localhost:8080/api/review-like/${reviewId.value}`;
+        const url = `/boot/api/review-like/${reviewId.value}`;
         const method = isLiked.value ? 'POST' : 'DELETE';
         const body = JSON.stringify(userId.value);
 
@@ -314,7 +314,7 @@ const handleLike = async () => {
 // };
 
 // const checkIsLiked = async () => {
-//     const response = await fetch(`http://localhost:8080/api/review-like/${reviewId.value}/${userId.value}`, {
+//     const response = await fetch(`/boot/api/review-like/${reviewId.value}/${userId.value}`, {
 //         method: "GET"
 //     });
 //     const responseDTO = await response.json();

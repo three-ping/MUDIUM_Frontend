@@ -81,7 +81,7 @@ const handleStarClick = async (score) => {
     console.log("별점: ", score);
     
     const response = await axios.post(
-      `http://localhost:8080/api/scope/create/${userId}/${props.musicalId}`,
+      `/boot/api/scope/create/${userId}/${props.musicalId}`,
       { scope: score },
       {
         headers: {

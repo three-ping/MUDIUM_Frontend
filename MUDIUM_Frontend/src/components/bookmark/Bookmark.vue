@@ -57,8 +57,8 @@ const toggleBookmark = async () => {
 
   try {
     const url = isBookmarked.value
-      ? `http://localhost:8080/api/bookmark`
-      : "http://localhost:8080/api/bookmark/add";
+      ? `/boot/api/bookmark`
+      : "/boot/api/bookmark/add";
 
     const options = isBookmarked.value
       ? { method: "DELETE" }

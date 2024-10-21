@@ -28,7 +28,7 @@ const route = useRoute();
 const fetchSearchResults = async (query) => {
   try {
     const sanitizedQuery = query.trim();
-    const url = `http://localhost:8080/api/musical?title=${encodeURIComponent(sanitizedQuery)}&page=0&size=200`;
+    const url = `/boot/api/musical?title=${encodeURIComponent(sanitizedQuery)}&page=0&size=200`;
 
     const response = await axios.get(url);
     if (response.data && response.data.data && Array.isArray(response.data.data.content)) {

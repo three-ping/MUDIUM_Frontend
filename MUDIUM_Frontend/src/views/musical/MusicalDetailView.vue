@@ -78,7 +78,7 @@ const setRating = (newRating) => {
 
 const fetchPerformanceList = async (id) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/performance/${id}`);
+    const response = await fetch(`/boot/api/performance/${id}`);
     const data = await response.json();
     performanceList.value = data.data;
   } catch (error) {
@@ -89,7 +89,7 @@ const fetchPerformanceList = async (id) => {
 const fetchMyScope = async (id) => {
   console.log("userId: ", userId);
   try {
-    const response = await fetch(`http://localhost:8080/api/scope/${userId}/${id}`);
+    const response = await fetch(`/boot/api/scope/${userId}/${id}`);
     const data = await response.json();
     scope.value = data.data;
     console.log("MyScope: ", scope.value);
@@ -100,7 +100,7 @@ const fetchMyScope = async (id) => {
 
 const fetchReviews = async (id) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/review/${id}`);
+    const response = await fetch(`/boot/api/review/${id}`);
     const data = await response.json();
     reviews.value = data.data;
     console.log(reviews.value);
@@ -111,7 +111,7 @@ const fetchReviews = async (id) => {
 
 const fetchAverageScope = async (id) => {
   try {
-    const response = await fetch(`http://localhost:8080/api/scope/${id}`);
+    const response = await fetch(`/boot/api/scope/${id}`);
     const data = await response.json();
 
     if (data.success && data.data) {
@@ -132,7 +132,7 @@ const fetchAverageScope = async (id) => {
 const fetchMusicalDetail = async () => {
   const id = route.params.id;
   try {
-    const response = await fetch(`http://localhost:8080/api/musical/${id}`);
+    const response = await fetch(`/boot/api/musical/${id}`);
     const data = await response.json();
     musical.value = {
       title: data.data.title,

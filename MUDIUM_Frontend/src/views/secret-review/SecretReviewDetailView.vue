@@ -103,7 +103,7 @@ const handleClickOutside = (event) => {
 // 리뷰 데이터 가져오기
 const fetchReview = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}?userId=${userId.value}`);
+        const response = await fetch(`/boot/api/secretreview/${secretReviewId.value}?userId=${userId.value}`);
         if (!response.ok) throw new Error('리뷰를 불러오는 데 실패했습니다.');
         const data = await response.json();
         Object.assign(secretReview, data.data[0]);
@@ -132,7 +132,7 @@ const handleReviewSubmit = async (updatedReview) => {
     };
 
     try {
-        const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}`, {
+        const response = await fetch(`/boot/api/secretreview/${secretReviewId.value}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ const deleteReview = () => {
 // 리뷰 삭제 처리
 const handleDeleteReviewSubmit = async () => {
     try {
-        const response = await fetch(`http://localhost:8080/api/secretreview/${secretReviewId.value}?userId=${userId.value}`, {
+        const response = await fetch(`/boot/api/secretreview/${secretReviewId.value}?userId=${userId.value}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

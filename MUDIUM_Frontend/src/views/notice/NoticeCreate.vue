@@ -39,7 +39,7 @@ const submitBoard = async () => {
     }
 
     const createBoard = async(title,content)=>{
-    return await fetch(`http://localhost:8080/api/notice`,{
+    return await fetch(`/boot/api/notice`,{
         method:"POST",
         headers:{"Content-Type":"application/json"},
         body: JSON.stringify({

@@ -44,7 +44,7 @@ const submitBoard = async () => {
     }
 
     const createBoard = async(title,content)=>{
-    return await fetch(`http://localhost:8080/api/board`,{
+    return await fetch(`/boot/api/board`,{
         method:"POST",
         headers: {
         'Authorization': `Bearer ${access_token}`, 

@@ -11,17 +11,17 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
-  server: {
-    proxy: {
-      "/api": {
-        target: "http://springboot-app:7777",
-        changeOrigin: true,
-        rewrite: path => {
-          const newPath = path;
-          console.log("Rewritten path:", newPath);
-          return newPath;
-        },
-      },
-    },
-  },
+  // server: {
+  //   proxy: {
+  //     "/api": {
+  //       target: "http://springboot-app:7777",
+  //       changeOrigin: true,
+  //       rewrite: path => {
+  //         const newPath = path;
+  //         console.log("Rewritten path:", newPath);
+  //         return newPath;
+  //       },
+  //     },
+  //   },
+  // },
 });

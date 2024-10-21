@@ -96,7 +96,7 @@ const fetchCustomTickets = () => {
 
   console.log('Fetching tickets for userId:', userId);
 
-  fetch(`http://localhost:8080/api/customticket/${userId}`)
+  fetch(`/boot/api/customticket/${userId}`)
     .then(response => response.json())
     .then(data => {
       if (data.success) {
@@ -193,7 +193,7 @@ const deleteTicket = async (userId, customTicketId) => {
   if (!confirmDelete) return;
 
   try {
-    const response = await fetch(`http://localhost:8080/api/customticket/delete/${customTicketId}/${userId}`, {
+    const response = await fetch(`/boot/api/customticket/delete/${customTicketId}/${userId}`, {
       method: 'DELETE',
     });
 

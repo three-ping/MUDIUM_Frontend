@@ -168,7 +168,7 @@
         console.log('저장할 티켓 데이터:', ticketData);
   
         // fetch를 사용하여 서버로 POST 요청 전송
-        fetch('http://localhost:8080/api/customticket/create', {
+        fetch('/boot/api/customticket/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

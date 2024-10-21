@@ -43,7 +43,7 @@ const userId = ref(3);
 
 const fetchDetailBoard = async() => {
     try {
-    const response = await fetch(`http://localhost:8080/api/notice/${id.value}`, {
+    const response = await fetch(`/boot/api/notice/${id.value}`, {
         method: "GET"
     });
     const responseDTO = await response.json();
@@ -59,7 +59,7 @@ const fetchDetailBoard = async() => {
 
 const updateBoard = async () => {
     try {
-    const response = await fetch(`http://localhost:8080/api/notice/${id.value}`, {
+    const response = await fetch(`/boot/api/notice/${id.value}`, {
         method: 'PUT',
         headers: {
         'Content-Type': 'application/json',

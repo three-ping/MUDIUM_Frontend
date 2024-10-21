@@ -48,7 +48,7 @@ const userId = Number(props.userId);
 
 const fetchDetailBoard = async() => {
     try {
-    const response = await fetch(`http://localhost:8080/api/board/${id.value}`, {
+    const response = await fetch(`/boot/api/board/${id.value}`, {
         method: "GET",
         headers: {
         'Authorization': `Bearer ${access_token}`, 
@@ -68,7 +68,7 @@ const fetchDetailBoard = async() => {
 
 const updateBoard = async () => {
     try {
-    const response = await fetch(`http://localhost:8080/api/board/${id.value}`, {
+    const response = await fetch(`/boot/api/board/${id.value}`, {
         method: 'PUT',
         headers: {
         'Authorization': `Bearer ${access_token}`, 

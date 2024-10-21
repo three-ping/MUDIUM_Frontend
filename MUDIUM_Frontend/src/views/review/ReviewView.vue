@@ -77,7 +77,7 @@ const closeModal = () => {
 
 const handleSubmit = async (review) => {
     try {
-        const response = await fetch(`http://localhost:8080/api/review/${musicalId.value}`, {
+        const response = await fetch(`/boot/api/review/${musicalId.value}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -115,7 +115,7 @@ const fetchReviews = async () => {
 
     try {
         const response = await fetch(
-            `http://localhost:8080/api/review/${musicalId.value}?page=${page.value}&perPage=${perPage}&sort=${sortOption.value}`
+            `/boot/api/review/${musicalId.value}?page=${page.value}&perPage=${perPage}&sort=${sortOption.value}`
         );
         if (!response.ok) {
             throw new Error('Failed to fetch reviews');
