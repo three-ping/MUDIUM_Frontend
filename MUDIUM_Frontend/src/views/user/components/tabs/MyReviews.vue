@@ -99,33 +99,53 @@ const closeReviewModal = () => {
 };
 
 const submitReview = async (reviewContent) => {
-    const reviewData = {
-        userId: userId,
-        content: reviewContent,
-    };
+    if (currentReview.value) {
+        // Update the current review's secretReview property
+        currentReview.value.secretReview = reviewContent;
 
-    try {
-        const response = await fetch(`http://localhost:8080/api/secretreview/${musicalId.value}`, {
-            method: 'POST',
-            headers: {
-                Authorization: `${access_token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reviewData),
-        });
+        // Prepare the review data for the API call
+        const reviewData = {
+            userId: userId,
+            content: reviewContent,
+        };
 
-        if (!response.ok) throw new Error('리뷰 저장에 실패했습니다.');
+        try {
+            // Make the API call to save the secret review
+            const response = await fetch(`http://localhost:8080/api/secretreview/${musicalId.value}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `${access_token}`,
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(reviewData),
+            });
 
-        const result = await response.json();
-        console.log('리뷰 저장 성공:', result);
+            // Check if the response is ok (status code in the range 200-299)
+            if (!response.ok) throw new Error('리뷰 저장에 실패했습니다.');
 
-        // 모달 닫기 및 리뷰 리스트 새로고침
-        closeModal();
-        await fetchReviews(); // 리뷰 다시 불러오기
-    } catch (error) {
-        console.error('리뷰 저장 중 오류 발생:', error);
+            // Parse the JSON response
+            const result = await response.json();
+            console.log('리뷰 저장 성공:', result);
+
+            // Update the local state to reflect the saved review
+            const index = reviews.value.findIndex((r) => r.reviewId === currentReview.value.reviewId);
+            if (index !== -1) {
+                // Update the review in the local state
+                reviews.value[index] = { ...reviews.value[index], secretReview: reviewContent };
+            }
+
+            // Close the modal and refresh the review list
+            closeModal();
+            page.value = 1; // Reset the page
+            await fetchReviews(); // Fetch the updated reviews
+
+        } catch (error) {
+            console.error('리뷰 저장 중 오류 발생:', error);
+        }
     }
+    closeReviewModal(); // Close the review modal
 };
+
 
 
 // Assuming we're getting the userId from a prop or a global state
