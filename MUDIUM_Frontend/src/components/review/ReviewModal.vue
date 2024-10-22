@@ -109,6 +109,7 @@ const submitReview = () => {
     cursor: pointer;
     color: #888;
     transition: color 0.3s ease;
+    box-shadow: none;
 }
 
 .close-button:hover {
@@ -143,6 +144,7 @@ const submitReview = () => {
     display: flex;
     justify-content: flex-end;
     gap: 15px;
+    box-shadow: none;
 }
 
 .modal-footer button {
@@ -152,6 +154,7 @@ const submitReview = () => {
     border-radius: 6px;
     font-size: 16px;
     transition: background-color 0.3s ease;
+    box-shadow: none;
 }
 
 .cancel-button {
@@ -175,6 +178,14 @@ const submitReview = () => {
 .submit-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+* {
+        font-size: 2rem;
+    }
+
+button {
+    box-shadow: none;
 }
 
 @media (max-width: 768px) {

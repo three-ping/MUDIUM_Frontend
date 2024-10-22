@@ -81,6 +81,7 @@ const yesModal = () => {
     color: #888;
     padding: 10px;
     transition: color 0.3s ease;
+    box-shadow: none;
 }
 
 .close-button:hover {
@@ -96,6 +97,7 @@ const yesModal = () => {
     display: flex;
     justify-content: center;
     gap: 15px;
+    box-shadow: none;
 }
 
 .cancel-button {
@@ -107,6 +109,7 @@ const yesModal = () => {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: none;
 }
 
 .cancel-button:hover {
@@ -122,10 +125,19 @@ const yesModal = () => {
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-shadow: none;
 }
 
 .delete-button:hover {
     background-color: #8a60bc;
+}
+
+* {
+        font-size: 2rem;
+    }
+
+button {
+    box-shadow: none;
 }
 
 @media (max-width: 768px) {
